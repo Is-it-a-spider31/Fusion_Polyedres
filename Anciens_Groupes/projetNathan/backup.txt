@@ -1,0 +1,64 @@
+ 
+
+    string nomFichier = "premier.obj";
+
+    double x, y, z;
+	string str;
+	string retourLigne;
+	string object_name;
+	ifstream file;
+
+	file.open(nomFichier);
+
+
+
+
+
+
+
+    if(file)
+    {
+
+        for(int i = 0 ; i < 4; i++)
+        {
+            getline(file, retourLigne);
+        }
+
+        file.ignore();
+
+        cout << "Les points : \n";
+
+        for (int i = 1; !(file >> str).fail() && str == "v"; ++i)
+        {
+            file >> x >> y >> z;
+
+            cout << x << " " << y << " " << z << " \n";
+
+        }
+
+
+
+
+        cout <<"\n";
+
+        for (int i = 1; !(file >> str).fail() && str == "f"; ++i)
+        {
+            file >> x;
+
+            cout << x << " \n";
+
+
+        }
+
+
+
+
+        file.close();
+    }
+    else
+    {
+        cout << "Le fichier est introuvable";
+    }
+
+
+    return 0;

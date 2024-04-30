@@ -1,0 +1,52 @@
+# depslib dependency file v1.0
+1693180741 source:c:\users\marti\onedrive\escritorio\projetnathan\main.cpp
+	<iostream>
+	<fstream>
+	<string>
+	<vector>
+	<string>
+	<sstream>
+	<set>
+	<algorithm>
+	<bits/stdc++.h>
+	"Point.h"
+	"Face.h"
+	"Polyhedre.h"
+	"Plan.h"
+
+1692621009 c:\users\marti\onedrive\escritorio\projetnathan\obj_loader.h
+	<iostream>
+	<vector>
+	<string>
+	<fstream>
+	<math.h>
+
+1692464761 source:c:\users\marti\onedrive\escritorio\projetnathan\src\point.cpp
+	"Point.h"
+
+1692464731 c:\users\marti\onedrive\escritorio\projetnathan\include\point.h
+
+1693147824 source:c:\users\marti\onedrive\escritorio\projetnathan\point.cpp
+	"Point.h"
+
+1693147841 c:\users\marti\onedrive\escritorio\projetnathan\point.h
+
+1693148186 source:c:\users\marti\onedrive\escritorio\projetnathan\face.cpp
+	"Face.h"
+
+1693148010 c:\users\marti\onedrive\escritorio\projetnathan\face.h
+	"Point.h"
+	<vector>
+
+1692911801 source:c:\users\marti\onedrive\escritorio\projetnathan\polyedre.cpp
+	"Polyhedre.h"
+
+1693068288 c:\users\marti\onedrive\escritorio\projetnathan\polyhedre.h
+	"Face.h"
+
+1693171299 source:c:\users\marti\onedrive\escritorio\projetnathan\plan.cpp
+	"Plan.h"
+
+1693163098 c:\users\marti\onedrive\escritorio\projetnathan\plan.h
+	"Point.h"
+

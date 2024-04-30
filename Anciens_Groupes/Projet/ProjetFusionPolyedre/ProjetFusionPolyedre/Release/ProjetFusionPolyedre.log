@@ -1,0 +1,19 @@
+﻿La génération a démarré 03/06/2016 18:18:54.
+     1>Projet "F:\Cours\Projet fusion polyedre\ProjetFusionPolyedre\ProjetFusionPolyedre\ProjetFusionPolyedre.vcxproj" sur le nœud 2 (Build cible(s)).
+     1>Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"F:\Cours\Projet fusion polyedre\ProjetFusionPolyedre\Release\ProjetFusionPolyedre.exe" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"F:\Cours\Projet fusion polyedre\ProjetFusionPolyedre\Release\ProjetFusionPolyedre.pdb" /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"F:\Cours\Projet fusion polyedre\ProjetFusionPolyedre\Release\ProjetFusionPolyedre.lib" /MACHINE:X86 /SAFESEH Release\Face.obj
+         Release\main.obj
+         Release\Plane.obj
+         Release\Polyhedron.obj
+         Release\Program.obj
+         Release\utils.obj
+         Release\Vertex.obj
+     1>Program.obj : error LNK2001: symbole externe non résolu "private: static class std::deque<class Vertex,class std::allocator<class Vertex> > Program::d_vertices_list" (?d_vertices_list@Program@@0V?$deque@VVertex@@V?$allocator@VVertex@@@std@@@std@@A)
+     1>Program.obj : error LNK2001: symbole externe non résolu "private: static class std::deque<class Face,class std::allocator<class Face> > Program::d_faces_list" (?d_faces_list@Program@@0V?$deque@VFace@@V?$allocator@VFace@@@std@@@std@@A)
+     1>Program.obj : error LNK2001: symbole externe non résolu "private: static class std::deque<class Polyhedron,class std::allocator<class Polyhedron> > Program::d_polyhedron_list" (?d_polyhedron_list@Program@@0V?$deque@VPolyhedron@@V?$allocator@VPolyhedron@@@std@@@std@@A)
+     1>F:\Cours\Projet fusion polyedre\ProjetFusionPolyedre\Release\ProjetFusionPolyedre.exe : fatal error LNK1120: 3 externes non résolus
+     1>Génération du projet "F:\Cours\Projet fusion polyedre\ProjetFusionPolyedre\ProjetFusionPolyedre\ProjetFusionPolyedre.vcxproj" terminée (Build cible(s)) -- ÉCHEC.
+
+ÉCHEC de la build.
+
+Temps écoulé 00:00:00.60

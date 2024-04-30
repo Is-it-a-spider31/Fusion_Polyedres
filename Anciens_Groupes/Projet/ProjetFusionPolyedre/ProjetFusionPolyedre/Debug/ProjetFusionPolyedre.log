@@ -1,0 +1,38 @@
+﻿La génération a démarré 06/06/2016 14:34:02.
+     1>Projet "F:\Cours\Projet fusion polyedre\ProjetFusionPolyedre\ProjetFusionPolyedre\ProjetFusionPolyedre.vcxproj" sur le nœud 2 (Build cible(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Polyhedron.cpp Program.cpp main.cpp
+         main.cpp
+         Program.cpp
+     1>f:\cours\projet fusion polyedre\projetfusionpolyedre\projetfusionpolyedre\program.cpp(101): warning C4018: '<' : incompatibilité signed/unsigned
+     1>f:\cours\projet fusion polyedre\projetfusionpolyedre\projetfusionpolyedre\program.cpp(105): warning C4018: '<' : incompatibilité signed/unsigned
+     1>f:\cours\projet fusion polyedre\projetfusionpolyedre\projetfusionpolyedre\program.cpp(106): warning C4018: '<' : incompatibilité signed/unsigned
+     1>f:\cours\projet fusion polyedre\projetfusionpolyedre\projetfusionpolyedre\program.cpp(128): warning C4018: '<' : incompatibilité signed/unsigned
+     1>f:\cours\projet fusion polyedre\projetfusionpolyedre\projetfusionpolyedre\program.cpp(133): warning C4018: '<' : incompatibilité signed/unsigned
+     1>f:\cours\projet fusion polyedre\projetfusionpolyedre\projetfusionpolyedre\program.cpp(137): warning C4018: '<' : incompatibilité signed/unsigned
+     1>f:\cours\projet fusion polyedre\projetfusionpolyedre\projetfusionpolyedre\program.cpp(138): warning C4018: '<' : incompatibilité signed/unsigned
+     1>f:\cours\projet fusion polyedre\projetfusionpolyedre\projetfusionpolyedre\program.cpp(194): warning C4018: '<' : incompatibilité signed/unsigned
+     1>f:\cours\projet fusion polyedre\projetfusionpolyedre\projetfusionpolyedre\program.cpp(197): warning C4018: '<' : incompatibilité signed/unsigned
+     1>f:\cours\projet fusion polyedre\projetfusionpolyedre\projetfusionpolyedre\program.cpp(217): warning C4018: '<' : incompatibilité signed/unsigned
+     1>f:\cours\projet fusion polyedre\projetfusionpolyedre\projetfusionpolyedre\program.cpp(220): warning C4018: '<' : incompatibilité signed/unsigned
+     1>f:\cours\projet fusion polyedre\projetfusionpolyedre\projetfusionpolyedre\program.cpp(237): warning C4018: '<' : incompatibilité signed/unsigned
+     1>f:\cours\projet fusion polyedre\projetfusionpolyedre\projetfusionpolyedre\program.cpp(238): warning C4018: '<' : incompatibilité signed/unsigned
+         Polyhedron.cpp
+     1>f:\cours\projet fusion polyedre\projetfusionpolyedre\projetfusionpolyedre\polyhedron.cpp(37): warning C4018: '<' : incompatibilité signed/unsigned
+     1>f:\cours\projet fusion polyedre\projetfusionpolyedre\projetfusionpolyedre\polyhedron.cpp(38): warning C4018: '<' : incompatibilité signed/unsigned
+     1>f:\cours\projet fusion polyedre\projetfusionpolyedre\projetfusionpolyedre\polyhedron.cpp(79): warning C4018: '<' : incompatibilité signed/unsigned
+         Génération de code en cours...
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"F:\Cours\Projet fusion polyedre\ProjetFusionPolyedre\Debug\ProjetFusionPolyedre.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"F:\Cours\Projet fusion polyedre\ProjetFusionPolyedre\Debug\ProjetFusionPolyedre.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"F:\Cours\Projet fusion polyedre\ProjetFusionPolyedre\Debug\ProjetFusionPolyedre.lib" /MACHINE:X86 Debug\Face.obj
+         Debug\main.obj
+         Debug\Plane.obj
+         Debug\Polyhedron.obj
+         Debug\Program.obj
+         Debug\utils.obj
+         Debug\Vertex.obj
+         ProjetFusionPolyedre.vcxproj -> F:\Cours\Projet fusion polyedre\ProjetFusionPolyedre\Debug\ProjetFusionPolyedre.exe
+     1>Génération du projet "F:\Cours\Projet fusion polyedre\ProjetFusionPolyedre\ProjetFusionPolyedre\ProjetFusionPolyedre.vcxproj" terminée (Build cible(s)).
+
+La génération a réussi.
+
+Temps écoulé 00:00:21.03
