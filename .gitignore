@@ -63,12 +63,6 @@
 *.user
 *.userosscache
 
-
-# Ignorer les fichiers de projet de Visual Studio
-*.vcxproj
-*.vcxproj.filters
-*.vcxproj.user
-
 # Ignorer les fichiers de journalisation
 *.log
 
