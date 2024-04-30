@@ -5,7 +5,6 @@
 *.slo
 *.lo
 *.o
-*.obj
 
 # Precompiled Headers
 *.gch
@@ -30,3 +29,62 @@
 *.exe
 *.out
 *.app
+
+
+#VISUAL STUDIO
+# Ignore les fichiers générés par Visual Studio
+.vs/
+/bin/
+/obj/
+*.suo
+*.user
+*.aps
+*.pch
+*.vspscc
+*_i.c
+*_p.c
+*.ncb
+*.sdf
+*.opensdf
+*.cachefile
+*.vc.db
+
+# Ignore les fichiers de sauvegarde
+*~
+*.bak
+
+# Ignorer les fichiers de dépendance générés par Visual Studio
+*.sdf
+*.opensdf
+*.cachefile
+
+# Ignorer les fichiers de configuration utilisateur de Visual Studio
+*.suo
+*.user
+*.userosscache
+
+# Ignorer les fichiers de solution de Visual Studio
+*.sln
+
+# Ignorer les fichiers de projet de Visual Studio
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+
+# Ignorer les fichiers de journalisation
+*.log
+
+# Ignorer les fichiers temporaires
+*.tmp
+
+# Ignorer les fichiers de build pour les outils d'édition de liens
+*.ilk
+
+# Ignorer les fichiers de bibliothèque statique
+*.lib
+
+# Ignorer les fichiers exécutables
+*.exe
+*.out
+*.app
+
