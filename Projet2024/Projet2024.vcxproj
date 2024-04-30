@@ -127,7 +127,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Algorithm.cpp" />
+    <ClCompile Include="Face.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Plan.cpp" />
+    <ClCompile Include="Point.cpp" />
+    <ClCompile Include="Polyedre.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Algorithm.h" />
+    <ClInclude Include="Face.h" />
+    <ClInclude Include="OBJ_Loader.h" />
+    <ClInclude Include="Plan.h" />
+    <ClInclude Include="Point.h" />
+    <ClInclude Include="Polyedre.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
