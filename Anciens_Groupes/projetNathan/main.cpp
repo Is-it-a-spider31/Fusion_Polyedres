@@ -6,7 +6,6 @@
 #include <sstream>
 #include <set>
 #include <algorithm>
-#include <bits/stdc++.h>
 
 #include "Point.h"
 #include "Face.h"
@@ -65,7 +64,7 @@ void ecrireFichier(vector<Point> listePoints, vector<Polyedre> listePoly, string
     }
     else
     {
-        cout << "ERREUR: Impossible d'ouvrir le fichier." << endl;
+        // cout << "ERREUR: Impossible d'ouvrir le fichier." << endl;
     }
 }
 
@@ -83,7 +82,7 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-    string nomFichier = "exemple2";
+    string nomFichier = "../../exemple3";
 
     stringstream strFichier ;
     strFichier << nomFichier;
@@ -118,12 +117,11 @@ int main(int argc, char* argv[])
 
         while ( myfile.good() )
         {
-
             myfile >> mystring;
 
             if(mystring == "o" || objet == true)
             {
-                cout << "\n\n\n objet \n";
+                // cout << "\n\n\n objet \n";
                 myfile >> mystring;
 
 
@@ -162,31 +160,38 @@ int main(int argc, char* argv[])
             {
                 //nouvelle normale  ( a voir si utilise ou non)
                 /*
-                cout << "normale:  \n";
+                // cout << "normale:  \n";
                 myfile >> mystring;
-                cout << "x : " << mystring << "\n";
+                // cout << "x : " << mystring << "\n";
                 myfile >> mystring;
-                cout << "y : " << mystring << "\n";
+                // cout << "y : " << mystring << "\n";
                 myfile >> mystring;
-                cout << "z : " << mystring << "\n";
+                // cout << "z : " << mystring << "\n";
                 */
             }
             if(mystring == "vt")
             {
                 //nouvelle texture (pas utilisee pour le moment)
                 /*
-                cout << "texture:  \n";
+                // cout << "texture:  \n";
                 myfile >> mystring;
-                cout << "1 : " << mystring << "\n";
+                // cout << "1 : " << mystring << "\n";
                 myfile >> mystring;
-                cout << "2 : " << mystring << "\n";
+                // cout << "2 : " << mystring << "\n";
                 */
             }
+
+
+
+
+            // ###############################################################################################################################
+
+
             if(mystring == "f")
             {
                 //nouvelle face de cet objet en cours
 
-                cout << "face:  \n";
+                // cout << "face:  \n";
                 myfile >> mystring;
 
                 while(mystring != "o" && myfile.good())
@@ -203,13 +208,14 @@ int main(int argc, char* argv[])
 
                             vecteurPointsInter.clear();
 
-
+                            // NE FONCTIONNE PAS
+                            // cout << indexPoint << endl;
                             listePoly[indexPoly-1].faces.push_back(faceInter);
 
                         }
 
 
-                        cout << "face:  \n";
+                        // cout << "face:  \n";
 
 
 
@@ -221,7 +227,7 @@ int main(int argc, char* argv[])
 
                         decouper(mystring, '/', decoupage);
 
-                        cout << "\n"  << decoupage[0] << " ";
+                        // cout << "\n"  << decoupage[0] << " ";
 
                         vecteurPointsInter.push_back(listePoints[stoi(decoupage[0]) - 1]);
 
@@ -263,52 +269,52 @@ int main(int argc, char* argv[])
 
 
 
-        cout << "\n\n\n\n";
+        // cout << "\n\n\n\n";
 
 
-        cout << "Points:";
+        // cout << "Points:";
 
         for(int i = 0 ; i < listePoints.size(); i++)
         {
-            cout << "Numero "<< i << "\n";
+            // cout << "Numero "<< i << "\n";
 
-            cout << listePoints[i].getId() << " ";
-            cout << listePoints[i].getX() << " ";
-            cout << listePoints[i].getY() << " ";
-            cout << listePoints[i].getZ() << " \n\n";
+            // cout << listePoints[i].getId() << " ";
+            // cout << listePoints[i].getX() << " ";
+            // cout << listePoints[i].getY() << " ";
+            // cout << listePoints[i].getZ() << " \n\n";
         }
 
-        cout << "\n\n Faces : ";
+        // cout << "\n\n Faces : ";
 
         for(int i = 0 ; i < listeFaces.size(); i++)
         {
-            cout << "\n face :" << i << " \n";
+            // cout << "\n face :" << i << " \n";
 
             vector<Point> interPoints = listeFaces[i].points;
 
             for(int j = 0; j < listeFaces[i].points.size(); j++)
             {
-                cout << interPoints[j].getId() << " ";
+                // cout << interPoints[j].getId() << " ";
             }
         }
 
-        cout << "\n\n Poly : ";
+        // cout << "\n\n Poly : ";
 
 
         for(int i = 0 ; i < listePoly.size(); i++)
         {
-            cout << "\n Poly :" << i << " \n";
+            // cout << "\n Poly :" << i << " \n";
 
             vector<Face> interFaces = listePoly[i].faces;
 
             for(int j = 0; j < interFaces.size(); j++)
             {
-                cout << interFaces[j].getId() << " ";
+                // cout << interFaces[j].getId() << " ";
             }
         }
 
 
-        cout << "\n\n";
+        // cout << "\n\n";
 
 
 
@@ -333,6 +339,7 @@ int main(int argc, char* argv[])
         }
 
 
+        cout << ordresPermutation.size() << endl;
 
         do { // pour chaque permutation
 
@@ -363,7 +370,6 @@ int main(int argc, char* argv[])
                 // parcours des polyedres pour tenter de les fusionner
                 for(int m = 1; m <polyedresPermutes.size();  m++)
                 {
-
 
                     polySuivant = polyedresPermutes[m];
 
@@ -414,7 +420,7 @@ int main(int argc, char* argv[])
 
 
 
-
+                                // TEST DE CONVEXITE polyActuel
                                 for(int i = 0; i < polyActuel.faces.size(); i++)
                                 {
                                     for(int j = 0; j < polyActuel.faces[i].points.size();j++)
@@ -424,6 +430,7 @@ int main(int argc, char* argv[])
                                     }
                                 }
 
+                                // TEST DE CONVEXITE polySuivant
                                 for(int i = 0; i < polySuivant.faces.size();i++)
                                 {
                                     for(int j = 0; j < polySuivant.faces[i].points.size(); j++)
@@ -528,7 +535,7 @@ int main(int argc, char* argv[])
 
                         if(convex)
                         {
-                            cout << polyActuel.getId() << " " << polySuivant.getId() <<   " convexe \n ";
+                            // cout << polyActuel.getId() << " " << polySuivant.getId() <<   " convexe \n ";
 
                             //fusion
 
@@ -558,7 +565,7 @@ int main(int argc, char* argv[])
 
                             polyActuel = polySuivant;
 
-                            cout << polyActuel.getId() << " " << polySuivant.getId() <<   " non convexe\n ";
+                            // cout << polyActuel.getId() << " " << polySuivant.getId() <<   " non convexe\n ";
                         }
 
                     }
@@ -605,7 +612,6 @@ int main(int argc, char* argv[])
 
                 ecrireFichier(listePoints, polyedresPermutes, nomFichier);
             }
-
         } while(next_permutation(ordresPermutation.begin(), ordresPermutation.end()));
 
 
@@ -615,7 +621,7 @@ int main(int argc, char* argv[])
 
 
 
-        cout << "\n\n";
+        // cout << "\n\n";
 
 
 
@@ -625,7 +631,7 @@ int main(int argc, char* argv[])
     }
     else
     {
-        cout << "Impossible d'ouvrir le fichier";
+        // cout << "Impossible d'ouvrir le fichier";
 
     }
 
