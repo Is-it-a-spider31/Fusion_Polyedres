@@ -63,8 +63,6 @@
 *.user
 *.userosscache
 
-# Ignorer les fichiers de solution de Visual Studio
-*.sln
 
 # Ignorer les fichiers de projet de Visual Studio
 *.vcxproj
