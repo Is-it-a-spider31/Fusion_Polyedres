@@ -16,12 +16,12 @@
 void decouper(std::string const &str, const char delim,
             std::vector<std::string> &out)
 {
-    std::stringstream ss(str);
+        std::stringstream ss(str);
 
-    std::string s;
-    while (std::getline(ss, s, delim)) {
-        out.push_back(s);
-    }
+        std::string s;
+        while (std::getline(ss, s, delim)) {
+            out.push_back(s);
+        }
 }
 
 void ecrireFichier(vector<Point> listePoints, vector<Polyedre> listePoly, string nomFichier)
