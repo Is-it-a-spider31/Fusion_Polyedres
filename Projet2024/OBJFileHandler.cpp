@@ -1,8 +1,8 @@
 #include "ObjFileHandler.h"
 
 #include <fstream>
-#include <sstream>
 #include <iostream>
+#include <sstream>
 
 /**
  * @brief Ecriture de polyedres dans un fichier obj
@@ -67,8 +67,10 @@ void OBJFileHandler::loadOBJ(vector<Point>& vertices, vector<Face>& faces, vecto
 
     string mystring;
     bool object = false;
-    int indexVertex = 0;
-    int indexFace = 0;
+    // Les indices commencent à 1 (selon le format OBJ)
+    int indexVertex = 1;
+    int indexFace = 1;
+
     int indexPoly = 0;
     vector<Point> currentVertices;
 
@@ -98,37 +100,33 @@ void OBJFileHandler::loadOBJ(vector<Point>& vertices, vector<Face>& faces, vecto
                 objFile >> mystring;
                 z = stold(mystring);    // z
 
-                indexVertex++;
                 Point currentVertex(indexVertex, x, y, z);
+                indexVertex++;
                 vertices.push_back(currentVertex);
             }
             if (mystring == "f")    // FACE
             {
-                //nouvelle face de cet object en cours
                 objFile >> mystring;
 
                 // Parcours de toutes les faces du polyedre courant
                 while (mystring != "o" && objFile.good())
                 {
-                    if (mystring == "f") 
+                    if (mystring == "f")    // Nouvelle face
                     {
-                        if (currentVertices.size() != 0)
+                        if (currentVertices.size() != 0) 
                         {
-                            indexFace++;
-
                             Face currentFace(currentVertices, indexFace);
+                            indexFace++;
                             faces.push_back(currentFace);
-
                             currentVertices.clear();
                             polyhedrons[indexPoly - 1].faces.push_back(currentFace);
                         }
                     }
-                    else
+                    else    // Face courante
                     {
-                        vector<string> decoupage;
-                        decouper(mystring, '/', decoupage);
-                        // cout << "\n"  << decoupage[0] << " ";
-                        currentVertices.push_back(vertices[stoi(decoupage[0]) - 1]);
+                        vector<float> vertexData = vertexDataFromString(mystring, '/');
+                        // Ajout du sommet a la face
+                        currentVertices.push_back(vertices[vertexData[0] - 1]);
                     }
                     objFile >> mystring;
                 }
@@ -137,18 +135,18 @@ void OBJFileHandler::loadOBJ(vector<Point>& vertices, vector<Face>& faces, vecto
                 {
                     if (currentVertices.size() != 0)
                     {
+                        Face currentFace(currentVertices, indexFace);
                         indexFace++;
-                        Face faceInter(currentVertices, indexFace);
-                        faces.push_back(faceInter);
+                        faces.push_back(currentFace);
                         currentVertices.clear();
-                        polyhedrons[indexPoly - 1].faces.push_back(faceInter);
+                        polyhedrons[indexPoly - 1].faces.push_back(currentFace);
                     }
                     object = true;
                 }
             }
         }
-        indexFace++;
 
+        // Ajout de la derniere face
         Face currentFace(currentVertices, indexFace);
         faces.push_back(currentFace);
         currentVertices.clear();
@@ -156,12 +154,30 @@ void OBJFileHandler::loadOBJ(vector<Point>& vertices, vector<Face>& faces, vecto
     }
 }
 
-void OBJFileHandler::decouper(string const& str, const char delim, vector<string>& out)
+/**
+ * @brief Permet d'extraire les donnees d'une face dans un tableau
+ * 
+ * Format d'une face :
+ * f vertexId/textureId/normalId ...
+ * 
+ * Exemple :
+ * f 9/15/7 10/16/7 12/17/7 11/18/7
+ * on veut seulement les vertices :
+ * f 9 10 12 11
+ * 
+ * @param str donnees d'une face
+ * @param delim delimiteur "/"
+ * 
+ * @return tableau des donnees du sommet (en float)
+*/
+vector<float> OBJFileHandler::vertexDataFromString(string const& str, const char delim)
 {
+    vector<float> out;
     stringstream ss(str);
-
     string s;
+
     while (getline(ss, s, delim)) {
-        out.push_back(s);
+        out.push_back(stoi(s));
     }
+    return out;
 }

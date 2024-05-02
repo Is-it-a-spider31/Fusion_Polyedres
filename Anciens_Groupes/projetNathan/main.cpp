@@ -98,9 +98,9 @@ int main(int argc, char* argv[])
 
     bool objet = false;
 
-    int indexPoint = 0;
+    int indexPoint = 1;
 
-    int indexFace = 0;
+    int indexFace = 1;
 
     int indexPoly= 0;
 
@@ -148,12 +148,13 @@ int main(int argc, char* argv[])
                 myfile >> mystring;
                 z = stold(mystring);
 
-                indexPoint++;
 
 
                 Point pointInter(indexPoint, x, y , z);
+                indexPoint++;
 
                 listePoints.push_back(pointInter);
+
             }
 
             if(mystring == "vn")
@@ -200,9 +201,10 @@ int main(int argc, char* argv[])
                     {
                         if(vecteurPointsInter.size() != 0)
                         {
-                            indexFace++;
 
                             Face faceInter(vecteurPointsInter, indexFace);
+                            indexFace++;
+
 
                             listeFaces.push_back(faceInter);
 
@@ -240,9 +242,10 @@ int main(int argc, char* argv[])
                 {
                     if(vecteurPointsInter.size() != 0)
                     {
-                        indexFace++;
 
                         Face faceInter(vecteurPointsInter, indexFace);
+                        indexFace++;
+
 
                         listeFaces.push_back(faceInter);
 
@@ -256,7 +259,6 @@ int main(int argc, char* argv[])
                 }
             }
         }
-        indexFace++;
 
         Face faceInter(vecteurPointsInter, indexFace);
 

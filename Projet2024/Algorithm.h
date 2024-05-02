@@ -19,6 +19,8 @@ public:
 	*/
 	Algorithm(const string &filename);
 
+    void run();
+
 
 private:
     // ATTRIBUTES
