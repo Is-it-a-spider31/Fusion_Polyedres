@@ -47,7 +47,7 @@ private:
 	*/
 	int d_id;
 
-	// Coordonnes x, y et z du point
+	// Coordonnees x, y et z du point
 	double d_x, d_y, d_z;
 
 };
