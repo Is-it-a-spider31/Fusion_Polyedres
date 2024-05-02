@@ -67,10 +67,10 @@ void OBJFileHandler::loadOBJ(vector<Point>& vertices, vector<Face>& faces, vecto
 
     string mystring;
     bool object = false;
-    int indexPoint = 0;
+    int indexVertex = 0;
     int indexFace = 0;
     int indexPoly = 0;
-    vector<Point> vecteurPointsInter;
+    vector<Point> currentVertices;
 
     if (objFile.is_open())
     {
@@ -98,8 +98,8 @@ void OBJFileHandler::loadOBJ(vector<Point>& vertices, vector<Face>& faces, vecto
                 objFile >> mystring;
                 z = stold(mystring);    // z
 
-                indexPoint++;
-                Point currentVertex(indexPoint, x, y, z);
+                indexVertex++;
+                Point currentVertex(indexVertex, x, y, z);
                 vertices.push_back(currentVertex);
             }
             if (mystring == "f")    // FACE
@@ -112,15 +112,15 @@ void OBJFileHandler::loadOBJ(vector<Point>& vertices, vector<Face>& faces, vecto
                 {
                     if (mystring == "f") 
                     {
-                        if (vecteurPointsInter.size() != 0)
+                        if (currentVertices.size() != 0)
                         {
                             indexFace++;
 
-                            Face faceInter(vecteurPointsInter, indexFace);
-                            faces.push_back(faceInter);
+                            Face currentFace(currentVertices, indexFace);
+                            faces.push_back(currentFace);
 
-                            vecteurPointsInter.clear();
-                            polyhedrons[indexPoly - 1].faces.push_back(faceInter);
+                            currentVertices.clear();
+                            polyhedrons[indexPoly - 1].faces.push_back(currentFace);
                         }
                     }
                     else
@@ -128,19 +128,19 @@ void OBJFileHandler::loadOBJ(vector<Point>& vertices, vector<Face>& faces, vecto
                         vector<string> decoupage;
                         decouper(mystring, '/', decoupage);
                         // cout << "\n"  << decoupage[0] << " ";
-                        vecteurPointsInter.push_back(vertices[stoi(decoupage[0]) - 1]);
+                        currentVertices.push_back(vertices[stoi(decoupage[0]) - 1]);
                     }
                     objFile >> mystring;
                 }
 
-                if (mystring == "o")
+                if (mystring == "o")    // POLYEDRE SUIVANT
                 {
-                    if (vecteurPointsInter.size() != 0)
+                    if (currentVertices.size() != 0)
                     {
                         indexFace++;
-                        Face faceInter(vecteurPointsInter, indexFace);
+                        Face faceInter(currentVertices, indexFace);
                         faces.push_back(faceInter);
-                        vecteurPointsInter.clear();
+                        currentVertices.clear();
                         polyhedrons[indexPoly - 1].faces.push_back(faceInter);
                     }
                     object = true;
@@ -149,10 +149,10 @@ void OBJFileHandler::loadOBJ(vector<Point>& vertices, vector<Face>& faces, vecto
         }
         indexFace++;
 
-        Face faceInter(vecteurPointsInter, indexFace);
-        faces.push_back(faceInter);
-        vecteurPointsInter.clear();
-        polyhedrons[indexPoly - 1].faces.push_back(faceInter);
+        Face currentFace(currentVertices, indexFace);
+        faces.push_back(currentFace);
+        currentVertices.clear();
+        polyhedrons[indexPoly - 1].faces.push_back(currentFace);
     }
 }
 

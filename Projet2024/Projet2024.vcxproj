@@ -130,6 +130,7 @@
     <ClCompile Include="Algorithm.cpp" />
     <ClCompile Include="Face.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="OBJFileHandler.cpp" />
     <ClCompile Include="Plan.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="Polyedre.cpp" />
@@ -137,6 +138,7 @@
   <ItemGroup>
     <ClInclude Include="Algorithm.h" />
     <ClInclude Include="Face.h" />
+    <ClInclude Include="OBJFileHandler.h" />
     <ClInclude Include="OBJ_Loader.h" />
     <ClInclude Include="Plan.h" />
     <ClInclude Include="Point.h" />

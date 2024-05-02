@@ -65,6 +65,7 @@
 
 # Ignorer les fichiers de journalisation
 *.log
+*.tlog
 
 # Ignorer les fichiers temporaires
 *.tmp
