@@ -38,9 +38,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="OBJ_Loader.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="Polyedre.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>

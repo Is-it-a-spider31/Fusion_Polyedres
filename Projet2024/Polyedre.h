@@ -25,6 +25,8 @@ public:
 	// GETTER
 	int getId() const;
 
+	// OPERATEURS 
+
 private:
 	/**
 	 * @brief Identifiant unique du polyedre

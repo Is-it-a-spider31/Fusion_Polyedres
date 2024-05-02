@@ -3,5 +3,4 @@
 
 ### todo
 
-    continuer a faire les classes
-    ajouter des methodes pour l'algos
+    cf. operator << dans premier projet
