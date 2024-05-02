@@ -9,7 +9,7 @@
 */
 Face::Face(const vector<Point> lesPoints, int id) {
 
-	points = lesPoints;
+	d_sommets = lesPoints;
 	d_id = id;
 }
 
@@ -40,9 +40,9 @@ bool Face::operator==(Face f)
 		int pointsEnCommun = 0;
 
 		for (int i = 0; i < d_sommets.size(); ++i) {
-			for (int j = 0; j < points.size(); ++j)
+			for (int j = 0; j < d_sommets.size(); ++j)
 			{
-				if (points[i] == f.d_sommets[j])
+				if (d_sommets[i] == f.d_sommets[j])
 				{
 
 					pointsEnCommun++;
