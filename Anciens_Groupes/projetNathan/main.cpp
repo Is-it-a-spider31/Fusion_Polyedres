@@ -319,7 +319,7 @@ int main(int argc, char* argv[])
         // cout << "\n\n";
 
 
-
+        // DEBUT ALGORITHME ------------------------------- -------------------------
 
 
         int minimumPolygones = 100000;
@@ -578,7 +578,7 @@ int main(int argc, char* argv[])
 
 
                 interListePoly.push_back(polyActuel);
-                //interListePoly.push_back(polyedresPermutes[polyedresPermutes.size()-1]);
+                interListePoly.push_back(polyedresPermutes[polyedresPermutes.size()-1]);
 
 
 
