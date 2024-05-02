@@ -12,3 +12,8 @@ Algorithm::Algorithm(const string& filename)
 	// Chargement des donnees a partir du fichier .obj
 	OBJFileHandler::loadOBJ(d_vertices, d_faces, d_polyhedrons, filename);
 }
+
+void Algorithm::run()
+{
+
+}

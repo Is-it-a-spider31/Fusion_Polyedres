@@ -45,7 +45,22 @@ public:
 	);
 
 private:
-
-	static void decouper(const string& str, const char delim, vector<string>& out);
+	/**
+	 * @brief Permet d'extraire les donnees d'un sommet dans un tableau
+	 *
+	 * Format d'une face :
+	 * f vertexId/normalId/textureId ...
+	 *
+	 * Exemple :
+	 * f 9/15/7 10/16/7 12/17/7 11/18/7
+	 * on veut seulement les vertices :
+	 * f 9 10 12 11
+	 *
+	 * @param str donnees du sommet (vertex, texture, normale) ou vertex niquement
+	 * @param delim delimiteur "/", ex : vertex/texture/normale
+	 * 
+	 * @return tableau des donnees du sommet (en float)
+	*/
+	static vector<float> vertexDataFromString(const string& str, const char delim);
 };
 
