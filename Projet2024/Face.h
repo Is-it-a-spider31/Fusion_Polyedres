@@ -43,7 +43,7 @@ public:
 	Point getSommet(int i);
 
 	// OPERATEUR REDEFINI
-	bool operator==(Face f);
+	bool operator==(const Face f) const;
 
 
 private:

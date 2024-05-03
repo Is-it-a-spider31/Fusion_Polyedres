@@ -28,9 +28,35 @@ vector<Face> Polyedre::getSharedFaces(Polyedre& poly1, Polyedre& poly2)
     return sharedFaces;
 }
 
-void Polyedre::mergePolyhedron(const Polyedre otherPoly)
+/**
+ * @brief Fusionne le polyedre courant avec un autre polyedre
+ *
+ * @param otherPoly Autre polyedre avec lequel on veut fusionner
+ * @param sharedFaces Liste des faces communes aux 2 polyedres
+*/
+void Polyedre::mergeWith(const Polyedre otherPoly, const vector<Face> sharedFaces)
 {
+    for (int n = 0; n < otherPoly.faces.size(); n++)
+    {
+        bool isSharedFace = false;
+        int j = 0;
+        // Cherche si la face courante est commune aux 2 polyedres
+        while (j < sharedFaces.size() && !isSharedFace) 
+        {
+            if (otherPoly.faces[n] == sharedFaces[j])
+            {
+                isSharedFace = true;
+            }
+            j++;
+        }
 
+        // Fusion uniquement la face n'est pas commune aux 2 polyèdres
+        if (!isSharedFace)
+        {
+            this->faces.push_back(otherPoly.faces[n]);
+        }
+
+    }
 }
 
 int Polyedre::getId() const { return d_id; }

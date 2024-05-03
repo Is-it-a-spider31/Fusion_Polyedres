@@ -38,8 +38,8 @@ public:
 	void setPoint(const Point& v);
 
 	// OPERATEURS REDEFINIS
-	bool operator==(Point v);
-	bool operator!=(Point v);
+	bool operator==(const Point& v) const;
+	bool operator!=(const Point& v) const;
 
 private:
 	/**

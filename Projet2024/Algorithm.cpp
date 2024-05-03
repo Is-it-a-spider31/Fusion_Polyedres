@@ -1,8 +1,11 @@
 #include "Algorithm.h"
 
 #include <fstream>
+#include <sstream>
 #include <algorithm>
 #include "OBJFileHandler.h"
+
+using namespace std;
 
 /**
  * @brief Contructeur a partir d'un fichier .obj
@@ -31,6 +34,7 @@ void Algorithm::run()
 
 	// Pour chaque combinaison de permutation
 	//	(complexite n! pour n polyedres)
+	int nbPermutaions = 0;
 	do {
 
 		Polyedre currentPolyhedron = permutedPolyhedrons[0];
@@ -51,19 +55,33 @@ void Algorithm::run()
 				{	// Si les 2 polyedres sont convexes (cf. consignes du projet)
 
 					// FUSION
-					currentPolyhedron.mergeWith(nextPolyhedron);
-
+					currentPolyhedron.mergeWith(nextPolyhedron, sharedFaces);
 				}
 				else
 				{	//Si les 2 polyedres ne sont pas convexes
-					
+					mergedPolyhedrons.push_back(currentPolyhedron);
 				}
 			}
 
 		}
 
+		// Ajout du dernier polyedre fusionne
+		mergedPolyhedrons.push_back(currentPolyhedron);
+		// Ajout du dernier polyedre de la list permutee
+		mergedPolyhedrons.push_back(permutedPolyhedrons.back());
+		
+		// Conversion de la taille du vecteur en chaîne de caractères
+		stringstream sizeStr;
+		sizeStr << mergedPolyhedrons.size();
+
+		// ECRITURE DU FICHIER OBJ POUR CETTE PERMUTATION
+		string filename = "FUSION." + sizeStr.str() + "Poly_" + to_string(nbPermutaions);
+		OBJFileHandler::writeOBJ(d_vertices, mergedPolyhedrons,	filename);
+
+
 		permutedPolyhedrons.clear();
 		mergedPolyhedrons.clear();
+		nbPermutaions++;
 
 	} while (next_permutation(permutedPolyhedrons.begin(), permutedPolyhedrons.end()));
 }

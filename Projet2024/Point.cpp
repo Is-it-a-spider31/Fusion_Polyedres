@@ -50,12 +50,12 @@ void Point::setPoint(const Point& v) {
 
 // OPERATEUR REDEFINIS
 
-bool Point::operator==(Point v)
+bool Point::operator==(const Point& v) const
 {
 	return(d_x == v.d_x && d_y == v.d_y && d_z == v.d_z);
 }
 
-bool Point::operator!=(Point v)
+bool Point::operator!=(const Point& v) const
 {
 	return !(*this == v);
 }

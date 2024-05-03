@@ -34,7 +34,7 @@ int Face::getId() const
 
 // OPERATEUR REDEFINI
 
-bool Face::operator==(Face f)
+bool Face::operator==(const Face f) const
 {
 	if (d_sommets.size() == f.d_sommets.size()) {
 		int pointsEnCommun = 0;

@@ -32,11 +32,12 @@ public:
 	static vector<Face> getSharedFaces(Polyedre& poly1, Polyedre& poly2);
 
 	/**
-	 * @brief Fusionne le polyedre avec un autre polyedre
+	 * @brief Fusionne le polyedre courant avec un autre polyedre
 	 * 
 	 * @param otherPoly Autre polyedre avec lequel on veut fusionner
+	 * @param sharedFaces Faces communes aux 2 polyedres
 	*/
-	void mergeWith(const Polyedre otherPoly);
+	void mergeWith(const Polyedre otherPoly, const vector<Face> sharedFaces);
 
 
 	const bool isConvex();
