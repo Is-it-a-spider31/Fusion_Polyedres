@@ -47,8 +47,9 @@ public:
 	// GETTER
 	int getId() const;
 
-	// OPERATEURS 
-	// todo surcharger les operateurs, plus tard
+	// OPERATEUR
+	bool operator<(const Polyedre& poly) const;
+
 
 private:
 	/**

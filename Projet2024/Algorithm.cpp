@@ -22,8 +22,6 @@ Algorithm::Algorithm(const string& filename)
 
 void Algorithm::run()
 {
-	/*
-	
 	// Liste des polyedres permutes
 	vector<Polyedre> permutedPolyhedrons; 
 
@@ -88,8 +86,6 @@ void Algorithm::run()
 		nbPermutaions++;
 
 	} while (next_permutation(permutedPolyhedrons.begin(), permutedPolyhedrons.end()));
-	
-	*/
 }
 
 void Algorithm::test_Convexity()

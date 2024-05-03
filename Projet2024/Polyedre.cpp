@@ -62,6 +62,13 @@ void Polyedre::mergeWith(const Polyedre otherPoly, const vector<Face> sharedFace
     }
 }
 
+// OPERATEUR
+bool Polyedre::operator<(const Polyedre& otherPoly) const
+{
+    return d_id < otherPoly.d_id;
+}
+
+// GETTERS
 int Polyedre::getId() const { return d_id; }
 
 bool Polyedre::isConvex() const { return d_isConvex; }
