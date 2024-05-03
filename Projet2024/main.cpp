@@ -5,7 +5,7 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-	Algorithm algo("ConvexiTest/subdiv_sphere.obj");
+	Algorithm algo("ConvexiTest/cylindre.obj");
 
 	algo.test_Convexity();
 
