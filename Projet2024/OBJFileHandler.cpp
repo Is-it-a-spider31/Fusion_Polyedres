@@ -17,7 +17,7 @@ void OBJFileHandler::writeOBJ(const vector<Point>& vertices, const vector<Polyed
 
     if (monFlux)    // ECRITURE
     {
-        monFlux << "# Blender 3.6.1" << endl;
+        monFlux << "# Generated from Projet2024" << endl;
         monFlux << "# www.blender.org" << endl;
         monFlux << "mtllib untitled.mtl" << endl;
 

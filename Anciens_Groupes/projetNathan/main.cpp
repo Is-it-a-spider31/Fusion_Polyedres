@@ -82,7 +82,7 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-    string nomFichier = "../../exemple3";
+    string nomFichier = "../../exemple2";
 
     stringstream strFichier ;
     strFichier << nomFichier;
@@ -319,7 +319,7 @@ int main(int argc, char* argv[])
         // cout << "\n\n";
 
 
-
+        // DEBUT ALGORITHME ------------------------------- -------------------------
 
 
         int minimumPolygones = 100000;
@@ -380,6 +380,7 @@ int main(int argc, char* argv[])
                     bool faceCommune;
 
 
+                    // recherche de faces communes
                     for(int i = 0; i <polyActuel.faces.size(); i++)
                     {
                         for(int j = 0; j < polySuivant.faces.size(); j++)
@@ -399,7 +400,7 @@ int main(int argc, char* argv[])
 
 
 
-
+                        // TEST DE CONVEXITE PolyActuel
                         for(int k = 0; k < polyActuel.faces.size(); k++)
                         {
                             comparaisons.clear();
@@ -467,7 +468,7 @@ int main(int argc, char* argv[])
                             }
                         }
 
-
+                        // TEST DE CONVEXITE PolySuivant
                         for(int k = 0; k < polySuivant.faces.size(); k++)
                         {
                             comparaisons.clear();
@@ -534,7 +535,7 @@ int main(int argc, char* argv[])
                         }
 
 
-
+                        // FUSION
                         if(convex)
                         {
                             // cout << polyActuel.getId() << " " << polySuivant.getId() <<   " convexe \n ";

@@ -41,6 +41,6 @@ private:
     vector<Polyedre> d_polyhedrons;
 
     // METHODES
-
+        
 };
 

@@ -139,7 +139,6 @@
     <ClInclude Include="Algorithm.h" />
     <ClInclude Include="Face.h" />
     <ClInclude Include="OBJFileHandler.h" />
-    <ClInclude Include="OBJ_Loader.h" />
     <ClInclude Include="Plan.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Polyedre.h" />
