@@ -2,6 +2,7 @@
 
 #include "Face.h"
 
+
 /**
  * @brief Represente un polyedre
 */
@@ -40,7 +41,8 @@ public:
 	void mergeWith(const Polyedre otherPoly, const vector<Face> sharedFaces);
 
 
-	const bool isConvex();
+	bool isConvex() const;
+	void computeConvexity();
 
 	// GETTER
 	int getId() const;
@@ -54,6 +56,9 @@ private:
 	*/
 	int d_id;
 
+	/**
+	 * @brief Etat convexe / non convexe du polyèdre
+	*/
 	bool d_isConvex;
 };
 

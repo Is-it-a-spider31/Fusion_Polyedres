@@ -20,7 +20,7 @@ public:
 	Algorithm(const string &filename);
 
     void run();
-
+    void test_Convexity();
 
 private:
     // ATTRIBUTES

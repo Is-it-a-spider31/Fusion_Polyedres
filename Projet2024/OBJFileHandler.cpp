@@ -133,6 +133,8 @@ void OBJFileHandler::loadOBJ(vector<Point>& vertices, vector<Face>& faces, vecto
 
                 if (mystring == "o")    // POLYEDRE SUIVANT
                 {
+                    polyhedrons[indexPoly - 1].computeConvexity();
+
                     if (currentVertices.size() != 0)
                     {
                         Face currentFace(currentVertices, indexFace);
@@ -140,6 +142,7 @@ void OBJFileHandler::loadOBJ(vector<Point>& vertices, vector<Face>& faces, vecto
                         faces.push_back(currentFace);
                         currentVertices.clear();
                         polyhedrons[indexPoly - 1].faces.push_back(currentFace);
+                 
                     }
                     object = true;
                 }
@@ -151,6 +154,7 @@ void OBJFileHandler::loadOBJ(vector<Point>& vertices, vector<Face>& faces, vecto
         faces.push_back(currentFace);
         currentVertices.clear();
         polyhedrons[indexPoly - 1].faces.push_back(currentFace);
+        polyhedrons[indexPoly - 1].computeConvexity();
     }
 }
 
