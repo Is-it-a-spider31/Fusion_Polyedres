@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-Polyedre::Polyedre(int id) : d_id(id) {}
+Polyedre::Polyedre(int id) : d_id(id), d_isConvex(true){}
 
 /**
  * @brief Renvoie les faces communes entre 2 polyedres
@@ -75,30 +75,73 @@ bool Polyedre::isConvex() const { return d_isConvex; }
 
 void Polyedre::computeConvexity()
 {
+    /*
+    // https://www.geogebra.org/3d?lang=fr
+    // plan Face 64
+    Plan plan = Plan(
+        Point(0, -0.535118, - 0.535118, 0.418850), // 15
+        Point(1, -0.610461, - 0.431759, 0.431759), // 93
+        Point(2, -0.664133, - 0.455302, 0.302983)  // 100
+    );
+
+    // Point bug
+    Point D(3, -0.698026, 0.474400, 0.156091); // 113
+    // Point E(4, 0.12, -2.58, 1);
+    double resD = plan.pointPositionFromPlan(D);
+    //double resE = plan.pointPositionFromPlan(E);
+
+    std::cout << "  TEST PLAN - D : " << resD << std::endl;
+    //std::cout << "  TEST PLAN - E : " << resE << std::endl;
+    */
 
     std::cout << faces.size() << std::endl;
     for (int i = 0; i < faces.size(); i++)
     {
-        double seuil = 1e-3;
-        Plan p = Plan(faces[i].d_sommets[0], faces[i].d_sommets[1], faces[i].d_sommets[2]);
-        int sens_reference = p.pointPositionFromPlan(faces[i].d_sommets[0]);
-        std::cout << "Sens reference de la face " << i << " : " << sens_reference << std::endl;
+        Plan plan = Plan(faces[i].d_sommets[0], faces[i].d_sommets[1], faces[i].d_sommets[2]);
+        double sens = 0;
+        bool pos;
 
-
-        for (int j = 1; j < faces[i].d_sommets.size(); j++)
+        for (int f = 0; f < faces.size(); f++)
         {
-            double sens_point = p.pointPositionFromPlan(faces[i].d_sommets[j]);
-            std::cout << "  - Sommet " << j << " : " << sens_point << std::endl;
-            if (sens_point != sens_reference)
+            for (int p2 = 0; p2 < faces[f].d_sommets.size(); p2++)
             {
-                //if (sens_point < sens_reference - seuil || sens_point > sens_reference + seuil)
-                //{ 
-                d_isConvex = false;
-                return;
-                //}
-            }
+                double sens_point = plan.pointPositionFromPlan(faces[f].d_sommets[p2]);
+                // std::cout << "  - Sommet " << p2 << " : " << sens_point << std::endl;
 
+                if (sens_point != 0 && abs(sens_point) > 0.00001)
+                {
+                    if (sens == 0) {
+                        sens = sens_point;
+                        pos = (sens > 0);
+                      /*  std::cout << "NOUVELLE FACE" << std::endl;
+                        std::cout << "Sens val : " << sens << std::endl;
+                        std::cout << "Sens : " << pos << std::endl;*/
+                    }
+                    else {
+                        if ( (   (sens_point > 0 && !pos) 
+                            ||  (sens_point < 0 && pos))
+                             && abs(sens_point) > 0.0001)
+                        {
+                            std::cout << "  Face reference : " << i << std::endl;
+                            std::cout << "  Face bug : " << f << std::endl;
+                            std::cout << "  Sommet bug : " << p2 << std::endl;
+                            std::cout << "  Point X " << faces[f].d_sommets[p2].getX() << std::endl;
+                            std::cout << "  Point Y " << faces[f].d_sommets[p2].getY() << std::endl;
+                            std::cout << "  Point Z " << faces[f].d_sommets[p2].getZ() << std::endl;
+                            std::cout << "  bool sens " << pos << std::endl;
+                            std::cout << "  sens point " << sens_point << std::endl;
+                            d_isConvex = false;
+                            return;
+                        }
+                        else {
+                            //std::cout << "  sens point " << sens_point << std::endl;
+                        }
+                    }
+
+                }
+            }
         }
+
     }
     std::cout << "c'est true normalement chef" << std::endl;
     d_isConvex = true;

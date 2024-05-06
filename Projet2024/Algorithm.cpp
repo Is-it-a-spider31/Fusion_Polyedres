@@ -90,6 +90,7 @@ void Algorithm::run()
 
 void Algorithm::test_Convexity()
 {
+	// OBJFileHandler::writeOBJ(d_vertices, d_polyhedrons, "ConvexiTest/generated/sphere_export.obj");
 	std::cout << "Nombre de sommets : " << d_vertices.size() << std::endl;
 	std::cout << "Nombre de faces : " << d_faces.size() << std::endl;
 
