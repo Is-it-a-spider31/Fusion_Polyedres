@@ -5,7 +5,10 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-	Algorithm algo("../Anciens_Groupes/exemple.obj");
+	Algorithm algo("ConvexiTest/normal_sphere.obj");
+
+	algo.test_Convexity();
+	algo.test_WriteObj();
 
 	return 0;
 }

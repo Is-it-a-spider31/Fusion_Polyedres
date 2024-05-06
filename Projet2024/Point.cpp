@@ -59,3 +59,9 @@ bool Point::operator!=(const Point& v) const
 {
 	return !(*this == v);
 }
+
+std::ostream& operator<<(std::ostream& os, const Point& p)
+{
+	os << "v " << p.getX() << " " << p.getY() << " " << p.getZ() << std::endl;
+	return os;
+}

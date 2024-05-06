@@ -1,4 +1,7 @@
 #include "Polyedre.h"
+#include "Plan.h"
+
+#include <iostream>
 
 Polyedre::Polyedre(int id) : d_id(id) {}
 
@@ -60,3 +63,76 @@ void Polyedre::mergeWith(const Polyedre otherPoly, const vector<Face> sharedFace
 }
 
 int Polyedre::getId() const { return d_id; }
+
+vector<Face> Polyedre::getFaces() const { return faces; }
+
+bool Polyedre::isConvex() const { return d_isConvex; }
+
+void Polyedre::computeConvexity()
+{
+
+    std::cout << faces.size() << std::endl;
+    for (int i = 0; i < faces.size(); i++)
+    {
+        double seuil = 1e-3;
+        Plan p = Plan(faces[i].d_sommets[0], faces[i].d_sommets[1], faces[i].d_sommets[2]);
+
+        /*for (int j = 0; j < faces[i].d_sommets.size(); j++)
+        {
+            double sens_point = p.pointPositionFromPlan(faces[i].d_sommets[j]);
+            std::cout << "  - Sommet " << j << " : " << sens_point << std::endl;
+            if (sens_point != sens_reference)
+            {
+                //if (sens_point < sens_reference - seuil || sens_point > sens_reference + seuil)
+                //{ 
+                d_isConvex = false;
+                return;
+                //}
+            }
+
+        }*/
+
+        for (int f = 0; f < faces.size(); f++)
+        {
+            double sens = 0;
+            bool pos;
+            std::cout << "  Face " << f << " : " << std::endl;
+            for (int p2 = 0; p2 < faces[f].d_sommets.size(); p2++)
+            {
+                
+                double sens_point = p.pointPositionFromPlan(faces[f].d_sommets[p2]);
+                std::cout << "  - Sommet " << p2 << " : " << sens_point << " [ x: " << faces[f].d_sommets[p2].getX() << " y: " << faces[f].d_sommets[p2].getY() << " z : " << faces[f].d_sommets[p2].getZ() <<std::endl;
+                if (p.pointPositionFromPlan(faces[f].d_sommets[p2]) != 0)
+                {
+                    if (sens == 0) {
+                        sens = p.pointPositionFromPlan(faces[f].d_sommets[p2]);
+                        pos = (sens >= 0);
+                    }
+                    else {
+                        if (!(sens_point >= 0 && pos || sens_point <= 0 && !pos))
+                        {
+                            d_isConvex = false;
+                            return;
+                        }
+                    }
+                    
+                }
+            }
+        }
+
+    }
+    std::cout << "c'est true normalement chef" << std::endl;
+    d_isConvex = true;
+    return;
+}
+
+std::ostream& operator<<(std::ostream& os, const Polyedre& p)
+{
+    os << "g Object" << p.getId() << std::endl;
+    for (const auto& face : p.getFaces()) 
+    {
+        os << face;
+    }
+    os << std::endl;
+    return os;
+}

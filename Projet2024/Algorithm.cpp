@@ -1,5 +1,7 @@
 #include "Algorithm.h"
 
+#include <iostream>
+
 #include <fstream>
 #include <sstream>
 #include <algorithm>
@@ -20,6 +22,8 @@ Algorithm::Algorithm(const string& filename)
 
 void Algorithm::run()
 {
+	/*
+	
 	// Liste des polyedres permutes
 	vector<Polyedre> permutedPolyhedrons; 
 
@@ -84,4 +88,31 @@ void Algorithm::run()
 		nbPermutaions++;
 
 	} while (next_permutation(permutedPolyhedrons.begin(), permutedPolyhedrons.end()));
+	
+	*/
+}
+
+void Algorithm::test_Convexity()
+{
+	std::cout << "Nombre de sommets : " << d_vertices.size() << std::endl;
+	std::cout << "Nombre de faces : " << d_faces.size() << std::endl;
+
+
+	for (int i = 0; i < d_polyhedrons.size(); i++)
+	{
+		std::cout << "id : " << d_polyhedrons[i].getId() << " ";
+		if (d_polyhedrons[i].isConvex())
+		{
+			std::cout << "is convex !" << std::endl;
+		}
+		else {
+			std::cout << "is not convex !" << std::endl;
+		}
+
+	}
+}
+
+void Algorithm::test_WriteObj()
+{
+	OBJFileHandler::writeOBJ(d_vertices, d_polyhedrons, "WriteObjectTest/exit_object.obj");
 }
