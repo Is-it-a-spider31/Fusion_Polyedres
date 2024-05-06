@@ -158,11 +158,13 @@ void Polyedre::computeConvexity()
 
 std::ostream& operator<<(std::ostream& os, const Polyedre& p)
 {
-    os << "g Object" << p.getId() << std::endl;
+    os << "o Object" << p.getId() << std::endl;
     for (const auto& face : p.getFaces()) 
     {
         os << face;
     }
     os << std::endl;
+
+
     return os;
 }
