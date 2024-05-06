@@ -80,7 +80,6 @@ private:
 	 * @return tableau des donnees du sommet (en float)
 	*/
 	static vector<float> vertexDataFromString(const string& str, const char delim);
-	static Polyedre createPoly(int id);
 
 };
 

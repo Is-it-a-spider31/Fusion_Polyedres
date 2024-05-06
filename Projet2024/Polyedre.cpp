@@ -4,7 +4,6 @@
 #include <iostream>
 
 Polyedre::Polyedre(int id) : d_id(id) {}
-Polyedre::Polyedre(): d_id(-1){}
 /**
  * @brief Renvoie les faces communes entre 2 polyedres
  *

@@ -17,7 +17,6 @@ public:
 	 * @param id Identifiant unique
 	*/
 	Polyedre(int id);
-	Polyedre();
 	/**
 	 * @brief Liste des faces du polyedre
 	*/

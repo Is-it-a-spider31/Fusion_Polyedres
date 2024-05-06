@@ -355,9 +355,3 @@ vector<float> OBJFileHandler::vertexDataFromString(string const& str, const char
     return out;
 }
 
-Polyedre OBJFileHandler::createPoly(int id)
-{
-    return Polyedre{id};
-}
-
-
