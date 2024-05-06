@@ -12,13 +12,16 @@ class Algorithm
 {
 public:
 
-	/**
-	 * @brief Contructeur a partir d'un fichier .obj
-     * 
-	 * @param filename Nom du fichier .obj
-	*/
-	Algorithm(const string &filename);
+    /**
+     * @brief Contructeur a partir d'un fichier .obj
+       * 
+     * @param filename Nom du fichier .obj
+    */
+    Algorithm(const string &filename);
 
+    /**
+     * @brief Algorithme principal de fusion
+    */
     void run();
 
     //FONCTIONS DE TEST

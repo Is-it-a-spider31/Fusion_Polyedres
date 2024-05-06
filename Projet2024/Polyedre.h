@@ -19,6 +19,21 @@ public:
 	Polyedre(int id);
 
 	/**
+	 * @brief Constructeur par copie
+	 * 
+	 * @param copy Polyedre a copier
+	*/
+	Polyedre(const Polyedre& copy);
+
+	/**
+	 * @brief Constructeur par copie en excluant des faces
+	 * 
+	 * @param copy Polyedre a copier
+	 * @param sharedFaces Faces a ne pas copier
+	*/
+	Polyedre(const Polyedre& copy, const vector<Face>& excludedFaces);
+
+	/**
 	 * @brief Liste des faces du polyedre
 	*/
 	vector<Face> faces;
@@ -38,7 +53,7 @@ public:
 	 * @param otherPoly Autre polyedre avec lequel on veut fusionner
 	 * @param sharedFaces Faces communes aux 2 polyedres
 	*/
-	void mergeWith(const Polyedre otherPoly, const vector<Face> sharedFaces);
+	static Polyedre merge2Polyhedrons(const Polyedre& poly1, const Polyedre& poly2, const vector<Face> sharedFaces);
 
 
 	bool isConvex() const;
@@ -48,8 +63,9 @@ public:
 	int getId() const;
 	vector<Face> getFaces() const;
 
-	// OPERATEURS 
-	// todo surcharger les operateurs, plus tard
+	// OPERATEUR
+	bool operator<(const Polyedre& poly) const;
+
 
 	friend std::ostream& operator<<(std::ostream& os, const Polyedre& p);
 
