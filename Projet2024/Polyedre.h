@@ -51,7 +51,7 @@ public:
 	// OPERATEURS 
 	// todo surcharger les operateurs, plus tard
 
-
+	//ecriture
 	friend std::ostream& operator<<(std::ostream& os, const Polyedre& p);
 
 private:
