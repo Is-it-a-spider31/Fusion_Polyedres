@@ -37,17 +37,27 @@ void Algorithm::run()
 	// Liste des polyedres avec fusion
 	vector<Polyedre> mergedPolyhedrons;
 
+	// Solution avec le nombre minimum de polyedres
+	int minNbPolySolution = permutedPolyhedrons.size();
+
 	// Pour chaque combinaison de permutation
 	//	(complexite n! pour n polyedres)
 	int nbPermutaions = 0;
-	do {
-
+	int nbFullSolutions = 0;	// nombre de solutions qui ont ete calculees jusqu'au bout
+	do 
+	{
 		Polyedre currentPolyhedron = permutedPolyhedrons[0];
 		Polyedre nextPolyhedron(0);
 
-		// Pour chaque polyedres (sauf le premier)
-		for (int nextPolyId = 1; nextPolyId < permutedPolyhedrons.size(); nextPolyId++)
+		// true : arreter la solution en cours car on a deja mieux
+		bool stopCurrentSolution = false;
+
+		// Pour chaque polyedres (sauf le premier), 
+		//	tant que la solution courante n'est pas arretee
+		int nextPolyId = 1;
+		while (nextPolyId < permutedPolyhedrons.size() && !stopCurrentSolution)
 		{
+			bool canMerge = false;	// true : la fusion est possible et convexe
 			nextPolyhedron = permutedPolyhedrons[nextPolyId];
 
 			// recherche des faces communes entre les 2 polyedres
@@ -60,50 +70,63 @@ void Algorithm::run()
 				{	// Si les 2 polyedres sont convexes (cf. consignes du projet)
 
 					// FUSION
-					Polyedre mergedPoly = Polyedre::merge2Polyhedrons(currentPolyhedron, nextPolyhedron, sharedFaces);
+					Polyedre mergedPoly = Polyedre::merge2Polyhedrons(
+						currentPolyhedron, 
+						nextPolyhedron, 
+						sharedFaces
+					);
 					mergedPoly.computeConvexity();
 
 					if (mergedPoly.isConvex())	// Fusion convexe
 					{
 						currentPolyhedron = mergedPoly;
+						canMerge = true;
 					}
-					else	// Fusion pas convexe
-					{
-						mergedPolyhedrons.push_back(currentPolyhedron);
-						currentPolyhedron = permutedPolyhedrons[nextPolyId];
-					}
-				}
-				else
-				{	//Si les 2 polyedres ne sont pas convexes
-					mergedPolyhedrons.push_back(currentPolyhedron);
-					currentPolyhedron = permutedPolyhedrons[nextPolyId];
 				}
 			}
-			else // Aucune face en commun
-			{
+
+			if (!canMerge)	// Si pas de fusion possible
+			{	// pas de face commune OU au moins 1 poly pas convexes OU fusion pas convexe
 				mergedPolyhedrons.push_back(currentPolyhedron);
 				currentPolyhedron = permutedPolyhedrons[nextPolyId];
+
+				// Si on a deja une meilleur solution
+				if (mergedPolyhedrons.size() >= minNbPolySolution)
+				{
+					stopCurrentSolution = true;
+				}
 			}
-		}	// for
 
-		// Ajout du dernier polyedre fusionne
-		mergedPolyhedrons.push_back(currentPolyhedron);
-		
-		// Conversion de la taille du vecteur en chaîne de caractères
-		stringstream sizeStr;
-		sizeStr << mergedPolyhedrons.size();
+			nextPolyId++;
+		}	// while
 
-		// ECRITURE DU FICHIER OBJ POUR CETTE PERMUTATION
-		string filename = "MergeTest/generated/FUSION." + sizeStr.str() + "Poly_" + to_string(nbPermutaions)+".obj";
-		OBJFileHandler::writeOBJ(d_vertices, mergedPolyhedrons,	filename);
+		if (!stopCurrentSolution)	// Solution calculee jusqu'au bout
+		{
+			// Ajout du dernier polyedre fusionne
+			mergedPolyhedrons.push_back(currentPolyhedron);
 
-		// permutedPolyhedrons.clear(); // 1 seul itération si décommenté (pour tester)
+			// Nouveau nombre minimum de polyedre (<= au minimum precedent)
+			minNbPolySolution = mergedPolyhedrons.size();
+			nbFullSolutions++;
+
+			// Conversion de la taille du vecteur en chaîne de caractères
+			stringstream sizeStr;
+			sizeStr << mergedPolyhedrons.size();
+
+			// ECRITURE DU FICHIER OBJ POUR CETTE PERMUTATION
+			string filename = "MergeTest/generated/FUSION." + sizeStr.str() 
+				+ "Poly_" + to_string(nbPermutaions) + ".obj";
+			OBJFileHandler::writeOBJ(d_vertices, mergedPolyhedrons, filename);
+		}
+
+		//permutedPolyhedrons.clear(); // 1 seul itération si non commente (pour tester)
 		mergedPolyhedrons.clear();
 		nbPermutaions++;
 
 	} while (next_permutation(permutedPolyhedrons.begin(), permutedPolyhedrons.end()));
 
-	cout << "Nb permutations : " << nbPermutaions << endl;
+	std::cout << "Nb permutations : " << nbPermutaions << endl;
+	std::cout << "Nb full solutions : " << nbFullSolutions << endl;
 }
 
 void Algorithm::test_Convexity()

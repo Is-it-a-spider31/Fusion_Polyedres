@@ -90,20 +90,11 @@ Polyedre Polyedre::merge2Polyhedrons(const Polyedre& poly1, const Polyedre& poly
 
     for (int n = 0; n < poly2.faces.size(); n++)
     {
-        bool isSharedFace = false;
-        int j = 0;
-        // Cherche si la face courante est commune aux 2 polyedres
-        while (j < sharedFaces.size() && !isSharedFace) 
-        {
-            if (poly2.faces[n] == sharedFaces[j])
-            {
-                isSharedFace = true;
-            }
-            j++;
-        }
+        // Cherche si la face est dans la liste des faces communes
+        auto it = std::find(sharedFaces.begin(), sharedFaces.end(), poly2.faces[n]);
 
         // Fusion uniquement la face n'est pas commune aux 2 polyèdres
-        if (!isSharedFace)
+        if (it == sharedFaces.end())
         {
             mergedPoly.faces.push_back(poly2.faces[n]);
         }
