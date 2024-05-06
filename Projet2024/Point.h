@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 
 /**
  * @brief Classe qui represente un point
@@ -40,6 +41,8 @@ public:
 	// OPERATEURS REDEFINIS
 	bool operator==(const Point& v) const;
 	bool operator!=(const Point& v) const;
+
+	friend std::ostream& operator<<(std::ostream& os, const Point& );
 
 private:
 	/**

@@ -11,47 +11,32 @@
  * @param polyhedrons Liste des polyedres
  * @param filename Nom du fichier
 */
+
 void OBJFileHandler::writeOBJ(const vector<Point>& vertices, const vector<Polyedre>& polyhedrons, const string& filename)
 {
     ofstream monFlux(filename.c_str());
-
     if (monFlux)    // ECRITURE
     {
-        monFlux << "# Generated from Projet2024" << endl;
-        monFlux << "# www.blender.org" << endl;
-        monFlux << "mtllib untitled.mtl" << endl;
-
-        // Ecriture de tous les sommets
-        for (int i = 0; i < vertices.size(); i++)
-        {
-            monFlux << "v " << vertices[i].getX() << " " << vertices[i].getY() << " " << vertices[i].getZ() << endl;
+        //SOMMETS
+        for (const auto& v : vertices) {
+            monFlux << v;
         }
 
-        // Ecriture des polyhedrons
-        for (int i = 0; i < polyhedrons.size(); i++)
-        {
-            monFlux << "o Polyedre" << i << endl;
-
-            // Pour chaques faces du polyedre
-            for (int j = 0; j < polyhedrons[i].faces.size(); j++)
-            {
-                vector<Point> sommets = polyhedrons[i].faces[j].d_sommets;
-
-                // Ecriture des sommets (leur identifiant) associes a la face
-                monFlux << "f ";
-                for (int k = 0; k < sommets.size(); k++)
-                {
-                    monFlux << sommets[k].getId() << " ";
-                }
-                monFlux << endl;
-            }
+        //POLYEDRE
+        for (const auto& poly : polyhedrons) {
+            monFlux << poly;
         }
+
+        monFlux.close();
+
     }
-    else    // ECHEC DE L'ECRITURE
+
+    else // ECHEC DE L'ECRITURE
     {
         cerr << "ERROR - cannot write file : \"" << filename << "\"" << endl;
     }
 }
+
 
 /**
  * @brief Lecture des donnees depuis un fichier .obj

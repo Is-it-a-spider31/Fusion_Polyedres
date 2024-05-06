@@ -44,7 +44,7 @@ public:
 
 	// OPERATEUR REDEFINI
 	bool operator==(const Face f) const;
-
+	friend std::ostream& operator<<(std::ostream& os, const Face& f);
 
 private:
 	/**

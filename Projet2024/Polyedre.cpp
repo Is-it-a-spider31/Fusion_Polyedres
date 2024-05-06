@@ -64,6 +64,8 @@ void Polyedre::mergeWith(const Polyedre otherPoly, const vector<Face> sharedFace
 
 int Polyedre::getId() const { return d_id; }
 
+vector<Face> Polyedre::getFaces() const { return faces; }
+
 bool Polyedre::isConvex() const { return d_isConvex; }
 
 void Polyedre::computeConvexity()
@@ -122,4 +124,15 @@ void Polyedre::computeConvexity()
     std::cout << "c'est true normalement chef" << std::endl;
     d_isConvex = true;
     return;
+}
+
+std::ostream& operator<<(std::ostream& os, const Polyedre& p)
+{
+    os << "g Object" << p.getId() << std::endl;
+    for (const auto& face : p.getFaces()) 
+    {
+        os << face;
+    }
+    os << std::endl;
+    return os;
 }

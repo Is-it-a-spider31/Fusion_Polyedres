@@ -46,9 +46,13 @@ public:
 
 	// GETTER
 	int getId() const;
+	vector<Face> getFaces() const;
 
 	// OPERATEURS 
 	// todo surcharger les operateurs, plus tard
+
+
+	friend std::ostream& operator<<(std::ostream& os, const Polyedre& p);
 
 private:
 	/**
