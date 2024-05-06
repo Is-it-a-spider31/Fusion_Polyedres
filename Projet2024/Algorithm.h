@@ -19,7 +19,11 @@ public:
 	*/
 	Algorithm(const string &filename);
 
+    /**
+     * @brief Algorithme principal de fusion
+    */
     void run();
+
     void test_Convexity();
 
 private:

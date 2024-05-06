@@ -3,7 +3,54 @@
 
 #include <iostream>
 
+/**
+ * @brief Constructeur par defaut
+ *
+ * @param id Identifiant unique
+*/
 Polyedre::Polyedre(int id) : d_id(id), d_isConvex(true){}
+
+
+/**
+ * @brief Constructeur par copie
+ *
+ * @param copy Polyedre a copier
+*/
+Polyedre::Polyedre(const Polyedre& copy)
+{
+    this->d_id = copy.d_id;
+    this->d_isConvex = copy.d_isConvex;
+
+    for (const Face faceCopy: copy.faces)
+    {
+        this->faces.push_back(faceCopy);
+    }
+}
+
+/**
+ * @brief Constructeur par copie en excluant des faces
+ *
+ * @param copy Polyedre a copier
+ * @param sharedFaces Faces a ne pas copier
+*/
+Polyedre::Polyedre(const Polyedre& copy, const vector<Face>& excludedFaces)
+{
+    this->d_id = copy.d_id;
+    this->d_isConvex = copy.d_isConvex;
+
+    // Pour chaque face à copier
+    int i = 0;
+    for (const Face faceCopy : copy.faces)
+    {
+        // Cherche si la face est dans la liste des faces a ne pas copier
+        auto it = std::find(excludedFaces.begin(), excludedFaces.end(), faceCopy);
+
+        if (it == excludedFaces.end()) 
+        {   // si la face n'est pas dans la liste des faces exclues
+            this->faces.push_back(faceCopy);
+        }
+    }
+}
 
 /**
  * @brief Renvoie les faces communes entre 2 polyedres
@@ -37,16 +84,18 @@ vector<Face> Polyedre::getSharedFaces(Polyedre& poly1, Polyedre& poly2)
  * @param otherPoly Autre polyedre avec lequel on veut fusionner
  * @param sharedFaces Liste des faces communes aux 2 polyedres
 */
-void Polyedre::mergeWith(const Polyedre otherPoly, const vector<Face> sharedFaces)
+Polyedre Polyedre::merge2Polyhedrons(const Polyedre& poly1, const Polyedre& poly2, const vector<Face> sharedFaces)
 {
-    for (int n = 0; n < otherPoly.faces.size(); n++)
+    Polyedre mergedPoly(poly1, sharedFaces);
+
+    for (int n = 0; n < poly2.faces.size(); n++)
     {
         bool isSharedFace = false;
         int j = 0;
         // Cherche si la face courante est commune aux 2 polyedres
         while (j < sharedFaces.size() && !isSharedFace) 
         {
-            if (otherPoly.faces[n] == sharedFaces[j])
+            if (poly2.faces[n] == sharedFaces[j])
             {
                 isSharedFace = true;
             }
@@ -56,10 +105,11 @@ void Polyedre::mergeWith(const Polyedre otherPoly, const vector<Face> sharedFace
         // Fusion uniquement la face n'est pas commune aux 2 polyèdres
         if (!isSharedFace)
         {
-            this->faces.push_back(otherPoly.faces[n]);
+            mergedPoly.faces.push_back(poly2.faces[n]);
         }
 
     }
+    return mergedPoly;
 }
 
 // OPERATEUR
@@ -105,12 +155,10 @@ void Polyedre::computeConvexity()
                             return;
                         }
                     }
-
-                }
-            }
-        }
-
-    }
+                }   // if
+            }   // for
+        }   // for
+    }   // for
     d_isConvex = true;
     return;
 }

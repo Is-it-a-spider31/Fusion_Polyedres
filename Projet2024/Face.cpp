@@ -44,13 +44,13 @@ bool Face::operator==(const Face f) const
 			{
 				if (d_sommets[i] == f.d_sommets[j])
 				{
-
 					pointsEnCommun++;
 				}
 			}
 		}
 
-		return pointsEnCommun == d_sommets.size();
+		// Nombres de sommets en commun = nombre de sommets de chaques faces
+		return ((pointsEnCommun == d_sommets.size()) && (pointsEnCommun == f.d_sommets.size()));
 	}
 	return false;
 }
