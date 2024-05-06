@@ -44,6 +44,24 @@ public:
 		const string& filename
 	);
 
+	static enum FirstString {
+		commentaire,
+		vertex,
+		face,
+		point,
+		vertex_normal,
+		vertex_texture,
+		line_,
+		material,
+		usemtl,
+		group,
+		object,
+		smoothgroup,
+		dont_know_string,
+	};
+
+	static FirstString resolveFirstString(string input);
+
 private:
 	/**
 	 * @brief Permet d'extraire les donnees d'un sommet dans un tableau
@@ -62,5 +80,7 @@ private:
 	 * @return tableau des donnees du sommet (en float)
 	*/
 	static vector<float> vertexDataFromString(const string& str, const char delim);
+	static Polyedre createPoly(int id);
+
 };
 

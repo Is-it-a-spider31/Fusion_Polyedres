@@ -110,9 +110,20 @@ void Algorithm::test_Convexity()
 		}
 
 	}
+
 }
 
 void Algorithm::test_WriteObj()
 {
 	OBJFileHandler::writeOBJ(d_vertices, d_polyhedrons, "WriteObjectTest/exit_object.obj");
+}
+
+void Algorithm::test_LoadObj()
+{
+	vector<Point> vertices;
+	vector<Polyedre> polyedrons;
+	vector<Face> faces;
+
+	OBJFileHandler::loadOBJ(vertices, faces, polyedrons, "ConvexiTest/normal_sphere.obj");
+	OBJFileHandler::writeOBJ(vertices, polyedrons, "WriteObjectTest/exit_object_from_read.obj");
 }

@@ -17,7 +17,7 @@ public:
 	 * @param id Identifiant unique
 	*/
 	Polyedre(int id);
-
+	Polyedre();
 	/**
 	 * @brief Liste des faces du polyedre
 	*/
@@ -47,6 +47,7 @@ public:
 	// GETTER
 	int getId() const;
 	vector<Face> getFaces() const;
+
 
 	// OPERATEURS 
 	// todo surcharger les operateurs, plus tard

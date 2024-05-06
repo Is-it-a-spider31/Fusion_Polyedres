@@ -4,7 +4,7 @@
 #include <iostream>
 
 Polyedre::Polyedre(int id) : d_id(id) {}
-
+Polyedre::Polyedre(): d_id(-1){}
 /**
  * @brief Renvoie les faces communes entre 2 polyedres
  *
@@ -128,11 +128,13 @@ void Polyedre::computeConvexity()
 
 std::ostream& operator<<(std::ostream& os, const Polyedre& p)
 {
-    os << "g Object" << p.getId() << std::endl;
+    os << "o Object" << p.getId() << std::endl;
     for (const auto& face : p.getFaces()) 
     {
         os << face;
     }
     os << std::endl;
+
+
     return os;
 }
