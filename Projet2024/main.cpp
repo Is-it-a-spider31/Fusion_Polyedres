@@ -5,12 +5,13 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-	Algorithm algo("MergeTest/exemple2.obj");
-	 algo.run();
+  // TO TEST MERGING ALGORITHM
+	// Algorithm algo("MergeTest/exemple2.obj");
+	// algo.run();
 
-	/*Algorithm algo("MergeTest/deviantMerge/NotConvexePoly.obj", "");
-	algo.test_Convexity();*/
-
+	Algorithm algo("ConvexiTest/normal_sphere.obj");
+	algo.test_Convexity();
+	algo.test_WriteObj();
 
 	return 0;
 }

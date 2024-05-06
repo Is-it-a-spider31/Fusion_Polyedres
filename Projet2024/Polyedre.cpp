@@ -38,7 +38,7 @@ Polyedre::Polyedre(const Polyedre& copy, const vector<Face>& excludedFaces)
     this->d_id = copy.d_id;
     this->d_isConvex = copy.d_isConvex;
 
-    // Pour chaque face à copier
+    // Pour chaque face Ã  copier
     int i = 0;
     for (const Face faceCopy : copy.faces)
     {
@@ -102,7 +102,7 @@ Polyedre Polyedre::merge2Polyhedrons(const Polyedre& poly1, const Polyedre& poly
             j++;
         }
 
-        // Fusion uniquement la face n'est pas commune aux 2 polyèdres
+        // Fusion uniquement la face n'est pas commune aux 2 polyÃ¨dres
         if (!isSharedFace)
         {
             mergedPoly.faces.push_back(poly2.faces[n]);
@@ -121,6 +121,8 @@ bool Polyedre::operator<(const Polyedre& otherPoly) const
 // GETTERS
 int Polyedre::getId() const { return d_id; }
 
+vector<Face> Polyedre::getFaces() const { return faces; }
+
 bool Polyedre::isConvex() const { return d_isConvex; }
 
 void Polyedre::computeConvexity()
@@ -138,7 +140,7 @@ void Polyedre::computeConvexity()
                 double sens_point = plan.pointPositionFromPlan(faces[f].d_sommets[p2]);
 
                 // Pour determiner le sens de reference, il faut etre sur que le point
-                // n'est pas sur le plan, donc théoriquement different de 0
+                // n'est pas sur le plan, donc thÃ©oriquement different de 0
                 // Ajout d'une marge d'erreur (exemple : 1.54 e-18 est considere comme 0)
                 if (sens_point != 0 && abs(sens_point) > 0.00001)
                 {
@@ -161,4 +163,15 @@ void Polyedre::computeConvexity()
     }   // for
     d_isConvex = true;
     return;
+}
+
+std::ostream& operator<<(std::ostream& os, const Polyedre& p)
+{
+    os << "g Object" << p.getId() << std::endl;
+    for (const auto& face : p.getFaces()) 
+    {
+        os << face;
+    }
+    os << std::endl;
+    return os;
 }

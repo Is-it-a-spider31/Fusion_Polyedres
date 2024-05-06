@@ -54,3 +54,14 @@ bool Face::operator==(const Face f) const
 	}
 	return false;
 }
+
+std::ostream& operator<<(std::ostream& os, const Face& f)
+{
+	os << "f ";
+	for (const auto& point : f.d_sommets)
+	{
+		os << point.getId() << " ";
+	}
+	os << std::endl;
+	return os;
+}

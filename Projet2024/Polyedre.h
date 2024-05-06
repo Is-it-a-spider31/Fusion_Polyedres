@@ -61,10 +61,13 @@ public:
 
 	// GETTER
 	int getId() const;
+	vector<Face> getFaces() const;
 
 	// OPERATEUR
 	bool operator<(const Polyedre& poly) const;
 
+
+	friend std::ostream& operator<<(std::ostream& os, const Polyedre& p);
 
 private:
 	/**
