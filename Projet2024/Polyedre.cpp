@@ -59,7 +59,7 @@ Polyedre::Polyedre(const Polyedre& copy, const vector<Face>& excludedFaces)
  * @param poly2
  * @return la liste des faces communes entre les 2 polyedres
 */
-vector<Face> Polyedre::getSharedFaces(Polyedre& poly1, Polyedre& poly2)
+vector<Face> Polyedre::getSharedFaces(const Polyedre& poly1, const Polyedre& poly2)
 {
     // Liste des faces communes aux 2 polyedres
     vector<Face> sharedFaces;
@@ -103,11 +103,7 @@ Polyedre Polyedre::merge2Polyhedrons(const Polyedre& poly1, const Polyedre& poly
     return mergedPoly;
 }
 
-// OPERATEUR
-bool Polyedre::operator<(const Polyedre& otherPoly) const
-{
-    return d_id < otherPoly.d_id;
-}
+
 
 // GETTERS
 int Polyedre::getId() const { return d_id; }
@@ -156,6 +152,29 @@ void Polyedre::computeConvexity()
     return;
 }
 
+
+// OPERATEURS
+
+bool Polyedre::operator<(const Polyedre& otherPoly) const
+{
+    return d_id < otherPoly.d_id;
+}
+
+bool Polyedre::operator==(const Polyedre& poly) const
+{
+    // Liste des faces communes aux 2 polyedres
+    vector<Face> sharedFaces = Polyedre::getSharedFaces(*this, poly);
+
+    // S'il ont le même nombre de faces et qu'elles sont 
+    //  toutes communes aux 2 polyedres
+    if (this->faces.size() == poly.faces.size()
+        && poly.faces.size() == sharedFaces.size())
+    {
+        return true;
+    }
+    return false;
+}
+
 std::ostream& operator<<(std::ostream& os, const Polyedre& p)
 {
     os << "o Object" << p.getId() << std::endl;
@@ -164,7 +183,6 @@ std::ostream& operator<<(std::ostream& os, const Polyedre& p)
         os << face;
     }
     os << std::endl;
-
 
     return os;
 }
