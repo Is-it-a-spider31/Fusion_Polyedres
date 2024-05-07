@@ -108,7 +108,17 @@ Polyedre Polyedre::merge2Polyhedrons(const Polyedre& poly1, const Polyedre& poly
 // GETTERS
 int Polyedre::getId() const { return d_id; }
 
+string Polyedre::getMTL() const
+{
+    return d_texture;
+}
+
 vector<Face> Polyedre::getFaces() const { return faces; }
+
+void Polyedre::setMTL(string name)
+{
+    d_texture = "Texture/" + name + ".obj";
+}
 
 bool Polyedre::isConvex() const { return d_isConvex; }
 

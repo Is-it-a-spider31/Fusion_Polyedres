@@ -226,7 +226,7 @@ void Algorithm::test_Convexity()
 
 void Algorithm::test_WriteObj()
 {
-	OBJFileHandler::writeOBJ(d_vertices, d_polyhedrons, "WriteObjectTest/exit_object.obj");
+	OBJFileHandler::writeOBJ(d_vertices, d_polyhedrons, "WriteObjectTest/exit_object_write.obj");
 }
 
 void Algorithm::test_LoadObj()
