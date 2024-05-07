@@ -25,6 +25,10 @@ Algorithm::Algorithm(const string& filename)
 */
 void Algorithm::run()
 {
+	// Liste des solutions uniques trouvees
+	//	(une solution = ensemble de polyedres)
+	vector<vector<Polyedre>> solutions;
+
 	// Liste des polyedres permutes
 	vector<Polyedre> permutedPolyhedrons; 
 
@@ -40,10 +44,13 @@ void Algorithm::run()
 	// Solution avec le nombre minimum de polyedres
 	int minNbPolySolution = permutedPolyhedrons.size();
 
+	// Statistiques
+	int nbPermutaions = 0;		// nombre de permuations effectuees
+	int nbFullSolutions = 0;	// nombre de solutions qui ont ete calculees jusqu'au bout
+	int nbUniqueSolutions = 0;	// nombre de solutions uniques trouvees
+
 	// Pour chaque combinaison de permutation
 	//	(complexite n! pour n polyedres)
-	int nbPermutaions = 0;
-	int nbFullSolutions = 0;	// nombre de solutions qui ont ete calculees jusqu'au bout
 	do 
 	{
 		Polyedre currentPolyhedron = permutedPolyhedrons[0];
@@ -109,14 +116,23 @@ void Algorithm::run()
 			minNbPolySolution = mergedPolyhedrons.size();
 			nbFullSolutions++;
 
-			// Conversion de la taille du vecteur en chaîne de caractères
-			stringstream sizeStr;
-			sizeStr << mergedPolyhedrons.size();
+			// Vrai si les meme fusions ont deja ete trouvees et ecrites dans un fichier obj
+			bool isAlreadyFinded = Algorithm::isSolutionAlreadyFinded(mergedPolyhedrons, solutions);
+	
+			if (!isAlreadyFinded)	// Si c'est une nouvelle solution
+			{
+				nbUniqueSolutions++;
+				solutions.push_back(mergedPolyhedrons);
 
-			// ECRITURE DU FICHIER OBJ POUR CETTE PERMUTATION
-			string filename = "MergeTest/generated/FUSION." + sizeStr.str() 
-				+ "Poly_" + to_string(nbPermutaions) + ".obj";
-			OBJFileHandler::writeOBJ(d_vertices, mergedPolyhedrons, filename);
+				// Conversion de la taille du vecteur en chaîne de caractères
+				stringstream sizeStr;
+				sizeStr << mergedPolyhedrons.size();
+
+				// Ecriture du fichier OBJ pour cette solution
+				string filename = "MergeTest/generated/FUSION." + sizeStr.str()
+					+ "Poly_" + to_string(nbPermutaions) + ".obj";
+				OBJFileHandler::writeOBJ(d_vertices, mergedPolyhedrons, filename);
+			}
 		}
 
 		//permutedPolyhedrons.clear(); // 1 seul itération si non commente (pour tester)
@@ -125,9 +141,66 @@ void Algorithm::run()
 
 	} while (next_permutation(permutedPolyhedrons.begin(), permutedPolyhedrons.end()));
 
+	// Affichage des statistiques
 	std::cout << "Nb permutations : " << nbPermutaions << endl;
 	std::cout << "Nb full solutions : " << nbFullSolutions << endl;
+	std::cout << "Nb unique solutions : " << nbUniqueSolutions << endl;
 }
+
+
+
+
+/**
+ * @brief Verifie si une solution de l'algo de fusion a deja ete trouvee
+ *
+ * Si la solution (ensemble de polyedres) courante est dans
+ * la liste des solutions, cela signifie que cette solution a deja
+ * ete calculee et trouvee par l'algo de fusion.
+ *
+ * @param polyhedrons Solution courante de l'algo de fusion
+ * @param solutions Liste des solutions deja trouvees
+ * 
+ * @return true Si la solution est presente dans la liste
+*/
+bool Algorithm::isSolutionAlreadyFinded(
+	const vector<Polyedre>& newSolution,		// Nouvelle solution
+	const vector<vector<Polyedre>>& solutions	// Liste des solutions trouvees
+)
+{
+	bool isSameSolution = false;	// true si la nouvelle solution est deja dans la liste
+
+	// Parcours des solutions trouvees
+	for (vector<Polyedre> solution : solutions)
+	{
+		// Si la nouvelle solution n'a pas le meme nombre de polyedres
+		//	que la solution courante 
+		if (solution.size() == newSolution.size())
+			isSameSolution = true;
+
+		// Parcours des polyedres d'une solution trouvee (si meme nombre de polyedres)
+		int indexSolution = 0;
+		while (indexSolution < solution.size() && isSameSolution)
+		{
+			// Cherche si le polyedre d'une solution est dans la nouvelle solution
+			auto it = std::find(newSolution.begin(), newSolution.end(), solution[indexSolution]);
+
+			// Le polyedre n'est pas dans la solution courante
+			if (it == newSolution.end())
+				isSameSolution = false;
+
+			indexSolution++;
+		}
+
+		// Nouvelle solution deja dans la liste
+		if (isSameSolution)
+			break;
+	}
+
+	return isSameSolution;
+}
+
+
+//FONCTIONS DE TEST
 
 void Algorithm::test_Convexity()
 {
