@@ -6,7 +6,7 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	//TO TEST MERGING ALGORITHM
-	Algorithm algo("MergeTest/exemple2.obj");
+	Algorithm algo("MergeTest/exemple3.obj");
 	algo.run();
 
 
@@ -14,8 +14,8 @@ int main(int argc, char* argv[])
 	algo.test_Convexity();
  */
   
-  algo.test_WriteObj();
-	algo.test_LoadObj();
+	//algo.test_WriteObj();
+	//algo.test_LoadObj();
 
 	return 0;
 }

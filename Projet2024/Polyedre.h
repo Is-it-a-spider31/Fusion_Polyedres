@@ -58,18 +58,12 @@ public:
 	bool isConvex() const;
 	void computeConvexity();
 
-	// GETTER
+	// GETTERS
 	int getId() const;
 	vector<Face> getFaces() const;
 
-
-
-	// OPERATEURS 
-	// todo surcharger les operateurs, plus tard
-
-	// OPERATEUR
+	// OPERATEURS
 	bool operator<(const Polyedre& poly) const;
-
 
 	friend std::ostream& operator<<(std::ostream& os, const Polyedre& p);
 

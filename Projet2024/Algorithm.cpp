@@ -129,6 +129,8 @@ void Algorithm::run()
 	std::cout << "Nb full solutions : " << nbFullSolutions << endl;
 }
 
+//FONCTIONS DE TEST
+
 void Algorithm::test_Convexity()
 {
 	// OBJFileHandler::writeOBJ(d_vertices, d_polyhedrons, "ConvexiTest/generated/sphere_export.obj");
