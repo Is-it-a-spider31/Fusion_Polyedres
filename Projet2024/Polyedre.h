@@ -44,7 +44,7 @@ public:
 	 * @param poly2 
 	 * @return la liste des faces communes entre les 2 polyedres
 	*/
-	static vector<Face> getSharedFaces(Polyedre& poly1, Polyedre& poly2);
+	static vector<Face> getSharedFaces(const Polyedre& poly1, const Polyedre& poly2);
 
 	/**
 	 * @brief Fusionne le polyedre courant avec un autre polyedre
@@ -64,6 +64,8 @@ public:
 
 	// OPERATEURS
 	bool operator<(const Polyedre& poly) const;
+
+	bool operator==(const Polyedre& poly) const;
 
 	friend std::ostream& operator<<(std::ostream& os, const Polyedre& p);
 
