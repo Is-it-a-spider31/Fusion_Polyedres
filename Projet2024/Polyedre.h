@@ -17,7 +17,6 @@ public:
 	 * @param id Identifiant unique
 	*/
 	Polyedre(int id);
-
 	/**
 	 * @brief Constructeur par copie
 	 * 
@@ -63,6 +62,11 @@ public:
 	int getId() const;
 	vector<Face> getFaces() const;
 
+
+
+	// OPERATEURS 
+	// todo surcharger les operateurs, plus tard
+
 	// OPERATEUR
 	bool operator<(const Polyedre& poly) const;
 
@@ -76,7 +80,7 @@ private:
 	int d_id;
 
 	/**
-	 * @brief Etat convexe / non convexe du polyèdre
+	 * @brief Etat convexe / non convexe du polyÃ¨dre
 	*/
 	bool d_isConvex;
 };

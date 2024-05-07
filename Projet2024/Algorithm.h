@@ -27,6 +27,7 @@ public:
     //FONCTIONS DE TEST
     void test_Convexity();
     void test_WriteObj();
+    void test_LoadObj();
 
 private:
     // ATTRIBUTES
