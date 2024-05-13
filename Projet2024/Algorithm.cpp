@@ -151,7 +151,7 @@ void Algorithm::run()
 			}
 		}
 
-		//permutedPolyhedrons.clear(); // 1 seul itération si non commente (pour tester)
+		permutedPolyhedrons.clear(); // 1 seul itération si non commente (pour tester)
 		mergedPolyhedrons.clear();
 		nbPermutaions++;
 
