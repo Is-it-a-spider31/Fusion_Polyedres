@@ -129,7 +129,7 @@ Polyedre Polyedre::merge2Polyhedrons2D(const Polyedre& poly1, const Polyedre& po
     else 
         cout << "not coplanar " << endl;*/
 
-
+    /*
     cout << "face 1 : " << endl;
     for (size_t i = 0; i < face1.d_sommets.size(); i++)
     {
@@ -142,6 +142,7 @@ Polyedre Polyedre::merge2Polyhedrons2D(const Polyedre& poly1, const Polyedre& po
         cout << "id : " << face1.d_sommets[i].getId() << endl;
         cout << "point : " << face1.d_sommets[i];
     }
+    */
 
 
 
@@ -163,9 +164,9 @@ Polyedre Polyedre::merge2Polyhedrons2D(const Polyedre& poly1, const Polyedre& po
                     nextJ = 0;
 
                 // 1 ou -1 si egale, 0 sinon
-                sameSegment = Point::are2SegmentsEquals(     // ERREUR ICI !!!! i = 3   j = 0
-                    face1.d_sommets[i], face1.d_sommets[i+1],   // P1
-                    face2.d_sommets[j], face2.d_sommets[j+1]    // P2
+                sameSegment = Point::are2SegmentsEquals(
+                    face1.d_sommets[i], face1.d_sommets[nextI],   // P1
+                    face2.d_sommets[j], face2.d_sommets[nextJ]    // P2
                 );
                 j++;
             }
@@ -175,6 +176,10 @@ Polyedre Polyedre::merge2Polyhedrons2D(const Polyedre& poly1, const Polyedre& po
         j--;
 
 
+        cout << "sameSegment : " << sameSegment << endl;
+        cout << "sommet i : " << face1.d_sommets[i];
+        cout << "sommet j : " << face2.d_sommets[j];
+
         if (sameSegment != 0)
         {   // FUSION
 
@@ -182,9 +187,6 @@ Polyedre Polyedre::merge2Polyhedrons2D(const Polyedre& poly1, const Polyedre& po
             Point destination = face1.d_sommets[0];
             if (i+1 < face1.d_sommets.size()) 
                 destination = face1.d_sommets[i + 1];
-
-            cout << "id dest : " << destination.getId() << endl;
-            cout << "destination : " << destination << endl;
 
             if (sameSegment == -1)
             {
@@ -194,9 +196,13 @@ Polyedre Polyedre::merge2Polyhedrons2D(const Polyedre& poly1, const Polyedre& po
                     j = 0;
             }
 
+            cout << "destination : " << destination;
+            cout << "sommet j suivant : " << face2.d_sommets[j];
+            cout << "i : " << i << endl;
+            cout << "j : " << j << endl;
 
-            mergedPoly = Polyedre(poly1.getId());   // copie
 
+            mergedPoly = Polyedre(poly1);   // copie
             // Parcours de tous les sommets de la 2eme face
             while (face2.d_sommets[j] != destination)
             {                   
@@ -217,19 +223,28 @@ Polyedre Polyedre::merge2Polyhedrons2D(const Polyedre& poly1, const Polyedre& po
 
                 // Insertion des sommets de la 2ème faces
                 // qui ne sont pas dans la 1ere
-                if (face2.d_sommets[j] != destination) {    // ERREUR ICI !!!! sommet[j] == destination
+                if (face2.d_sommets[j] != destination) {
 
                     mergedPoly.faces[0].d_sommets.insert(            
-                        mergedPoly.faces[0].d_sommets.begin() + i,
+                        mergedPoly.faces[0].d_sommets.begin() + i+1,
                         //mergedPoly.faces[0].d_sommets[j]
                         face2.d_sommets[j]
                     );
+                    cout << "insertion indice i = " << i << endl;
                     if (i < mergedPoly.faces[0].d_sommets.size() - 1)
                         i++;
                     else
                         i = 0;
                 }
-            }
+            }   // while 
+        }   // if 1 segment en commun
+    }   // if 2 faces coplanaires
+    cout << "MERGED POLY" << endl;
+    for (auto& face : mergedPoly.faces)
+    {
+        for (auto& p : face.d_sommets)
+        {
+            cout << p;
         }
     }
 
