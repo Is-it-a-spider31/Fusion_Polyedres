@@ -11,7 +11,6 @@
  * @param polyhedrons Liste des polyedres
  * @param filename Nom du fichier
 */
-
 void OBJFileHandler::writeOBJ(const vector<Point>& vertices, const vector<Polyedre>& polyhedrons, const string& filename)
 {
     ofstream monFlux(filename.c_str());
@@ -36,8 +35,6 @@ void OBJFileHandler::writeOBJ(const vector<Point>& vertices, const vector<Polyed
         cerr << "ERROR - cannot write file : \"" << filename << "\"" << endl;
     }
 }
-
-
 
 /**
  * @brief Lecture des donnees depuis un fichier .obj

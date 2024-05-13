@@ -28,6 +28,8 @@ void Algorithm::run()
 	// Liste des solutions uniques trouvees
 	//	(une solution = ensemble de polyedres)
 	vector<vector<Polyedre>> solutions;
+	// Nombre de permutations pour chaques solutions
+	vector<int> permutationsId;
 
 	// Liste des polyedres permutes
 	vector<Polyedre> permutedPolyhedrons; 
@@ -122,16 +124,8 @@ void Algorithm::run()
 			if (!isAlreadyFinded)	// Si c'est une nouvelle solution
 			{
 				nbUniqueSolutions++;
-				solutions.push_back(mergedPolyhedrons);
-
-				// Conversion de la taille du vecteur en chaîne de caractères
-				stringstream sizeStr;
-				sizeStr << mergedPolyhedrons.size();
-
-				// Ecriture du fichier OBJ pour cette solution
-				string filename = "MergeTest/generated/FUSION." + sizeStr.str()
-					+ "Poly_" + to_string(nbPermutaions) + ".obj";
-				OBJFileHandler::writeOBJ(d_vertices, mergedPolyhedrons, filename);
+				solutions.push_back(mergedPolyhedrons);				
+				permutationsId.push_back(nbPermutaions);
 			}
 		}
 
@@ -140,14 +134,30 @@ void Algorithm::run()
 		nbPermutaions++;
 
 	} while (next_permutation(permutedPolyhedrons.begin(), permutedPolyhedrons.end()));
+	
+	//	ECRITURE DES MEILLEURES SOLUTIONS TROUVEES
+	auto it = permutationsId.begin();
+	for (vector<Polyedre>& solution : solutions)
+	{
+		if (solution.size() == minNbPolySolution)
+		{
+			// Conversion de la taille du vecteur en chaîne de caractères
+			stringstream sizeStr;
+			sizeStr << solution.size();
+
+			// Ecriture du fichier OBJ pour cette solution
+			string filename = "MergeTest/generated/FUSION." + sizeStr.str()
+				+ "Poly_" + to_string(*it) + ".obj";
+			OBJFileHandler::writeOBJ(d_vertices, solution, filename);
+			++it;
+		}
+	}
 
 	// Affichage des statistiques
 	std::cout << "Nb permutations : " << nbPermutaions << endl;
 	std::cout << "Nb full solutions : " << nbFullSolutions << endl;
-	std::cout << "Nb unique solutions : " << nbUniqueSolutions << endl;
+	std::cout << "Nb solutions unique trouvees : " << nbUniqueSolutions << endl;
 }
-
-
 
 
 /**
