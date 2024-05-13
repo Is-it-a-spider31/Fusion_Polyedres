@@ -66,35 +66,57 @@ void Algorithm::run()
 		int nextPolyId = 1;
 		while (nextPolyId < permutedPolyhedrons.size() && !stopCurrentSolution)
 		{
-			bool canMerge = false;	// true : la fusion est possible et convexe
+			bool isMergeLegal = false;	// true : la fusion est possible et convexe
 			nextPolyhedron = permutedPolyhedrons[nextPolyId];
 
-			// recherche des faces communes entre les 2 polyedres
-			vector<Face> sharedFaces = Polyedre::getSharedFaces(currentPolyhedron, nextPolyhedron);			
+			// Si les 2 polyedres sont convexes (cf. consignes du projet)
+			if (currentPolyhedron.isConvex() && nextPolyhedron.isConvex())
+			{	
+				bool areMerged = false;
+				Polyedre mergedPoly(0);
 
-			// S'il y a au moins une face commune
-			if (!sharedFaces.empty()) 
-			{
-				if (currentPolyhedron.isConvex() && nextPolyhedron.isConvex()) 
-				{	// Si les 2 polyedres sont convexes (cf. consignes du projet)
+				// recherche des faces communes entre les 2 polyedres
+				vector<Face> sharedFaces = Polyedre::getSharedFaces(currentPolyhedron, nextPolyhedron);
 
-					// FUSION
-					Polyedre mergedPoly = Polyedre::merge2Polyhedrons(
-						currentPolyhedron, 
-						nextPolyhedron, 
+				if (!sharedFaces.empty())	// S'il y a au moins une face commune
+				{
+					// FUSION polyedres 3D
+					mergedPoly = Polyedre::merge2Polyhedrons(
+						currentPolyhedron,
+						nextPolyhedron,
 						sharedFaces
 					);
-					mergedPoly.computeConvexity();
+					areMerged = true;
 
+				}
+				else	// Pas de faces communes
+				{
+					// 1 seule face pour chaque polyedre 
+					if (currentPolyhedron.faces.size() == nextPolyhedron.faces.size()
+						&& currentPolyhedron.faces.size() == 1) 
+					{
+						// FUSION polyedres 2D
+						mergedPoly = Polyedre::merge2Polyhedrons2D(currentPolyhedron, nextPolyhedron);
+						if (mergedPoly.getId() != -1)
+						{
+							areMerged = true;
+						}
+					}
+				}
+
+				// Si fusion effectuee, teste si convexe
+				if (areMerged)
+				{
+					mergedPoly.computeConvexity();
 					if (mergedPoly.isConvex())	// Fusion convexe
 					{
 						currentPolyhedron = mergedPoly;
-						canMerge = true;
+						isMergeLegal = true;
 					}
 				}
 			}
 
-			if (!canMerge)	// Si pas de fusion possible
+			if (!isMergeLegal)	// Si pas de fusion possible
 			{	// pas de face commune OU au moins 1 poly pas convexes OU fusion pas convexe
 				mergedPolyhedrons.push_back(currentPolyhedron);
 				currentPolyhedron = permutedPolyhedrons[nextPolyId];
@@ -149,8 +171,8 @@ void Algorithm::run()
 			string filename = "MergeTest/generated/FUSION." + sizeStr.str()
 				+ "Poly_" + to_string(*it) + ".obj";
 			OBJFileHandler::writeOBJ(d_vertices, solution, filename);
-			++it;
 		}
+		++it;
 	}
 
 	// Affichage des statistiques
@@ -232,6 +254,11 @@ void Algorithm::test_Convexity()
 
 	}
 
+}
+
+void Algorithm::test_Merge()
+{
+	// FUSION
 }
 
 void Algorithm::test_WriteObj()

@@ -98,8 +98,8 @@ Polyedre Polyedre::merge2Polyhedrons(const Polyedre& poly1, const Polyedre& poly
         {
             mergedPoly.faces.push_back(poly2.faces[n]);
         }
-
     }
+
     return mergedPoly;
 }
 
@@ -109,6 +109,98 @@ Polyedre Polyedre::merge2Polyhedrons(const Polyedre& poly1, const Polyedre& poly
 int Polyedre::getId() const { return d_id; }
 
 vector<Face> Polyedre::getFaces() const { return faces; }
+
+Polyedre Polyedre::merge2Polyhedrons2D(const Polyedre& poly1, const Polyedre& poly2)
+{
+    Polyedre mergedPoly(-1);
+
+    const Face& face1 = poly1.faces[0];
+    const Face& face2 = poly2.faces[0];
+
+    // Tester si faces coplanaires
+    Point u = face1.d_sommets[1] - face1.d_sommets[0];
+    Point v = face1.d_sommets.back() - face1.d_sommets[0];
+    Point w = face2.d_sommets[1] - face2.d_sommets[0];
+    bool areCoplanar = Plan::coplanarVectors(u, v, w);
+
+ /*   cout << "coplanar ? : " << areCoplanar << endl;
+    if (areCoplanar)
+        cout << "coplanar " << endl;
+    else 
+        cout << "not coplanar " << endl;*/
+
+    if (areCoplanar)    // Si les 2 faces sont coplanaires
+    {
+        int sameSegment = 0;    // 1 ou -1 si egale, 0 sinon
+        auto it1 = face1.d_sommets.begin();
+        auto it2 = face2.d_sommets.begin();
+        while (it1 != face1.d_sommets.end()-1 && sameSegment==0)
+        {
+            while (it2 != face2.d_sommets.end()-1 && sameSegment==0)
+            {
+                // 1 ou -1 si egale, 0 sinon
+                auto nextIt1 = it1 + 1;
+                auto nextIt2 = it2 + 1;
+                sameSegment = Point::are2SegmentsEquals(*it1, *(nextIt1), *it2, *(nextIt2));
+                ++it2;
+            }
+            ++it1;
+        }
+
+        --it1;
+        --it2;
+
+        if (sameSegment != 0)
+        {   // FUSION
+
+            mergedPoly = Polyedre(poly1);   // copie
+
+            // Parcours de tous les sommets
+            //for (size_t i = 0; i < mergedPoly.faces[0].d_sommets.size()-1; i++)
+            //{
+                Point p = *it1;
+    
+                if (p == *it1)
+                {
+                    while (*it2 != mergedPoly.faces[0].d_sommets[i+1])
+                    {
+                        if (it2 == face2.d_sommets.end())
+                            it2 = face2.d_sommets.begin();
+                        else if (it2 == face2.d_sommets.begin())
+                            it2 = face2.d_sommets.end();
+                        else if (sameSegment == 1)
+                            --it2;
+                        else
+                            ++it2;
+
+                        // Insertion des sommets de la 2ème faces
+                        // qui ne sont pas dans la 1ere
+                        
+                        // todo
+                        // ERREUR ICI !!!!
+                        // ERREUR ICI !!!!
+                        // ERREUR ICI !!!!
+                        mergedPoly.faces[0].d_sommets.insert(it1, *it2); // ERREUR ICI !!!!
+                        // ERREUR ICI !!!!
+                        // ERREUR ICI !!!!
+                        // ERREUR ICI !!!!
+
+
+                        if (it1 == face1.d_sommets.end())
+                            it1 = face2.d_sommets.begin();
+                        else
+                            ++it1;
+                        // avant : ++it1;
+                    }
+                    // Apres insertion, fin de la fusion
+                    //break;
+                //} // for
+            }
+        }
+    }
+
+    return mergedPoly;
+}
 
 bool Polyedre::isConvex() const { return d_isConvex; }
 

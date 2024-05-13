@@ -26,6 +26,7 @@ public:
 
     //FONCTIONS DE TEST
     void test_Convexity();
+    void test_Merge();
     void test_WriteObj();
     void test_LoadObj();
 

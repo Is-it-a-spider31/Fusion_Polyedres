@@ -54,6 +54,17 @@ public:
 	*/
 	static Polyedre merge2Polyhedrons(const Polyedre& poly1, const Polyedre& poly2, const vector<Face> sharedFaces);
 
+	/**
+	 * @brief 
+	 * 
+	 * Polyedre avec 1 seule face !!!
+	 * 
+	 * @param poly1 
+	 * @param poly2 
+	 * @return 
+	*/
+	static Polyedre merge2Polyhedrons2D(const Polyedre& poly1, const Polyedre& poly2);
+
 
 	bool isConvex() const;
 	void computeConvexity();
