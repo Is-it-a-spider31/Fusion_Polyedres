@@ -55,11 +55,16 @@ Point Plan::vectorFrom2Points(const Point& A, const Point& B) {
 
 
 bool Plan::coplanarVectors(const Point& u, const Point& v, const Point& w) {
-	double alpha, beta;
+	/*double alpha, beta;
 	alpha = (u.getX() - u.getY() / w.getY()) / (v.getX() - v.getY() / w.getY());
 	beta = (u.getY() - alpha * v.getY()) / w.getY();
 
-	return u.getZ() == alpha * v.getZ() + beta * w.getZ();
+	return u.getZ() == alpha * v.getZ() + beta * w.getZ();*/
+	// Calcul du produit scalaire du produit vectoriel de u et v avec w
+	double dotProduct = u.crossProduct(v).dotProduct(w);
+
+	// Si le produit scalaire est très proche de zéro (pour prendre en compte les erreurs de précision)
+	return std::abs(dotProduct) < 1e-9;
 }
 
 Plan::~Plan()

@@ -2,5 +2,4 @@
 
 
 ### todo
-
-    cf. operator << dans premier projet
+	Erreur : Polyedre.cpp > line 177

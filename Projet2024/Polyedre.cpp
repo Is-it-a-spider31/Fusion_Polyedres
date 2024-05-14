@@ -78,14 +78,30 @@ vector<Face> Polyedre::getSharedFaces(const Polyedre& poly1, const Polyedre& pol
     return sharedFaces;
 }
 
+
 /**
- * @brief Fusionne le polyedre courant avec un autre polyedre
- *
- * @param otherPoly Autre polyedre avec lequel on veut fusionner
+ * @brief Fusionne 2 polyedres
+ * 
+ * Les 2 polyedres doivent avoir au moins une face commune.
+ * La fusion fonctionne si les polyedres ont une seule face (volume nul)
+ * 
+ * @param poly1 1er polyedre
+ * @param poly2 2eme polyedre
  * @param sharedFaces Liste des faces communes aux 2 polyedres
+ * 
+ * @return Le polyedre resultant de la fusion
 */
-Polyedre Polyedre::merge2Polyhedrons(const Polyedre& poly1, const Polyedre& poly2, const vector<Face> sharedFaces)
+Polyedre Polyedre::merge2Polyhedra(const Polyedre& poly1, const Polyedre& poly2, const vector<Face> sharedFaces)
 {
+    // Si poly2 a une seule face (polygone)
+    // la fusion est egale a poly1
+    if (poly2.faces.size() <= 1)    
+        return poly1;
+    // Si poly1 a une seule face (polygone)
+    // la fusion est egale a poly2
+    if (poly1.faces.size() <= 1)
+        return poly2;
+
     Polyedre mergedPoly(poly1, sharedFaces);
 
     for (int n = 0; n < poly2.faces.size(); n++)
@@ -98,11 +114,10 @@ Polyedre Polyedre::merge2Polyhedrons(const Polyedre& poly1, const Polyedre& poly
         {
             mergedPoly.faces.push_back(poly2.faces[n]);
         }
-
     }
+
     return mergedPoly;
 }
-
 
 
 // GETTERS
@@ -110,10 +125,129 @@ int Polyedre::getId() const { return d_id; }
 
 vector<Face> Polyedre::getFaces() const { return faces; }
 
+Polyedre Polyedre::merge2Polygones(const Polyedre& poly1, const Polyedre& poly2)
+{
+    Polyedre mergedPoly(-1);    // -1 par defaut : pas de fusion
+    const Face& face1 = poly1.faces[0];
+    const Face& face2 = poly2.faces[0];
+
+    // Tester si faces coplanaires
+    Point u = face1.d_sommets[1] - face1.d_sommets[0];
+    Point v = face1.d_sommets.back() - face1.d_sommets[0];
+    Point w = face2.d_sommets[1] - face2.d_sommets[0];
+    bool areCoplanar = Plan::coplanarVectors(u, v, w);
+
+    if (areCoplanar)    // Si les 2 faces sont coplanaires
+    {
+        int sameEdge = 0;    // 1 ou -1 si egales, 0 sinon
+        // indice du sommet de la face 1 pour lequel on a trouve une arrete commune
+        int i = 0; 
+        // indice du sommet de la face 2 pour lequel on a trouve une arrete commune
+        int j = 0;
+
+        // CHERCHE UNE ARRETE COMMUNE aux 2 faces
+        while (i < face1.d_sommets.size() && sameEdge==0)
+        {
+            int nextI = i + 1;
+            if (nextI >= face1.d_sommets.size())
+                nextI = 0;
+            j = 0;
+
+            while (j < face2.d_sommets.size() && sameEdge==0)
+            {
+                int nextJ= j + 1;
+                if (nextJ >= face2.d_sommets.size())
+                    nextJ = 0;
+
+                // 1 ou -1 si egale, 0 sinon (pour sens du parours de la face)
+                sameEdge = Point::are2EdgesEquals(
+                    face1.d_sommets[i], face1.d_sommets[nextI],   // arrete de la face 1
+                    face2.d_sommets[j], face2.d_sommets[nextJ]    // arrete de la face 2
+                );
+                j++;
+            }
+            i++;
+        }
+        i--;
+        j--;
+
+        // ARRETE EN COMMUN
+        if (sameEdge != 0)
+        {   // FUSION
+
+            // Determine a partir de quel sommet de la 1ere face
+            // on doit arreter la fusion
+            Point destination = face1.d_sommets[0];
+            if (i+1 < face1.d_sommets.size()) 
+                destination = face1.d_sommets[i + 1];
+
+            // j : determine a partir de quel sommet de la 2eme face
+            // on doit commencer la fusion
+            if (sameEdge == -1)
+            {
+                if (j + 1 < face2.d_sommets.size())
+                    j++;
+                else
+                    j = 0;
+            }
+
+            mergedPoly = Polyedre(poly1);   // copie
+
+            // Insertion des sommets de la 2ème faces dans la 1ere
+            // si ils ne sont pas deja dans la 1er face
+            // Parcours de tous les sommets de la 2eme face
+            while (face2.d_sommets[j] != destination)
+            {   
+                // Sens du parcours de la 2eme face
+                if (sameEdge == 1)
+                {
+                    if (j <= 0)
+                        j = face2.d_sommets.size()-1;
+                    else
+                        j--;
+                }
+                else
+                {
+                    if (j >= face2.d_sommets.size()-1)
+                        j = 0;
+                    else
+                        j++;
+                }
+
+                // si le sommet n'est pas deja dans la 1er face
+                if (face2.d_sommets[j] != destination) 
+                {   // INSERTION D'UN NOUVEAU SOMMET
+
+                    // i : determine a quel endroit de la 1er face
+                    // on doit inserer le nouveau sommet
+                    mergedPoly.faces[0].d_sommets.insert(            
+                        mergedPoly.faces[0].d_sommets.begin() + i+1,
+                        face2.d_sommets[j]
+                    );
+
+                    if (i < mergedPoly.faces[0].d_sommets.size() - 1)
+                        i++;
+                    else
+                        i = 0;
+                }
+            }   // while 
+        }   // if arrete en commun
+    }   // if 2 faces coplanaires
+
+    return mergedPoly;
+}
+
 bool Polyedre::isConvex() const { return d_isConvex; }
 
 void Polyedre::computeConvexity()
 {
+    if (faces.size() == 1)  // POLYGONE (Poledre 2D, une seule face)
+    {
+        d_isConvex = faces[0].isConvex();
+        return;
+    }
+
+    // Pour chaques faces
     for (int i = 0; i < faces.size(); i++)
     {
         Plan plan = Plan(faces[i].d_sommets[0], faces[i].d_sommets[1], faces[i].d_sommets[2]);
