@@ -46,7 +46,7 @@ private:
     /**
      * @brief Liste des polyedres
     */
-    vector<Polyedre> d_polyhedrons;
+    vector<Polyedre> d_polyhedra;
 
     // METHODES
 

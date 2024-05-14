@@ -27,23 +27,30 @@ public:
 	~Point();
 
 	/**
-	 * @brief Teste si 2 segments sont identiques
+	 * @brief Teste si 2 arretes sont identiques
 	 *
 	 * Teste si les segments [p1, p2] et [q1, q2]
-	 * sont identiques.
+	 * sont identiques et si les points des 2 arretes
+	 * sont dans le même sens.
+	 *
+	 * Retours :
+	 * 1 : [p1, p2] = [q1, q2]
+	 * -1 : [p1, p2] = [q2, q1]
+	 * 0 : arretes differentes
 	 *
 	 * @param p1 Point du 1er segment
 	 * @param p2 Point du 1er segment
 	 * @param q1 Point du 2eme segment
 	 * @param q2 Point du 2eme segment
 	 *
-	 * @return true s'il sont identiques, false sinon
+	 * @return 1 ou -1 si les arretes sont identiques, 0 sinon
 	*/
-	static int are2SegmentsEquals(const Point& p1, const Point& p2, const Point& q1, const Point& q2);
+	static int are2EdgesEquals(const Point& p1, const Point& p2, const Point& q1, const Point& q2);
 
 	/**
-	 * @brief Produit vectoriel
-	 * @param other 
+	 * @brief Produit vectoriel entre 2 vecteurs
+	 * 
+	 * @param other Autre vecteur
 	 * @return 
 	*/
 	Point crossProduct(const Point& other) const;
