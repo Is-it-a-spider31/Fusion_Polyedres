@@ -151,7 +151,7 @@ void Algorithm::run()
 			}
 		}
 
-		// permutedPolyhedrons.clear(); // 1 seul itération si non commente (pour tester)
+		// permutedPolyhedrons.clear(); // 1 seul itÃ©ration si non commente (pour tester)
 		mergedPolyhedra.clear();
 		nbPermutaions++;
 
@@ -163,7 +163,7 @@ void Algorithm::run()
 	{
 		if (solution.size() == minNbPolySolution)
 		{
-			// Conversion de la taille du vecteur en chaîne de caractères
+			// Conversion de la taille du vecteur en chaÃ®ne de caractÃ¨res
 			stringstream sizeStr;
 			sizeStr << solution.size();
 

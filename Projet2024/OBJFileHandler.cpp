@@ -165,6 +165,7 @@ void OBJFileHandler::loadOBJ(vector<Point>& vertices, vector<Face>& faces, vecto
 
                     case material:
                         getline(objFile, nextString);
+                        
                         break;
 
                     case usemtl:

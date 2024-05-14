@@ -77,7 +77,11 @@ public:
 
 	// GETTERS
 	int getId() const;
+	string getMTL() const;
 	vector<Face> getFaces() const;
+
+	//SETTERS
+	void setMTL(string name);
 
 	// OPERATEURS
 	bool operator<(const Polyedre& poly) const;
@@ -96,5 +100,7 @@ private:
 	 * @brief Etat convexe / non convexe du polyèdre
 	*/
 	bool d_isConvex;
+
+	string d_texture;
 };
 
