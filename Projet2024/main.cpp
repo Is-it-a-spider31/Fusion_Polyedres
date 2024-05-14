@@ -6,14 +6,15 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	//TO TEST MERGING ALGORITHM
-	//Algorithm algo("MergeTest/exemple3.obj");
-	Algorithm algo("ConvexiTest/cube_convex.obj");
+	Algorithm algo("MergeTest/PlanOverCubeFaceobj.obj");
+
 	algo.run();
 
-
-	/*Algorithm algo("ConvexiTest/normal_sphere.obj");
-	algo.test_Convexity();
- */
+	//Algorithm algo("ConvexiTest/2DnotConvex.obj");
+	// Algorithm algo("MergeTest/3plans-2Convexes.obj");
+	//Algorithm algo("BugsTests/2DnotConvex-corrected.obj");
+	//algo.test_Convexity();
+	//algo.run();
   
 	algo.test_WriteObj();
 	//algo.test_LoadObj();

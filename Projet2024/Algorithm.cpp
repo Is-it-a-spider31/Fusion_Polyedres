@@ -17,7 +17,7 @@ using namespace std;
 Algorithm::Algorithm(const string& filename)
 {
 	// Chargement des donnees a partir du fichier .obj
-	OBJFileHandler::loadOBJ(d_vertices, d_faces, d_polyhedrons, filename);
+	OBJFileHandler::loadOBJ(d_vertices, d_faces, d_polyhedra, filename);
 }
 
 /**
@@ -28,21 +28,23 @@ void Algorithm::run()
 	// Liste des solutions uniques trouvees
 	//	(une solution = ensemble de polyedres)
 	vector<vector<Polyedre>> solutions;
+	// Nombre de permutations pour chaques solutions
+	vector<int> permutationsId;
 
 	// Liste des polyedres permutes
-	vector<Polyedre> permutedPolyhedrons; 
+	vector<Polyedre> permutedPolyhedra; 
 
 	// Copie de la liste des polyedres dans celle qui sera permutee
-	for (int i = 0; i < d_polyhedrons.size(); i++)
+	for (int i = 0; i < d_polyhedra.size(); i++)
 	{
-		permutedPolyhedrons.push_back(d_polyhedrons[i]);
+		permutedPolyhedra.push_back(d_polyhedra[i]);
 	}
 
 	// Liste des polyedres avec fusion
-	vector<Polyedre> mergedPolyhedrons;
+	vector<Polyedre> mergedPolyhedra;
 
 	// Solution avec le nombre minimum de polyedres
-	int minNbPolySolution = permutedPolyhedrons.size();
+	int minNbPolySolution = permutedPolyhedra.size();
 
 	// Statistiques
 	int nbPermutaions = 0;		// nombre de permuations effectuees
@@ -53,7 +55,7 @@ void Algorithm::run()
 	//	(complexite n! pour n polyedres)
 	do 
 	{
-		Polyedre currentPolyhedron = permutedPolyhedrons[0];
+		Polyedre currentPolyhedron = permutedPolyhedra[0];
 		Polyedre nextPolyhedron(0);
 
 		// true : arreter la solution en cours car on a deja mieux
@@ -62,43 +64,65 @@ void Algorithm::run()
 		// Pour chaque polyedres (sauf le premier), 
 		//	tant que la solution courante n'est pas arretee
 		int nextPolyId = 1;
-		while (nextPolyId < permutedPolyhedrons.size() && !stopCurrentSolution)
+		while (nextPolyId < permutedPolyhedra.size() && !stopCurrentSolution)
 		{
-			bool canMerge = false;	// true : la fusion est possible et convexe
-			nextPolyhedron = permutedPolyhedrons[nextPolyId];
+			bool isMergeLegal = false;	// true : la fusion est possible et convexe
+			nextPolyhedron = permutedPolyhedra[nextPolyId];
 
-			// recherche des faces communes entre les 2 polyedres
-			vector<Face> sharedFaces = Polyedre::getSharedFaces(currentPolyhedron, nextPolyhedron);			
+			// Si les 2 polyedres sont convexes (cf. consignes du projet)
+			if (currentPolyhedron.isConvex() && nextPolyhedron.isConvex())
+			{	
+				bool areMerged = false;
+				Polyedre mergedPoly(0);
 
-			// S'il y a au moins une face commune
-			if (!sharedFaces.empty()) 
-			{
-				if (currentPolyhedron.isConvex() && nextPolyhedron.isConvex()) 
-				{	// Si les 2 polyedres sont convexes (cf. consignes du projet)
+				// recherche des faces communes entre les 2 polyedres
+				vector<Face> sharedFaces = Polyedre::getSharedFaces(currentPolyhedron, nextPolyhedron);
 
-					// FUSION
-					Polyedre mergedPoly = Polyedre::merge2Polyhedrons(
-						currentPolyhedron, 
-						nextPolyhedron, 
+				if (!sharedFaces.empty())	// S'il y a au moins une face commune
+				{
+					// FUSION 2 Polyedres
+					mergedPoly = Polyedre::merge2Polyhedra(
+						currentPolyhedron,
+						nextPolyhedron,
 						sharedFaces
 					);
-					mergedPoly.computeConvexity();
+					areMerged = true;
 
+				}
+				else	// Pas de faces communes
+				{
+					// Les 2 polyedres ont une seule face
+					if (currentPolyhedron.faces.size() == nextPolyhedron.faces.size()
+						&& currentPolyhedron.faces.size() == 1) 
+					{
+						// FUSION 2 Polygones (une seule face + face pas commune aux 2)
+						mergedPoly = Polyedre::merge2Polygones(currentPolyhedron, nextPolyhedron);
+						if (mergedPoly.getId() != -1)
+						{
+							areMerged = true;
+						}
+					}
+				}
+
+				// Si fusion effectuee, teste si convexe
+				if (areMerged)
+				{
+					mergedPoly.computeConvexity();
 					if (mergedPoly.isConvex())	// Fusion convexe
 					{
 						currentPolyhedron = mergedPoly;
-						canMerge = true;
+						isMergeLegal = true;
 					}
 				}
 			}
 
-			if (!canMerge)	// Si pas de fusion possible
+			if (!isMergeLegal)	// Si pas de fusion possible
 			{	// pas de face commune OU au moins 1 poly pas convexes OU fusion pas convexe
-				mergedPolyhedrons.push_back(currentPolyhedron);
-				currentPolyhedron = permutedPolyhedrons[nextPolyId];
+				mergedPolyhedra.push_back(currentPolyhedron);
+				currentPolyhedron = permutedPolyhedra[nextPolyId];
 
 				// Si on a deja une meilleur solution
-				if (mergedPolyhedrons.size() >= minNbPolySolution)
+				if (mergedPolyhedra.size() >= minNbPolySolution)
 				{
 					stopCurrentSolution = true;
 				}
@@ -110,44 +134,52 @@ void Algorithm::run()
 		if (!stopCurrentSolution)	// Solution calculee jusqu'au bout
 		{
 			// Ajout du dernier polyedre fusionne
-			mergedPolyhedrons.push_back(currentPolyhedron);
+			mergedPolyhedra.push_back(currentPolyhedron);
 
 			// Nouveau nombre minimum de polyedre (<= au minimum precedent)
-			minNbPolySolution = mergedPolyhedrons.size();
+			minNbPolySolution = mergedPolyhedra.size();
 			nbFullSolutions++;
 
 			// Vrai si les meme fusions ont deja ete trouvees et ecrites dans un fichier obj
-			bool isAlreadyFinded = Algorithm::isSolutionAlreadyFinded(mergedPolyhedrons, solutions);
+			bool isAlreadyFinded = Algorithm::isSolutionAlreadyFinded(mergedPolyhedra, solutions);
 	
 			if (!isAlreadyFinded)	// Si c'est une nouvelle solution
 			{
 				nbUniqueSolutions++;
-				solutions.push_back(mergedPolyhedrons);
-
-				// Conversion de la taille du vecteur en chaÓne de caractËres
-				stringstream sizeStr;
-				sizeStr << mergedPolyhedrons.size();
-
-				// Ecriture du fichier OBJ pour cette solution
-				string filename = "MergeTest/generated/FUSION." + sizeStr.str()
-					+ "Poly_" + to_string(nbPermutaions) + ".obj";
-				OBJFileHandler::writeOBJ(d_vertices, mergedPolyhedrons, filename);
+				solutions.push_back(mergedPolyhedra);				
+				permutationsId.push_back(nbPermutaions);
 			}
 		}
 
-		//permutedPolyhedrons.clear(); // 1 seul itÈration si non commente (pour tester)
-		mergedPolyhedrons.clear();
+		// permutedPolyhedrons.clear(); // 1 seul it√©ration si non commente (pour tester)
+		mergedPolyhedra.clear();
 		nbPermutaions++;
 
-	} while (next_permutation(permutedPolyhedrons.begin(), permutedPolyhedrons.end()));
+	} while (next_permutation(permutedPolyhedra.begin(), permutedPolyhedra.end()));
+	
+	//	ECRITURE DES MEILLEURES SOLUTIONS TROUVEES
+	auto it = permutationsId.begin();
+	for (vector<Polyedre>& solution : solutions)
+	{
+		if (solution.size() == minNbPolySolution)
+		{
+			// Conversion de la taille du vecteur en cha√Æne de caract√®res
+			stringstream sizeStr;
+			sizeStr << solution.size();
+
+			// Ecriture du fichier OBJ pour cette solution
+			string filename = "MergeTest/generated/FUSION." + sizeStr.str()
+				+ "Poly_" + to_string(*it) + ".obj";
+			OBJFileHandler::writeOBJ(d_vertices, solution, filename);
+		}
+		++it;
+	}
 
 	// Affichage des statistiques
 	std::cout << "Nb permutations : " << nbPermutaions << endl;
 	std::cout << "Nb full solutions : " << nbFullSolutions << endl;
-	std::cout << "Nb unique solutions : " << nbUniqueSolutions << endl;
+	std::cout << "Nb solutions unique trouvees : " << nbUniqueSolutions << endl;
 }
-
-
 
 
 /**
@@ -209,10 +241,10 @@ void Algorithm::test_Convexity()
 	std::cout << "Nombre de faces : " << d_faces.size() << std::endl;
 
 
-	for (int i = 0; i < d_polyhedrons.size(); i++)
+	for (int i = 0; i < d_polyhedra.size(); i++)
 	{
-		std::cout << "id : " << d_polyhedrons[i].getId() << " ";
-		if (d_polyhedrons[i].isConvex())
+		std::cout << "id : " << d_polyhedra[i].getId() << " ";
+		if (d_polyhedra[i].isConvex())
 		{
 			std::cout << "is convex !" << std::endl;
 		}
@@ -224,9 +256,14 @@ void Algorithm::test_Convexity()
 
 }
 
+void Algorithm::test_Merge()
+{
+	// FUSION
+}
+
 void Algorithm::test_WriteObj()
 {
-	OBJFileHandler::writeOBJ(d_vertices, d_polyhedrons, "WriteObjectTest/exit_object_write.obj");
+	OBJFileHandler::writeOBJ(d_vertices, d_polyhedra, "WriteObjectTest/exit_object.obj");
 }
 
 void Algorithm::test_LoadObj()

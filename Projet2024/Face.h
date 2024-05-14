@@ -27,6 +27,12 @@ public:
 	*/
 	vector<Point> d_sommets;
 
+	/**
+	 * @brief Teste si la face (polygone) est convexe
+	 * @return true si convexe, false sinon
+	*/
+	bool isConvex() const;
+
 	// GETTERS
 	
 	/**

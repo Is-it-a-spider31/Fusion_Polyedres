@@ -46,13 +46,30 @@ public:
 	*/
 	static vector<Face> getSharedFaces(const Polyedre& poly1, const Polyedre& poly2);
 
-	/**
-	 * @brief Fusionne le polyedre courant avec un autre polyedre
+	/*
+	 * @brief Fusionne 2 polyedres
 	 * 
-	 * @param otherPoly Autre polyedre avec lequel on veut fusionner
-	 * @param sharedFaces Faces communes aux 2 polyedres
+	 * Au moins un des deux polyedres doit avoir plus d'une face.
+	 * 
+	 * @param poly1 1er polyedre
+	 * @param poly2 2eme polyedre
+	 * @param sharedFaces Liste des faces communes aux 2 polyedres
+	 * 
+	 * @return Le polyedre resultant de la fusion
 	*/
-	static Polyedre merge2Polyhedrons(const Polyedre& poly1, const Polyedre& poly2, const vector<Face> sharedFaces);
+	static Polyedre merge2Polyhedra(const Polyedre& poly1, const Polyedre& poly2, const vector<Face> sharedFaces);
+
+	/**
+	 * @brief Fusionne 2 polygones
+	 * 
+	 * Un polygone est un polyedre avec un volume nul
+	 * (c'est-a-dire un polyedre avec une seule face)
+	 * 
+	 * @param poly1 
+	 * @param poly2 
+	 * @return 
+	*/
+	static Polyedre merge2Polygones(const Polyedre& poly1, const Polyedre& poly2);
 
 
 	bool isConvex() const;

@@ -17,7 +17,50 @@ public:
 	 * @param z coordonnee en z
 	*/
 	Point(int id, double x, double y, double z);
+
+	/**
+	 * @brief Constructeur par copie
+	 * 
+	 * @param p Point a copier
+	*/
+	Point(const Point& p);
 	~Point();
+
+	/**
+	 * @brief Teste si 2 arretes sont identiques
+	 *
+	 * Teste si les segments [p1, p2] et [q1, q2]
+	 * sont identiques et si les points des 2 arretes
+	 * sont dans le même sens.
+	 *
+	 * Retours :
+	 * 1 : [p1, p2] = [q1, q2]
+	 * -1 : [p1, p2] = [q2, q1]
+	 * 0 : arretes differentes
+	 *
+	 * @param p1 Point du 1er segment
+	 * @param p2 Point du 1er segment
+	 * @param q1 Point du 2eme segment
+	 * @param q2 Point du 2eme segment
+	 *
+	 * @return 1 ou -1 si les arretes sont identiques, 0 sinon
+	*/
+	static int are2EdgesEquals(const Point& p1, const Point& p2, const Point& q1, const Point& q2);
+
+	/**
+	 * @brief Produit vectoriel entre 2 vecteurs
+	 * 
+	 * @param other Autre vecteur
+	 * @return 
+	*/
+	Point crossProduct(const Point& other) const;
+
+	/**
+	 * @brief Produit scalaire
+	 * @param other 
+	 * @return 
+	*/
+	double dotProduct(const Point& other) const;
 
 	// GETTERS
 	int getId() const;
@@ -41,6 +84,7 @@ public:
 	// OPERATEURS REDEFINIS
 	bool operator==(const Point& v) const;
 	bool operator!=(const Point& v) const;
+	Point operator-(const Point& v) const;
 
 	friend std::ostream& operator<<(std::ostream& os, const Point& );
 

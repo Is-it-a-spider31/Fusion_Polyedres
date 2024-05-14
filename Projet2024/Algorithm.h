@@ -26,6 +26,7 @@ public:
 
     //FONCTIONS DE TEST
     void test_Convexity();
+    void test_Merge();
     void test_WriteObj();
     void test_LoadObj();
 
@@ -45,7 +46,7 @@ private:
     /**
      * @brief Liste des polyedres
     */
-    vector<Polyedre> d_polyhedrons;
+    vector<Polyedre> d_polyhedra;
 
     // METHODES
 
