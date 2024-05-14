@@ -8,6 +8,9 @@
 
 using namespace std;
 
+/**
+ * @brief Classe abstraite, parent des classes d'algo des fusions
+*/
 class Algorithm
 {
 public:
@@ -21,16 +24,18 @@ public:
 
     /**
      * @brief Algorithme principal de fusion
+     * Methode abstraite !
     */
-    void run();
+    virtual void run() = 0;
+
+    int evaluateSolution(const vector<Polyedre>& solution);
 
     //FONCTIONS DE TEST
     void test_Convexity();
-    void test_Merge();
     void test_WriteObj();
     void test_LoadObj();
 
-private:
+protected:
     // ATTRIBUTES
 
     /**
@@ -47,24 +52,5 @@ private:
      * @brief Liste des polyedres
     */
     vector<Polyedre> d_polyhedra;
-
-    // METHODES
-
-    /**
-     * @brief Verifie si une solution de l'algo de fusion a deja ete trouvee
-     * 
-     * Si la solution (ensemble de polyedres) courante est dans 
-     * la liste des solutions, cela signifie que cette solution a deja 
-     * ete calculee et trouvee par l'algo de fusion.
-     * 
-     * @param newSolution Solution courante de l'algo de fusion
-     * @param solutions Liste des solutions deja trouvees
-     * 
-     * @return true Si la solution est presente dans la liste
-    */
-    static bool isSolutionAlreadyFinded(
-        const vector<Polyedre>& newSolution,        // Nouvelle solution
-        const vector<vector<Polyedre>>& solutions   // Liste des solutions trouvees
-    );
 };
 

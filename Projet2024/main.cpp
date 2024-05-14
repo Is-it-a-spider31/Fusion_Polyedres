@@ -1,12 +1,13 @@
 #include <iostream>
 #include "Algorithm.h"
+#include "BrutForceAlgorithm.h"
 
 using namespace std;
 
 int main(int argc, char* argv[])
 {
 	//TO TEST MERGING ALGORITHM
-	Algorithm algo("MergeTest/PlanOverCubeFaceobj.obj");
+	BrutForceAlgorithm algo("MergeTest/PlanOverCubeFaceobj.obj");
 	algo.run();
 
 	//Algorithm algo("ConvexiTest/2DnotConvex.obj");
