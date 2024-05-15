@@ -108,12 +108,13 @@ vector<Polyedre> Algorithm::mergeAlgorithm(const vector<Polyedre>& solution, int
 				stopCurrentSolution = true;
 			}
 		}
-
 		nextPolyId++;
 	}	// while
 
+
 	if (!stopCurrentSolution)	// Solution calculee jusqu'au bout
 	{
+
 		// Ajout du dernier polyedre fusionne
 		mergedPolyhedra.push_back(currentPolyhedron);
 	}

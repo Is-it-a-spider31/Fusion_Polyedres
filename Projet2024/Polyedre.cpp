@@ -123,8 +123,12 @@ Polyedre Polyedre::merge2Polyhedra(const Polyedre& poly1, const Polyedre& poly2,
 // GETTERS
 int Polyedre::getId() const { return d_id; }
 
-vector<Face> Polyedre::getFaces() const { return faces; }
+string Polyedre::getMTL() const
+{
+    return d_texture;
+}
 
+vector<Face> Polyedre::getFaces() const { return faces; }
 Polyedre Polyedre::merge2Polygones(const Polyedre& poly1, const Polyedre& poly2)
 {
     Polyedre mergedPoly(-1);    // -1 par defaut : pas de fusion
@@ -235,6 +239,11 @@ Polyedre Polyedre::merge2Polygones(const Polyedre& poly1, const Polyedre& poly2)
     }   // if 2 faces coplanaires
 
     return mergedPoly;
+}
+  
+void Polyedre::setMTL(string name)
+{
+    d_texture = "Texture/" + name + ".obj";
 }
 
 bool Polyedre::isConvex() const { return d_isConvex; }

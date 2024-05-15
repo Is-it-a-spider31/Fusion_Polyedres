@@ -17,6 +17,7 @@ int main(int argc, char* argv[])
 
 	//TO TEST BRUT FORCE ALGORITHM
 	BrutForceAlgorithm algo("MergeTest/exemple3.obj");
+
 	algo.run();
 
 	//Algorithm algo("ConvexiTest/2DnotConvex.obj");
@@ -25,7 +26,7 @@ int main(int argc, char* argv[])
 	//algo.test_Convexity();
 	//algo.run();
   
-	//algo.test_WriteObj();
+	algo.test_WriteObj();
 	//algo.test_LoadObj();
 
 	return 0;
