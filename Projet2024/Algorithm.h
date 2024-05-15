@@ -28,6 +28,29 @@ public:
     */
     virtual void run() = 0;
 
+    /**
+     * @brief Algoritme de fusion d'une solution (liste de polyedres)
+     * 
+     * Effectue les fusions possibles dans l'ordre pour 
+     * un ensemble de polyedres donnes.
+     * On arrete l'algoritme de fusion si le nombre de polyedres depasse
+     * la limite fixee (si -1 alors pas de limite).
+     * 
+     * @param solution  liste de polyedres
+     * @param limitNbPoly Nombre limite de polyedres (-1 par defaut, pas de limite) 
+     * @return nombre polyedres apres fusions
+    */
+    vector<Polyedre> mergeAlgorithm(const vector<Polyedre>& solution, int limitNbPoly=-1);
+
+    /**
+     * @brief Fonction d'evaluation d'une solution
+     * 
+     * Renvoie le nombre de polyedres resultants de l'algoritme
+     * de fusion.
+     * 
+     * @param solution liste de polyedres
+     * @return nombre de polyedres apres l'algo de fusion
+    */
     int evaluateSolution(const vector<Polyedre>& solution);
 
     //FONCTIONS DE TEST

@@ -7,7 +7,7 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	//TO TEST MERGING ALGORITHM
-	BrutForceAlgorithm algo("MergeTest/PlanOverCubeFaceobj.obj");
+	BrutForceAlgorithm algo("MergeTest/exemple3.obj");
 	algo.run();
 
 	//Algorithm algo("ConvexiTest/2DnotConvex.obj");

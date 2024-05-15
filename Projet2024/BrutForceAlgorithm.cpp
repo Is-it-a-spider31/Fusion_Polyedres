@@ -50,93 +50,17 @@ void BrutForceAlgorithm::run()
 	// Statistiques
 	int nbPermutaions = 0;		// nombre de permuations effectuees
 	int nbFullSolutions = 0;	// nombre de solutions qui ont ete calculees jusqu'au bout
-	int nbUniqueSolutions = 0;	// nombre de solutions uniques trouvees
+	int nbOptimalSolutions = 0;	// nombre de solutions uniques trouvees
 
 	// Pour chaque combinaison de permutation
 	//	(complexite n! pour n polyedres)
 	do
 	{
-		Polyedre currentPolyhedron = permutedPolyhedra[0];
-		Polyedre nextPolyhedron(0);
+		// Algoritme de fusion de la solution courante (permutedPolyhedra)
+		mergedPolyhedra = mergeAlgorithm(permutedPolyhedra, minNbPolySolution);
 
-		// true : arreter la solution en cours car on a deja mieux
-		bool stopCurrentSolution = false;
-
-		// Pour chaque polyedres (sauf le premier), 
-		//	tant que la solution courante n'est pas arretee
-		int nextPolyId = 1;
-		while (nextPolyId < permutedPolyhedra.size() && !stopCurrentSolution)
+		if (!mergedPolyhedra.empty())	// Solution calculee jusqu'au bout
 		{
-			bool isMergeLegal = false;	// true : la fusion est possible et convexe
-			nextPolyhedron = permutedPolyhedra[nextPolyId];
-
-			// Si les 2 polyedres sont convexes (cf. consignes du projet)
-			if (currentPolyhedron.isConvex() && nextPolyhedron.isConvex())
-			{
-				bool areMerged = false;
-				Polyedre mergedPoly(0);
-
-				// recherche des faces communes entre les 2 polyedres
-				vector<Face> sharedFaces = Polyedre::getSharedFaces(currentPolyhedron, nextPolyhedron);
-
-				if (!sharedFaces.empty())	// S'il y a au moins une face commune
-				{
-					// FUSION 2 Polyedres
-					mergedPoly = Polyedre::merge2Polyhedra(
-						currentPolyhedron,
-						nextPolyhedron,
-						sharedFaces
-					);
-					areMerged = true;
-
-				}
-				else	// Pas de faces communes
-				{
-					// Les 2 polyedres ont une seule face
-					if (currentPolyhedron.faces.size() == nextPolyhedron.faces.size()
-						&& currentPolyhedron.faces.size() == 1)
-					{
-						// FUSION 2 Polygones (une seule face + face pas commune aux 2)
-						mergedPoly = Polyedre::merge2Polygones(currentPolyhedron, nextPolyhedron);
-						if (mergedPoly.getId() != -1)
-						{
-							areMerged = true;
-						}
-					}
-				}
-
-				// Si fusion effectuee, teste si convexe
-				if (areMerged)
-				{
-					mergedPoly.computeConvexity();
-					if (mergedPoly.isConvex())	// Fusion convexe
-					{
-						currentPolyhedron = mergedPoly;
-						isMergeLegal = true;
-					}
-				}
-			}
-
-			if (!isMergeLegal)	// Si pas de fusion possible
-			{	// pas de face commune OU au moins 1 poly pas convexes OU fusion pas convexe
-				mergedPolyhedra.push_back(currentPolyhedron);
-				currentPolyhedron = permutedPolyhedra[nextPolyId];
-
-				// Si on a deja une meilleur solution
-				if (mergedPolyhedra.size() >= minNbPolySolution)
-				{
-					stopCurrentSolution = true;
-				}
-			}
-
-			nextPolyId++;
-		}	// while
-
-		if (!stopCurrentSolution)	// Solution calculee jusqu'au bout
-		{
-			// Ajout du dernier polyedre fusionne
-			mergedPolyhedra.push_back(currentPolyhedron);
-
 			// Nouveau nombre minimum de polyedre (<= au minimum precedent)
 			minNbPolySolution = mergedPolyhedra.size();
 			nbFullSolutions++;
@@ -146,7 +70,6 @@ void BrutForceAlgorithm::run()
 
 			if (!isAlreadyFinded)	// Si c'est une nouvelle solution
 			{
-				nbUniqueSolutions++;
 				solutions.push_back(mergedPolyhedra);
 				permutationsId.push_back(nbPermutaions);
 			}
@@ -164,6 +87,7 @@ void BrutForceAlgorithm::run()
 	{
 		if (solution.size() == minNbPolySolution)
 		{
+			nbOptimalSolutions++;
 			// Conversion de la taille du vecteur en chaîne de caractères
 			stringstream sizeStr;
 			sizeStr << solution.size();
@@ -177,9 +101,12 @@ void BrutForceAlgorithm::run()
 	}
 
 	// Affichage des statistiques
-	std::cout << "Nb permutations : " << nbPermutaions << endl;
-	std::cout << "Nb full solutions : " << nbFullSolutions << endl;
-	std::cout << "Nb solutions unique trouvees : " << nbUniqueSolutions << endl;
+	cout << " ---  STATISTIQUES  ---" << endl;
+	cout << "Nb permutations effectuees : " << nbPermutaions << endl;
+	cout << "Nb solutions calculees entierement : " << nbFullSolutions << endl;
+	cout << "Nb solutions uniques calculees entierement: " << solutions.size() << endl;
+	cout << "Nb de solution optimales : " << nbOptimalSolutions << endl;
+	cout << "Nb optimale de poledres : " << minNbPolySolution << endl;
 }
 
 
