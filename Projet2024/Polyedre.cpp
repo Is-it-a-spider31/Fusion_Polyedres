@@ -144,12 +144,12 @@ Polyedre Polyedre::merge2Polygones(const Polyedre& poly1, const Polyedre& poly2)
     if (areCoplanar)    // Si les 2 faces sont coplanaires
     {
         int sameEdge = 0;    // 1 ou -1 si egales, 0 sinon
-        // indice du sommet de la face 1 pour lequel on a trouve une arrete commune
+        // indice du sommet de la face 1 pour lequel on a trouve une arete commune
         int i = 0; 
-        // indice du sommet de la face 2 pour lequel on a trouve une arrete commune
+        // indice du sommet de la face 2 pour lequel on a trouve une arete commune
         int j = 0;
 
-        // CHERCHE UNE ARRETE COMMUNE aux 2 faces
+        // CHERCHE UNE ARETE COMMUNE aux 2 faces
         while (i < face1.d_sommets.size() && sameEdge==0)
         {
             int nextI = i + 1;
@@ -165,8 +165,8 @@ Polyedre Polyedre::merge2Polygones(const Polyedre& poly1, const Polyedre& poly2)
 
                 // 1 ou -1 si egale, 0 sinon (pour sens du parours de la face)
                 sameEdge = Point::are2EdgesEquals(
-                    face1.d_sommets[i], face1.d_sommets[nextI],   // arrete de la face 1
-                    face2.d_sommets[j], face2.d_sommets[nextJ]    // arrete de la face 2
+                    face1.d_sommets[i], face1.d_sommets[nextI],   // arete de la face 1
+                    face2.d_sommets[j], face2.d_sommets[nextJ]    // arete de la face 2
                 );
                 j++;
             }
@@ -175,12 +175,12 @@ Polyedre Polyedre::merge2Polygones(const Polyedre& poly1, const Polyedre& poly2)
         i--;
         j--;
 
-        // ARRETE EN COMMUN
+        // ARETE EN COMMUN
         if (sameEdge != 0)
         {   // FUSION
 
             // Determine a partir de quel sommet de la 1ere face
-            // on doit arreter la fusion
+            // on doit areter la fusion
             Point destination = face1.d_sommets[0];
             if (i+1 < face1.d_sommets.size()) 
                 destination = face1.d_sommets[i + 1];
@@ -235,7 +235,7 @@ Polyedre Polyedre::merge2Polygones(const Polyedre& poly1, const Polyedre& poly2)
                         i = 0;
                 }
             }   // while 
-        }   // if arrete en commun
+        }   // if arete en commun
     }   // if 2 faces coplanaires
 
     return mergedPoly;
