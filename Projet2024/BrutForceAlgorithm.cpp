@@ -17,12 +17,11 @@ using namespace std;
  *
  * @param filename Nom du fichier .obj
 */
-BrutForceAlgorithm::BrutForceAlgorithm(const string& filename) : Algorithm(filename)
-{
-}
+BrutForceAlgorithm::BrutForceAlgorithm(const string& filename) 
+	: Algorithm(filename) {}
 
 /**
- * @brief Algorithme principal de fusion
+ * @brief Algoritme Brute-force
 */
 void BrutForceAlgorithm::run()
 {

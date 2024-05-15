@@ -12,12 +12,11 @@ public:
     BrutForceAlgorithm(const string& filename);
 
     /**
-     * @brief Algorithme principal de fusion
+     * @brief Algoritme Brute-force
     */
     void run() override;
 
 private:
-    // METHODES
 
     /**
      * @brief Verifie si une solution de l'algo de fusion a deja ete trouvee

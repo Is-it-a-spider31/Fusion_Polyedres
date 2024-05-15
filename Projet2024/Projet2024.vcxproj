@@ -135,6 +135,7 @@
     <ClCompile Include="Plan.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="Polyedre.cpp" />
+    <ClCompile Include="RecuitSimuleAlgorithm.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Algorithm.h" />
@@ -144,6 +145,7 @@
     <ClInclude Include="Plan.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Polyedre.h" />
+    <ClInclude Include="RecuitSimuleAlgorithm.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
