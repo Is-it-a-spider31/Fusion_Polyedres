@@ -8,7 +8,7 @@ class GeneticAlgorithm : public Algorithm
 
 public:
 	GeneticAlgorithm(const string& filename, int popSize, double probaCross, double probaMut, int maxIter);
-	GeneticAlgorithm(const string& filename, int popSize, double probaCross, double probaMut, int maxIter);
+	//GeneticAlgorithm(const string& filename, int popSize, double probaCross, double probaMut, int maxIter);
 
 	void run() override;
 

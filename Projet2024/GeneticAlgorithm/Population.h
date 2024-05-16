@@ -12,7 +12,7 @@ public:
 
 	vector<vector<int>> randomInit();
 
-private
+private:
 
 };
 
