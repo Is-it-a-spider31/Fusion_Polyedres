@@ -1,7 +1,7 @@
 #pragma once
 #include "Algorithm.h"
 
-class BrutForceAlgorithm : public Algorithm
+class BruteForceAlgorithm : public Algorithm
 {
 public:
     /**
@@ -9,7 +9,7 @@ public:
      *
      * @param filename Nom du fichier .obj
     */
-    BrutForceAlgorithm(const string& filename);
+    BruteForceAlgorithm(const string& filename);
 
     /**
      * @brief Algoritme Brute-force

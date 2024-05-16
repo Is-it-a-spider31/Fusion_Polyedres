@@ -21,11 +21,11 @@ Algorithm::Algorithm(const string& filename)
 }
 
 /**
- * @brief Algoritme de fusion d'une solution (liste de polyedres)
+ * @brief Algorithme de fusion d'une solution (liste de polyedres)
  *
  * Effectue les fusions possibles dans l'ordre pour
  * un ensemble de polyedres donnes.
- * On arrete l'algoritme de fusion si le nombre de polyedres depasse
+ * On arrete l'Algorithme de fusion si le nombre de polyedres depasse
  * la limite fixee (si -1 alors pas de limite).
  *
  * @param solution  liste de polyedres
@@ -129,7 +129,7 @@ vector<Polyedre> Algorithm::mergeAlgorithm(const vector<Polyedre>& solution, int
 /**
  * @brief Fonction d'evaluation d'une solution
  *
- * Renvoie le nombre de polyedres resultants de l'algoritme
+ * Renvoie le nombre de polyedres resultants de l'Algorithme
  * de fusion.
  *
  * @param solution liste de polyedres

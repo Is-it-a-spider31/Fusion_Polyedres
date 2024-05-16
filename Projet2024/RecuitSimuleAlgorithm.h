@@ -14,7 +14,7 @@ public:
     RecuitSimuleAlgorithm(const string& filename);
 
     /**
-     * @brief Algoritme principal du recuit simule
+     * @brief Algorithme principal du recuit simule
     */
     void run() override;
 
@@ -36,23 +36,23 @@ private:
     std::mt19937 d_randomGenerator;
 
     /**
-     * @brief Permute 2 elements dans la liste 
-     * 
+     * @brief Permute 2 elements dans la liste
+     *
      * @param polyhedra Liste de polyedres a permuter
     */
     void permute2Elements(vector<Polyedre>& polyhedra);
 
     /**
      * @brief Teste si la solution voisine est acceptee ou pas
-     * 
+     *
      * Calcule la probabilite d'acceptation de la solution voisine
      * avec la formule classique donne dans l'algo du recuit simule.
-     * 
+     *
      * @param currentEval Evaluation de la solution courante
      * @param neighborEval Evaluation de la solution voisine
-     * 
+     *
      * @return true si solution voisine acceptee, false sinon
     */
     bool isNeighborAccepted(const int& currentEval, const int& neighborEval);
 
-
+};
