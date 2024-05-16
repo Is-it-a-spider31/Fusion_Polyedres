@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Algorithm.h"
 #include "BrutForceAlgorithm.h"
+#include "GeneticAlgorithm.h"
 
 #include <cstdlib> // Pour la fonction system()
 
@@ -16,9 +17,9 @@ int main(int argc, char* argv[])
 	#endif
 
 	//TO TEST BRUT FORCE ALGORITHM
-	BrutForceAlgorithm algo("MergeTest/exemple3.obj");
+	//BrutForceAlgorithm algo("MergeTest/exemple3.obj");
 
-	algo.run();
+	//algo.run();
 
 	//Algorithm algo("ConvexiTest/2DnotConvex.obj");
 	//Algorithm algo("MergeTest/3plans-2Convexes.obj");
@@ -26,8 +27,14 @@ int main(int argc, char* argv[])
 	//algo.test_Convexity();
 	//algo.run();
   
-	algo.test_WriteObj();
+	//algo.test_WriteObj();
 	//algo.test_LoadObj();
+
+	//------------------------------------------
+	GeneticAlgorithm ga{"MergeTest/exemple3.obj", 500000, 0.5, 0.5, 100000};
+	ga.run();
+
+	//faire gaffe si la population est petite et la dimension aussi
 
 	return 0;
 }

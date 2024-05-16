@@ -3,6 +3,14 @@
 #include <vector>
 #include <iostream>
 
+#include "GeneticAlgorithm/Population.h"
+#include "GeneticAlgorithm/Selection.h"
+#include "GeneticAlgorithm/Crossover.h"
+#include "GeneticAlgorithm/Mutation.h"
+
+#include <cmath>
+#include "OBJFileHandler.h"
+
 class GeneticAlgorithm : public Algorithm
 {
 
@@ -15,8 +23,10 @@ public:
 	//Getters
 	int getPopSize() const;
 	int getMaxIteration() const;
+	int getDimension() const;
 	double getProbaCross() const;
 	double getProbaMut() const;
+	void printPopulation() const;
 
 	
 
@@ -25,19 +35,19 @@ public:
 	//reséparer en , création, initialisation pop, initialisation, tournoi = selection, 
 	// croisements, mutation, fonction de check de critere d'arret
 
-	void createPop();
-	void initializePop();
+	//void createPop();
+	//void initializePop();
 	
 	//renvoie les 2 winners
-	 vector<int>* turnament();
+	 //vector<int>* turnament();
 
-	 void crossover();
-	 void mutation();
+	 //void crossover();
+	 //void mutation();
 
 	 //surement mettre en private ses trucs la
 
-	 void onePointCrossover(int first_parent, int sec_parent);
-	 void oneGeneMutation(int child);
+	 //void onePointCrossover(int first_parent, int sec_parent);
+	 //void oneGeneMutation(int child);
 
 
 
@@ -45,6 +55,10 @@ public:
 protected:
 
 	int d_popSize;
+
+	//nb de polyhedre totale
+	int d_dimension;
+
 	int d_maxIteration;
 	
 	double d_crossoverProba;
@@ -55,10 +69,14 @@ protected:
 
 	vector<int> turnamentWinner;
 
+	bool d_popResized = false;
 
 	//-----------------------------
 
-
+	Population* population;
+	Selection* selection;
+	Crossover* crossover;
+	Mutation* mutation;
 
 
 };

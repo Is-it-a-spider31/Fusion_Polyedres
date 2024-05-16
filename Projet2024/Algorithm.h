@@ -51,7 +51,7 @@ public:
      * @param solution liste de polyedres
      * @return nombre de polyedres apres l'algo de fusion
     */
-    int evaluateSolution(const vector<Polyedre>& solution);
+    int evaluateSolution(const vector<Polyedre>& solution) ;
 
     //FONCTIONS DE TEST
     void test_Convexity();
