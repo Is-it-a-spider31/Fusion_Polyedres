@@ -1,4 +1,4 @@
-#include "BrutForceAlgorithm.h"
+#include "BruteForceAlgorithm.h"
 
 
 #include "Algorithm.h"
@@ -6,25 +6,22 @@
 #include <iostream>
 
 #include <fstream>
-#include <sstream>
 #include <algorithm>
 #include "OBJFileHandler.h"
 
-using namespace std;
 
 /**
  * @brief Contructeur a partir d'un fichier .obj
  *
  * @param filename Nom du fichier .obj
 */
-BrutForceAlgorithm::BrutForceAlgorithm(const string& filename) : Algorithm(filename)
-{
-}
+BruteForceAlgorithm::BruteForceAlgorithm(const string& filename) 
+	: Algorithm(filename) {}
 
 /**
- * @brief Algorithme principal de fusion
+ * @brief Algoritme Brute-force
 */
-void BrutForceAlgorithm::run()
+void BruteForceAlgorithm::run()
 {
 	// Liste des solutions uniques trouvees
 	//	(une solution = ensemble de polyedres)
@@ -66,7 +63,7 @@ void BrutForceAlgorithm::run()
 			nbFullSolutions++;
 
 			// Vrai si les meme fusions ont deja ete trouvees et ecrites dans un fichier obj
-			bool isAlreadyFinded = BrutForceAlgorithm::isSolutionAlreadyFinded(mergedPolyhedra, solutions);
+			bool isAlreadyFinded = BruteForceAlgorithm::isSolutionAlreadyFinded(mergedPolyhedra, solutions);
 
 			if (!isAlreadyFinded)	// Si c'est une nouvelle solution
 			{
@@ -82,22 +79,19 @@ void BrutForceAlgorithm::run()
 	} while (next_permutation(permutedPolyhedra.begin(), permutedPolyhedra.end()));
 
 	//	ECRITURE DES MEILLEURES SOLUTIONS TROUVEES
-	auto it = permutationsId.begin();
+	auto solutionId = permutationsId.begin();
 	for (vector<Polyedre>& solution : solutions)
 	{
 		if (solution.size() == minNbPolySolution)
 		{
 			nbOptimalSolutions++;
-			// Conversion de la taille du vecteur en chaîne de caractères
-			stringstream sizeStr;
-			sizeStr << solution.size();
 
 			// Ecriture du fichier OBJ pour cette solution
-			string filename = "MergeTest/generated/FUSION." + sizeStr.str()
-				+ "Poly_" + to_string(*it) + ".obj";
+			string filename = "MergeTest/generated/FUSION." + to_string(solution.size())
+				+ "Poly_" + to_string(*solutionId) + ".obj";
 			OBJFileHandler::writeOBJ(d_vertices, solution, filename);
 		}
-		++it;
+		++solutionId;
 	}
 
 	// Affichage des statistiques
@@ -122,7 +116,7 @@ void BrutForceAlgorithm::run()
  *
  * @return true Si la solution est presente dans la liste
 */
-bool BrutForceAlgorithm::isSolutionAlreadyFinded(
+bool BruteForceAlgorithm::isSolutionAlreadyFinded(
 	const vector<Polyedre>& newSolution,		// Nouvelle solution
 	const vector<vector<Polyedre>>& solutions	// Liste des solutions trouvees
 )
