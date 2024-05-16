@@ -8,6 +8,8 @@ class GeneticAlgorithm : public Algorithm
 
 public:
 	GeneticAlgorithm(const string& filename, int popSize, double probaCross, double probaMut, int maxIter);
+	GeneticAlgorithm(const string& filename, int popSize, double probaCross, double probaMut, int maxIter);
+
 	void run() override;
 
 	//Getters
@@ -40,7 +42,7 @@ public:
 
 
 
-private:
+protected:
 
 	int d_popSize;
 	int d_maxIteration;
@@ -48,10 +50,16 @@ private:
 	double d_crossoverProba;
 	double d_mutationProba;
 
-	vector<vector<int>> d_popActual;
-	vector<vector<int>> d_popNew;
+	vector<vector<int>> d_pop;
+	
 
 	vector<int> turnamentWinner;
+
+
+	//-----------------------------
+
+
+
 
 };
 
