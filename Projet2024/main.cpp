@@ -16,14 +16,14 @@ int main(int argc, char* argv[])
 		system("./delete_obj_files.sh");
 	#endif
 
-	//TEST ALGO BRUT-FORCE
+
+	//TEST ALGO BRUTE-FORCE
 	//BruteForceAlgorithm bruteforce("MergeTest/exemple3.obj");
 	//bruteforce.run();
 
 	//TEST RECUIT SIMULE
-	RecuitSimuleAlgorithm recuit("MergeTest/exemple3.obj");
-	recuit.run();
-
+	//RecuitSimuleAlgorithm recuit("MergeTest/exemple3.obj");
+	//recuit.run();
 
 	// TESTS CONVEXITE
 	//Algorithm algo("ConvexiTest/2DnotConvex.obj");
