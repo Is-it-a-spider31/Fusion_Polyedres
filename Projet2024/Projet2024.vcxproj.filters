@@ -19,6 +19,12 @@
     <Filter Include="Fichiers d%27en-tête\genetic">
       <UniqueIdentifier>{1a80af5c-db16-400c-b0d2-5e4523c66e68}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\genetic\mutation">
+      <UniqueIdentifier>{d8fb2d1d-01bd-49b1-8406-5c935dd354db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\genetic\mutation">
+      <UniqueIdentifier>{e3f523e9-7333-41e5-9585-9c2c53b2d4b0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -54,14 +60,17 @@
     <ClCompile Include="GeneticAlgorithm\Population.cpp">
       <Filter>Fichiers sources\genetic</Filter>
     </ClCompile>
-    <ClCompile Include="GeneticAlgorithm\Mutation.cpp">
-      <Filter>Fichiers sources\genetic</Filter>
-    </ClCompile>
     <ClCompile Include="GeneticAlgorithm.cpp">
       <Filter>Fichiers sources\genetic</Filter>
     </ClCompile>
     <ClCompile Include="GeneticAlgorithm\Crossover.cpp">
       <Filter>Fichiers sources\genetic</Filter>
+    </ClCompile>
+    <ClCompile Include="InsertionMutation.cpp">
+      <Filter>Fichiers sources\genetic\mutation</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneticAlgorithm\Mutation.cpp">
+      <Filter>Fichiers sources\genetic\mutation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -92,9 +101,6 @@
     <ClInclude Include="GeneticAlgorithm\Crossover.h">
       <Filter>Fichiers d%27en-tête\genetic</Filter>
     </ClInclude>
-    <ClInclude Include="GeneticAlgorithm\Mutation.h">
-      <Filter>Fichiers d%27en-tête\genetic</Filter>
-    </ClInclude>
     <ClInclude Include="GeneticAlgorithm\Population.h">
       <Filter>Fichiers d%27en-tête\genetic</Filter>
     </ClInclude>
@@ -103,6 +109,12 @@
     </ClInclude>
     <ClInclude Include="GeneticAlgorithm.h">
       <Filter>Fichiers d%27en-tête\genetic</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneticAlgorithm\Mutation.h">
+      <Filter>Fichiers d%27en-tête\genetic\mutation</Filter>
+    </ClInclude>
+    <ClInclude Include="InsertionMutation.h">
+      <Filter>Fichiers d%27en-tête\genetic\mutation</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

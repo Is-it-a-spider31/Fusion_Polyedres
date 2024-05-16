@@ -135,6 +135,7 @@
     <ClCompile Include="GeneticAlgorithm\Mutation.cpp" />
     <ClCompile Include="GeneticAlgorithm\Population.cpp" />
     <ClCompile Include="GeneticAlgorithm\Selection.cpp" />
+    <ClCompile Include="InsertionMutation.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OBJFileHandler.cpp" />
     <ClCompile Include="Plan.cpp" />
@@ -151,6 +152,7 @@
     <ClInclude Include="GeneticAlgorithm\Mutation.h" />
     <ClInclude Include="GeneticAlgorithm\Population.h" />
     <ClInclude Include="GeneticAlgorithm\Selection.h" />
+    <ClInclude Include="InsertionMutation.h" />
     <ClInclude Include="OBJFileHandler.h" />
     <ClInclude Include="Plan.h" />
     <ClInclude Include="Point.h" />
