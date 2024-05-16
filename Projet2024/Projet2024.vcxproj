@@ -130,6 +130,11 @@
     <ClCompile Include="Algorithm.cpp" />
     <ClCompile Include="BrutForceAlgorithm.cpp" />
     <ClCompile Include="Face.cpp" />
+    <ClCompile Include="GeneticAlgorithm.cpp" />
+    <ClCompile Include="GeneticAlgorithm\Crossover.cpp" />
+    <ClCompile Include="GeneticAlgorithm\Mutation.cpp" />
+    <ClCompile Include="GeneticAlgorithm\Population.cpp" />
+    <ClCompile Include="GeneticAlgorithm\Selection.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OBJFileHandler.cpp" />
     <ClCompile Include="Plan.cpp" />
@@ -140,6 +145,11 @@
     <ClInclude Include="Algorithm.h" />
     <ClInclude Include="BrutForceAlgorithm.h" />
     <ClInclude Include="Face.h" />
+    <ClInclude Include="GeneticAlgorithm.h" />
+    <ClInclude Include="GeneticAlgorithm\Crossover.h" />
+    <ClInclude Include="GeneticAlgorithm\Mutation.h" />
+    <ClInclude Include="GeneticAlgorithm\Population.h" />
+    <ClInclude Include="GeneticAlgorithm\Selection.h" />
     <ClInclude Include="OBJFileHandler.h" />
     <ClInclude Include="Plan.h" />
     <ClInclude Include="Point.h" />
