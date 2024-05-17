@@ -44,7 +44,7 @@ public:
 		const string& filename
 	);
 
-	static enum FirstString {
+	enum FirstString {
 		commentaire,
 		vertex,
 		face,

@@ -19,6 +19,12 @@ public:
 private:
 
     /**
+     * Chemin du repertoire ves lequel l'agoritme ecrit
+     * les solutions trouvees sous forme de fichiers .obj
+    */
+    static const string GENERATE_OBJ_PATH ;
+
+    /**
      * @brief Verifie si une solution de l'algo de fusion a deja ete trouvee
      *
      * Si la solution (ensemble de polyedres) courante est dans

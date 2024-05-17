@@ -21,6 +21,12 @@ public:
 private:
 
     /**
+     * Chemin du repertoire ves lequel l'agoritme ecrit
+     * les solutions trouvees sous forme de fichiers .obj
+    */
+    static const string GENERATE_OBJ_PATH;
+
+    /**
      * @brief Facteur de refroidissement h
     */
     double d_coolingFactor;

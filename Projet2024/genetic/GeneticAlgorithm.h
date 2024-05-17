@@ -1,15 +1,15 @@
 #pragma once
-#include "Algorithm.h"
+#include "../Algorithm.h"
 #include <vector>
 #include <iostream>
 
-#include "GeneticAlgorithm/Population.h"
-#include "GeneticAlgorithm/Selection.h"
-#include "GeneticAlgorithm/Crossover.h"
-#include "GeneticAlgorithm/Mutation.h"
+#include "Population.h"
+#include "Selection.h"
+#include "Crossover.h"
+#include "Mutation.h"
 
 #include <cmath>
-#include "OBJFileHandler.h"
+#include "../OBJFileHandler.h"
 
 class GeneticAlgorithm : public Algorithm
 {
@@ -79,6 +79,12 @@ protected:
 	Crossover* d_Crossover;
 	Mutation* d_Mutation;
 
+private:
+	/**
+	 * Chemin du repertoire ves lequel l'agoritme ecrit
+	 * les solutions trouvees sous forme de fichiers .obj
+	*/
+	static const string GENERATE_OBJ_PATH;
 
 };
 

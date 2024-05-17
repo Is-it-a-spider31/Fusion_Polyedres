@@ -48,22 +48,25 @@
     <ClCompile Include="RecuitSimuleAlgorithm.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="GeneticAlgorithm\Selection.cpp">
+    <ClCompile Include="genetic\Selection.cpp">
       <Filter>Fichiers sources\genetic</Filter>
     </ClCompile>
-    <ClCompile Include="GeneticAlgorithm\Population.cpp">
+    <ClCompile Include="genetic\Population.cpp">
       <Filter>Fichiers sources\genetic</Filter>
     </ClCompile>
-    <ClCompile Include="GeneticAlgorithm.cpp">
+    <ClCompile Include="genetic\GeneticAlgorithm.cpp">
       <Filter>Fichiers sources\genetic</Filter>
     </ClCompile>
-    <ClCompile Include="GeneticAlgorithm\Crossover.cpp">
+    <ClCompile Include="genetic\Crossover.cpp">
       <Filter>Fichiers sources\genetic</Filter>
     </ClCompile>
-    <ClCompile Include="InsertionMutation.cpp">
+    <ClCompile Include="genetic\InsertionMutation.cpp">
       <Filter>Fichiers sources\genetic</Filter>
     </ClCompile>
-    <ClCompile Include="GeneticAlgorithm\Mutation.cpp">
+    <ClCompile Include="genetic\Mutation.cpp">
+      <Filter>Fichiers sources\genetic</Filter>
+    </ClCompile>
+    <ClCompile Include="genetic\TurnamentSelection.cpp">
       <Filter>Fichiers sources\genetic</Filter>
     </ClCompile>
   </ItemGroup>
@@ -92,23 +95,32 @@
     <ClInclude Include="RecuitSimuleAlgorithm.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="GeneticAlgorithm\Crossover.h">
+    <ClInclude Include="genetic\Crossover.h">
       <Filter>Fichiers d%27en-tête\genetic</Filter>
     </ClInclude>
-    <ClInclude Include="GeneticAlgorithm\Population.h">
+    <ClInclude Include="genetic\Population.h">
       <Filter>Fichiers d%27en-tête\genetic</Filter>
     </ClInclude>
-    <ClInclude Include="GeneticAlgorithm\Selection.h">
+    <ClInclude Include="genetic\Selection.h">
       <Filter>Fichiers d%27en-tête\genetic</Filter>
     </ClInclude>
-    <ClInclude Include="GeneticAlgorithm.h">
+    <ClInclude Include="genetic\GeneticAlgorithm.h">
       <Filter>Fichiers d%27en-tête\genetic</Filter>
     </ClInclude>
-    <ClInclude Include="InsertionMutation.h">
+    <ClInclude Include="genetic\InsertionMutation.h">
       <Filter>Fichiers d%27en-tête\genetic</Filter>
     </ClInclude>
-    <ClInclude Include="GeneticAlgorithm\Mutation.h">
+    <ClInclude Include="genetic\Mutation.h">
       <Filter>Fichiers d%27en-tête\genetic</Filter>
+    </ClInclude>
+    <ClInclude Include="genetic\NXCrossover.h">
+      <Filter>Fichiers d%27en-tête\genetic</Filter>
+    </ClInclude>
+    <ClInclude Include="genetic\TurnamentSelection.h">
+      <Filter>Fichiers d%27en-tête\genetic</Filter>
+    </ClInclude>
+    <ClInclude Include="genetic\NXCrossover.cpp">
+      <Filter>Fichiers sources\genetic</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
