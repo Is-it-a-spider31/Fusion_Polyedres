@@ -5,6 +5,8 @@
 #include "RecuitSimuleAlgorithm.h"
 #include "genetic/GeneticAlgorithm.h"
 
+#include "genetic/TurnamentSelection.h"
+
 #include <cstdlib> // Pour la fonction system()
 #include <string>
 
@@ -45,8 +47,9 @@ int main(int argc, char* argv[])
 	//algo.test_LoadObj();
 
 	//------------------------------------------
-	//GeneticAlgorithm ga{ MERGE_TEST_PATH+"exemple3.obj", 500000, 0.5, 0.5, 100000};
-	//ga.run();
+	TurnamentSelection selection;
+	GeneticAlgorithm ga{MERGE_TEST_PATH+"exemple3.obj", 10, 0.5, 0.5, 100000, selection};
+	ga.run();
 
 	//faire gaffe si la population est petite et la dimension aussi
 

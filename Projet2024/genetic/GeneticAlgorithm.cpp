@@ -6,9 +6,11 @@
 */
 const string GeneticAlgorithm::GENERATE_OBJ_PATH = "Tests/generated/GeneticAlgo/";
 
-GeneticAlgorithm::GeneticAlgorithm(const string& filename, int popSize, double probaCross, double probaMut, int maxIter) :
+GeneticAlgorithm::GeneticAlgorithm(const string& filename, int popSize, double probaCross, double probaMut, int maxIter, Selection& selection) :
 	Algorithm(filename), d_popSize{ popSize }, d_crossoverProba{probaCross}, d_mutationProba{probaMut}
 {
+	d_Selection = &selection;
+
 	d_dimension = d_polyhedra.size();
 
 	if (d_popSize > tgamma(d_dimension + 1))
@@ -22,8 +24,8 @@ GeneticAlgorithm::GeneticAlgorithm(const string& filename, int popSize, double p
 void GeneticAlgorithm::run()
 {
 	//Initialisation
-	population = new Population{d_dimension, d_popSize};
-	d_pop = population->randomInit();
+	d_Population = new Population{d_dimension, d_popSize};
+	d_pop = d_Population->randomInit();
 
 	printPopulation();
 
@@ -32,7 +34,7 @@ void GeneticAlgorithm::run()
 	int index_scoreMax = -1;
 
 	//-----------------------------TANT QUE----------------------------------------------------
-
+	d_score_pop.clear();
 	for (int i = 0; i < d_popSize; i++)
 	{
 		//Transforme le tableau d'index en tableau de polyhedre
@@ -43,7 +45,7 @@ void GeneticAlgorithm::run()
 		}
 
 		double current_indiv_score = (double)d_dimension / (double)evaluateSolution(solution);
-
+		d_score_pop.push_back(current_indiv_score);
 
 		//MAJ du score max et index
 		if (current_indiv_score > scoreMax)
@@ -82,8 +84,16 @@ void GeneticAlgorithm::run()
 		return ;
 	}
 
+	else 
+	{
+
+		//Selection
+		d_Selection->select(d_pop, d_score_pop);
+
+	}
+
 	
-	//Selection
+	
 
 }
 

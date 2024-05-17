@@ -1,6 +1,8 @@
 #pragma once
 
 #include <vector>
+#include <random>
+#include <iostream>
 
 using namespace std;
 
@@ -8,7 +10,7 @@ class Selection
 {
 public:
 
-	virtual void select();
+	virtual void select(vector<vector<int>>& population, vector<double> score) = 0;
 
 protected:
 

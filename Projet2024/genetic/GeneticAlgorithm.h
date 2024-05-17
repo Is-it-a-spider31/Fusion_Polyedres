@@ -15,7 +15,7 @@ class GeneticAlgorithm : public Algorithm
 {
 
 public:
-	GeneticAlgorithm(const string& filename, int popSize, double probaCross, double probaMut, int maxIter);
+	GeneticAlgorithm(const string& filename, int popSize, double probaCross, double probaMut, int maxIter, Selection& selection);
 	//GeneticAlgorithm(const string& filename, int popSize, double probaCross, double probaMut, int maxIter);
 
 	void run() override;
@@ -65,6 +65,7 @@ protected:
 	double d_mutationProba;
 
 	vector<vector<int>> d_pop;
+	vector<double> d_score_pop;
 	
 
 	vector<int> turnamentWinner;
@@ -73,10 +74,10 @@ protected:
 
 	//-----------------------------
 
-	Population* population;
-	Selection* selection;
-	Crossover* crossover;
-	Mutation* mutation;
+	Population* d_Population;
+	Selection* d_Selection;
+	Crossover* d_Crossover;
+	Mutation* d_Mutation;
 
 private:
 	/**
