@@ -1,6 +1,8 @@
 #include <iostream>
 #include "Algorithm.h"
-#include "BrutForceAlgorithm.h"
+
+#include "BruteForceAlgorithm.h"
+#include "RecuitSimuleAlgorithm.h"
 #include "GeneticAlgorithm.h"
 
 #include <cstdlib> // Pour la fonction system()
@@ -16,17 +18,24 @@ int main(int argc, char* argv[])
 		system("./delete_obj_files.sh");
 	#endif
 
-	//TO TEST BRUT FORCE ALGORITHM
-	//BrutForceAlgorithm algo("MergeTest/exemple3.obj");
+	//TEST ALGO BRUTE-FORCE
+	//BruteForceAlgorithm bruteforce("MergeTest/exemple3.obj");
+	//bruteforce.run();
 
-	//algo.run();
 
+	//TEST RECUIT SIMULE
+	//RecuitSimuleAlgorithm recuit("MergeTest/exemple3.obj");
+	//recuit.run();
+
+	// TESTS CONVEXITE
 	//Algorithm algo("ConvexiTest/2DnotConvex.obj");
 	//Algorithm algo("MergeTest/3plans-2Convexes.obj");
 	//Algorithm algo("BugsTests/2DnotConvex-corrected.obj");
 	//algo.test_Convexity();
 	//algo.run();
   
+	// TEST ECRITURE/LECTURE .OBJ
+
 	//algo.test_WriteObj();
 	//algo.test_LoadObj();
 

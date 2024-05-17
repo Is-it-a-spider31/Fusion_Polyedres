@@ -128,32 +128,36 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Algorithm.cpp" />
-    <ClCompile Include="BrutForceAlgorithm.cpp" />
+    <ClCompile Include="BruteForceAlgorithm.cpp" />
     <ClCompile Include="Face.cpp" />
     <ClCompile Include="GeneticAlgorithm.cpp" />
     <ClCompile Include="GeneticAlgorithm\Crossover.cpp" />
     <ClCompile Include="GeneticAlgorithm\Mutation.cpp" />
     <ClCompile Include="GeneticAlgorithm\Population.cpp" />
     <ClCompile Include="GeneticAlgorithm\Selection.cpp" />
+    <ClCompile Include="InsertionMutation.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OBJFileHandler.cpp" />
     <ClCompile Include="Plan.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="Polyedre.cpp" />
+    <ClCompile Include="RecuitSimuleAlgorithm.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Algorithm.h" />
-    <ClInclude Include="BrutForceAlgorithm.h" />
+    <ClInclude Include="BruteForceAlgorithm.h" />
     <ClInclude Include="Face.h" />
     <ClInclude Include="GeneticAlgorithm.h" />
     <ClInclude Include="GeneticAlgorithm\Crossover.h" />
     <ClInclude Include="GeneticAlgorithm\Mutation.h" />
     <ClInclude Include="GeneticAlgorithm\Population.h" />
     <ClInclude Include="GeneticAlgorithm\Selection.h" />
+    <ClInclude Include="InsertionMutation.h" />
     <ClInclude Include="OBJFileHandler.h" />
     <ClInclude Include="Plan.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Polyedre.h" />
+    <ClInclude Include="RecuitSimuleAlgorithm.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

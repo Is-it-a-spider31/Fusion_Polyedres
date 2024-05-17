@@ -6,5 +6,9 @@
 $directory = "MergeTest\generated"  # Chemin du repertoire
 Get-ChildItem $directory -Filter *.obj | Remove-Item -Force
 
+
+$directory = "RecuitSimule\generated"  # Chemin du repertoire
+Get-ChildItem $directory -Filter *.obj | Remove-Item -Force
+
 $directory = "GeneticAlgorithm\generated"  # Chemin du repertoire
 Get-ChildItem $directory -Filter *.obj | Remove-Item -Force

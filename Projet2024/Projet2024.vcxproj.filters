@@ -42,7 +42,10 @@
     <ClCompile Include="OBJFileHandler.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="BrutForceAlgorithm.cpp">
+    <ClCompile Include="BruteForceAlgorithm.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="RecuitSimuleAlgorithm.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="GeneticAlgorithm\Selection.cpp">
@@ -51,13 +54,16 @@
     <ClCompile Include="GeneticAlgorithm\Population.cpp">
       <Filter>Fichiers sources\genetic</Filter>
     </ClCompile>
-    <ClCompile Include="GeneticAlgorithm\Mutation.cpp">
-      <Filter>Fichiers sources\genetic</Filter>
-    </ClCompile>
     <ClCompile Include="GeneticAlgorithm.cpp">
       <Filter>Fichiers sources\genetic</Filter>
     </ClCompile>
     <ClCompile Include="GeneticAlgorithm\Crossover.cpp">
+      <Filter>Fichiers sources\genetic</Filter>
+    </ClCompile>
+    <ClCompile Include="InsertionMutation.cpp">
+      <Filter>Fichiers sources\genetic</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneticAlgorithm\Mutation.cpp">
       <Filter>Fichiers sources\genetic</Filter>
     </ClCompile>
   </ItemGroup>
@@ -80,13 +86,13 @@
     <ClInclude Include="OBJFileHandler.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="BrutForceAlgorithm.h">
+    <ClInclude Include="BruteForceAlgorithm.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="RecuitSimuleAlgorithm.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="GeneticAlgorithm\Crossover.h">
-      <Filter>Fichiers d%27en-tête\genetic</Filter>
-    </ClInclude>
-    <ClInclude Include="GeneticAlgorithm\Mutation.h">
       <Filter>Fichiers d%27en-tête\genetic</Filter>
     </ClInclude>
     <ClInclude Include="GeneticAlgorithm\Population.h">
@@ -96,6 +102,12 @@
       <Filter>Fichiers d%27en-tête\genetic</Filter>
     </ClInclude>
     <ClInclude Include="GeneticAlgorithm.h">
+      <Filter>Fichiers d%27en-tête\genetic</Filter>
+    </ClInclude>
+    <ClInclude Include="InsertionMutation.h">
+      <Filter>Fichiers d%27en-tête\genetic</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneticAlgorithm\Mutation.h">
       <Filter>Fichiers d%27en-tête\genetic</Filter>
     </ClInclude>
   </ItemGroup>

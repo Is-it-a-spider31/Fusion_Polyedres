@@ -129,6 +129,17 @@ string Polyedre::getMTL() const
 }
 
 vector<Face> Polyedre::getFaces() const { return faces; }
+
+/**
+ * @brief Fusionne 2 polygones
+ *
+ * Un polygone est un polyedre avec un volume nul
+ * (c'est-a-dire un polyedre avec une seule face)
+ *
+ * @param poly1
+ * @param poly2
+ * @return Le polygone resultant de la fusion (si id=-1, alors fusion pas possible)
+*/
 Polyedre Polyedre::merge2Polygones(const Polyedre& poly1, const Polyedre& poly2)
 {
     Polyedre mergedPoly(-1);    // -1 par defaut : pas de fusion
@@ -152,16 +163,12 @@ Polyedre Polyedre::merge2Polygones(const Polyedre& poly1, const Polyedre& poly2)
         // CHERCHE UNE ARETE COMMUNE aux 2 faces
         while (i < face1.d_sommets.size() && sameEdge==0)
         {
-            int nextI = i + 1;
-            if (nextI >= face1.d_sommets.size())
-                nextI = 0;
+            int nextI = (i + 1) % face1.d_sommets.size();
             j = 0;
 
             while (j < face2.d_sommets.size() && sameEdge==0)
             {
-                int nextJ= j + 1;
-                if (nextJ >= face2.d_sommets.size())
-                    nextJ = 0;
+                int nextJ = (j + 1) % face2.d_sommets.size();
 
                 // 1 ou -1 si egale, 0 sinon (pour sens du parours de la face)
                 sameEdge = Point::are2EdgesEquals(
@@ -181,18 +188,13 @@ Polyedre Polyedre::merge2Polygones(const Polyedre& poly1, const Polyedre& poly2)
 
             // Determine a partir de quel sommet de la 1ere face
             // on doit areter la fusion
-            Point destination = face1.d_sommets[0];
-            if (i+1 < face1.d_sommets.size()) 
-                destination = face1.d_sommets[i + 1];
+            Point destination = face1.d_sommets[(i + 1)% face1.d_sommets.size()];
 
             // j : determine a partir de quel sommet de la 2eme face
             // on doit commencer la fusion
             if (sameEdge == -1)
             {
-                if (j + 1 < face2.d_sommets.size())
-                    j++;
-                else
-                    j = 0;
+                j = (j + 1) % face2.d_sommets.size();
             }
 
             mergedPoly = Polyedre(poly1);   // copie
@@ -212,10 +214,7 @@ Polyedre Polyedre::merge2Polygones(const Polyedre& poly1, const Polyedre& poly2)
                 }
                 else
                 {
-                    if (j >= face2.d_sommets.size()-1)
-                        j = 0;
-                    else
-                        j++;
+                    j = (j + 1) % face2.d_sommets.size();
                 }
 
                 // si le sommet n'est pas deja dans la 1er face
@@ -229,10 +228,7 @@ Polyedre Polyedre::merge2Polygones(const Polyedre& poly1, const Polyedre& poly2)
                         face2.d_sommets[j]
                     );
 
-                    if (i < mergedPoly.faces[0].d_sommets.size() - 1)
-                        i++;
-                    else
-                        i = 0;
+                    i = (i + 1) % mergedPoly.faces[0].d_sommets.size();
                 }
             }   // while 
         }   // if arete en commun
