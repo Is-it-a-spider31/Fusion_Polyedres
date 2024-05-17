@@ -67,7 +67,7 @@ public:
 	 * 
 	 * @param poly1 
 	 * @param poly2 
-	 * @return 
+	 * @return Le polygone resultant de la fusion (si id=-1, alors fusion pas possible)
 	*/
 	static Polyedre merge2Polygones(const Polyedre& poly1, const Polyedre& poly2);
 

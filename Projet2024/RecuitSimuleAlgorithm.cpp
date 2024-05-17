@@ -3,6 +3,13 @@
 #include <algorithm>	// Pour std:swap
 #include "OBJFileHandler.h"
 
+/**
+ * Chemin du repertoire ves lequel l'agoritme ecrit
+ * les solutions trouvees sous forme de fichiers .obj
+*/
+const string RecuitSimuleAlgorithm::GENERATE_OBJ_PATH = "Tests/generated/RecuitSimule/";
+
+
 RecuitSimuleAlgorithm::RecuitSimuleAlgorithm(const string& filename) 
 	: Algorithm(filename), 
 	d_coolingFactor(0.99), 
@@ -62,7 +69,7 @@ void RecuitSimuleAlgorithm::run()
 
 	cout << "SIZE : " << currentSolution.size() << endl;
 	// Ecriture du fichier OBJ pour cette solution
-	string filename = "RecuitSimule/generated/FUSION." 
+	string filename = GENERATE_OBJ_PATH  + "FUSION." 
 		+ to_string(currentSolution.size()) + ".obj";
 	OBJFileHandler::writeOBJ(d_vertices, currentSolution, filename);
 }
