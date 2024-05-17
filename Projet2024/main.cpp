@@ -1,7 +1,9 @@
 #include <iostream>
 #include "Algorithm.h"
+
 #include "BruteForceAlgorithm.h"
 #include "RecuitSimuleAlgorithm.h"
+#include "GeneticAlgorithm.h"
 
 #include <cstdlib> // Pour la fonction system()
 
@@ -16,10 +18,10 @@ int main(int argc, char* argv[])
 		system("./delete_obj_files.sh");
 	#endif
 
-
 	//TEST ALGO BRUTE-FORCE
 	//BruteForceAlgorithm bruteforce("MergeTest/exemple3.obj");
 	//bruteforce.run();
+
 
 	//TEST RECUIT SIMULE
 	//RecuitSimuleAlgorithm recuit("MergeTest/exemple3.obj");
@@ -33,8 +35,15 @@ int main(int argc, char* argv[])
 	//algo.run();
   
 	// TEST ECRITURE/LECTURE .OBJ
+
 	//algo.test_WriteObj();
 	//algo.test_LoadObj();
+
+	//------------------------------------------
+	GeneticAlgorithm ga{"MergeTest/exemple3.obj", 500000, 0.5, 0.5, 100000};
+	ga.run();
+
+	//faire gaffe si la population est petite et la dimension aussi
 
 	return 0;
 }

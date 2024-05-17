@@ -9,3 +9,7 @@ find "$directory" -type f -name "*.obj" -delete
 
 directory="RecuitSimule\generated"  # Chemin du repertoire
 find "$directory" -type f -name "*.obj" -delete
+
+directory="GeneticAlgorithm\generated"  # Chemin du repertoire
+find "$directory" -type f -name "*.obj" -delete
+
