@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "GeneticAlgorithm/Mutation.h"
+#include "Mutation.h"
 
 using namespace std;
 

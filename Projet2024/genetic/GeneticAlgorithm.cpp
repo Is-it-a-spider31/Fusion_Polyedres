@@ -1,5 +1,10 @@
 #include "GeneticAlgorithm.h"
 
+/**
+ * Chemin du repertoire ves lequel l'agoritme ecrit
+ * les solutions trouvees sous forme de fichiers .obj
+*/
+const string GeneticAlgorithm::GENERATE_OBJ_PATH = "Tests/generated/GeneticAlgo/";
 
 GeneticAlgorithm::GeneticAlgorithm(const string& filename, int popSize, double probaCross, double probaMut, int maxIter) :
 	Algorithm(filename), d_popSize{ popSize }, d_crossoverProba{probaCross}, d_mutationProba{probaMut}
@@ -71,7 +76,7 @@ void GeneticAlgorithm::run()
 		vector<Polyedre> solution_merged = mergeAlgorithm(solution);
 
 		//Ecriture de la solution puis fin de la boucle
-		string filename = "GeneticAlgorithm/generated/FUSION."+ to_string(solution_merged.size()) + ".obj";
+		string filename = GENERATE_OBJ_PATH+"FUSION."+ to_string(solution_merged.size()) + ".obj";
 		OBJFileHandler::writeOBJ(d_vertices, solution_merged, filename);
 
 		return ;

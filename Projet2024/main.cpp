@@ -3,45 +3,50 @@
 
 #include "BruteForceAlgorithm.h"
 #include "RecuitSimuleAlgorithm.h"
-#include "GeneticAlgorithm.h"
+#include "genetic/GeneticAlgorithm.h"
 
 #include <cstdlib> // Pour la fonction system()
+#include <string>
 
 using namespace std;
 
 int main(int argc, char* argv[])
 {
-	// Script qui supprime les fichiers .obj du repertoire "MergeTest/generated"
+	// Script qui supprime les fichiers .obj eventuellement generes 
+	// par d'anciennes executions du programme
 	#ifdef _WIN32 // OS Windows
-		system("powershell.exe -ExecutionPolicy Bypass -File delete_obj_files.ps1");
+		system("powershell.exe -ExecutionPolicy Bypass -File scripts/delete_obj_files.ps1");
 	#elif __linux__ // OS Linux
-		system("./delete_obj_files.sh");
+		system("./scripts/delete_obj_files.sh");
 	#endif
 
-	//TEST ALGO BRUTE-FORCE
-	//BruteForceAlgorithm bruteforce("MergeTest/exemple3.obj");
-	//bruteforce.run();
+	// Chemins des fichiers .obj avec lesquels le programme est teste
+	const string MERGE_TEST_PATH = "Tests/MergeTest/";
+	const string CONVEXITY_TEST_PATH = "Tests/ConvexiTest/";
+	const string BUGS_TEST_PATH = "Tests/BugsTests/";
 
+	//TEST ALGO BRUTE-FORCE
+	BruteForceAlgorithm bruteforce(MERGE_TEST_PATH+"exemple2.obj");
+	bruteforce.run();
 
 	//TEST RECUIT SIMULE
-	//RecuitSimuleAlgorithm recuit("MergeTest/exemple3.obj");
+	//RecuitSimuleAlgorithm recuit(MERGE_TEST_PATH+"exemple3.obj");
 	//recuit.run();
 
 	// TESTS CONVEXITE
-	//Algorithm algo("ConvexiTest/2DnotConvex.obj");
-	//Algorithm algo("MergeTest/3plans-2Convexes.obj");
-	//Algorithm algo("BugsTests/2DnotConvex-corrected.obj");
+	//BruteForceAlgorithm algo(CONVEXITY_TEST_PATH + "2DnotConvex.obj");
+	//BruteForceAlgorithm algo(MERGE_TEST_PATH + "3plans-2Convexes.obj");
+	//BruteForceAlgorithm algo(BUGS_TEST_PATH + "2DnotConvex-corrected.obj");
 	//algo.test_Convexity();
 	//algo.run();
   
 	// TEST ECRITURE/LECTURE .OBJ
-
 	//algo.test_WriteObj();
 	//algo.test_LoadObj();
 
 	//------------------------------------------
-	GeneticAlgorithm ga{"MergeTest/exemple3.obj", 500000, 0.5, 0.5, 100000};
-	ga.run();
+	//GeneticAlgorithm ga{ MERGE_TEST_PATH+"exemple3.obj", 500000, 0.5, 0.5, 100000};
+	//ga.run();
 
 	//faire gaffe si la population est petite et la dimension aussi
 

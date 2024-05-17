@@ -9,6 +9,11 @@
 #include <algorithm>
 #include "OBJFileHandler.h"
 
+/**
+ * Chemin du repertoire ves lequel l'agoritme ecrit
+ * les solutions trouvees sous forme de fichiers .obj
+*/
+const string BruteForceAlgorithm::GENERATE_OBJ_PATH = "Tests/generated/BruteForce/";
 
 /**
  * @brief Contructeur a partir d'un fichier .obj
@@ -87,7 +92,7 @@ void BruteForceAlgorithm::run()
 			nbOptimalSolutions++;
 
 			// Ecriture du fichier OBJ pour cette solution
-			string filename = "MergeTest/generated/FUSION." + to_string(solution.size())
+			string filename = GENERATE_OBJ_PATH + "FUSION." + to_string(solution.size())
 				+ "Poly_" + to_string(*solutionId) + ".obj";
 			OBJFileHandler::writeOBJ(d_vertices, solution, filename);
 		}
