@@ -26,6 +26,8 @@ void GeneticAlgorithm::run()
 	double scoreMax = 0.0;
 	int index_scoreMax = -1;
 
+	//-----------------------------TANT QUE----------------------------------------------------
+
 	for (int i = 0; i < d_popSize; i++)
 	{
 		//Transforme le tableau d'index en tableau de polyhedre
@@ -71,11 +73,11 @@ void GeneticAlgorithm::run()
 		//Ecriture de la solution puis fin de la boucle
 		string filename = "GeneticAlgorithm/generated/FUSION."+ to_string(solution_merged.size()) + ".obj";
 		OBJFileHandler::writeOBJ(d_vertices, solution_merged, filename);
+
+		return ;
 	}
 
 	
-	
-
 	//Selection
 
 }
