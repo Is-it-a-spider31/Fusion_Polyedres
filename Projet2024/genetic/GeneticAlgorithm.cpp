@@ -24,109 +24,108 @@ GeneticAlgorithm::GeneticAlgorithm(const string& filename, int popSize, double p
 
 void GeneticAlgorithm::run()
 {
-	//Initialisation
-	d_Population = new Population{d_dimension, d_popSize};
-	d_pop = d_Population->randomInit();
+	int nbPoly = d_polyhedra.size();
 
-	printPopulation();
+		//Initialisation
+		d_Population = new Population{ d_dimension, d_popSize };
+		d_pop = d_Population->randomInit();
 
-	//Evaluation
+		printPopulation();
 
-	double scoreMax = 0.0;
-	
-	d_score_pop.clear();
-	for (int i = 0; i < d_popSize; i++)
-	{
-		//Transforme le tableau d'index en tableau de polyhedre
-		vector<Polyedre> solution = perm2Poly(i);
+		//Evaluation
 
-		double current_indiv_score = (double)d_dimension / (double)evaluateSolution(solution);
-		d_score_pop.push_back(current_indiv_score);
+		double scoreMax = 0.0;
 
-		//MAJ du score max et index
-		if (current_indiv_score > scoreMax)
+		d_score_pop.clear();
+		for (int i = 0; i < d_popSize; i++)
 		{
-			//cout << "permutation n°" << i << " : score = " << current_indiv_score << " | NB POLYEDRE FINAL : " << evaluateSolution(solution) << endl;
+			//Transforme le tableau d'index en tableau de polyhedre
+			vector<Polyedre> solution = perm2Poly(i);
 
-			scoreMax = current_indiv_score;
-			d_permutScoreMax = solution;
-		}
+			double current_indiv_score = (double)d_dimension / (double)evaluateSolution(solution);
+			d_score_pop.push_back(current_indiv_score);
 
-	}
-
-	//SI d_popsize = tgamma(d_dimension + 1) BREAK pck on a déja fait toutes les permutations
-	// donc il faut renvoyer le meilleur score. 
-	//if(d_popresized) { break; }
-	if (d_popResized)
-	{
-		vector<Polyedre> solution_merged = mergeAlgorithm(d_permutScoreMax);
-
-		//Ecriture de la solution puis fin de la boucle
-		string filename = GENERATE_OBJ_PATH+"FUSION."+ to_string(solution_merged.size()) + ".obj";
-		OBJFileHandler::writeOBJ(d_vertices, solution_merged, filename);
-
-		return ;
-	}
-
-	else 
-	{
-	//-----------------------------TANT QUE----------------------------------------------------
-		int iteration = 0;
-		while (iteration < d_maxIteration)
-		{
-
-			for (int individu = 0; individu < d_popSize; individu++)
+			//MAJ du score max et index
+			if (current_indiv_score > scoreMax)
 			{
-				//Selection
-				d_Selection->select(d_pop, d_score_pop);
+				//cout << "permutation n°" << i << " : score = " << current_indiv_score << " | NB POLYEDRE FINAL : " << evaluateSolution(solution) << endl;
 
-				//Création de proba croisement
-				int rdm_cross = rand() % 101;
-				if (rdm_cross < d_crossoverProba * 100)
-				{
-					//CROISEMENT
-				}
-
-				//Création de propba mutation
-				int rdm_mut = rand() % 101;
-				if (rdm_mut < d_mutationProba * 100)
-				{
-					d_Mutation->mutate(d_pop[individu]);
-				}
-
-				//Evaluer l'indiv modifier et modifier si besoin le scoreMax
-
-				vector<Polyedre> toEvaluate = perm2Poly(individu);
-				double new_indiv_score = (double)d_dimension / (double)evaluateSolution(toEvaluate);
-
-				if (new_indiv_score > scoreMax)
-				{
-					scoreMax = new_indiv_score;
-					d_permutScoreMax = toEvaluate;
-				}
-
+				scoreMax = current_indiv_score;
+				d_permutScoreMax = solution;
 			}
 
-			cout << "Best score : " << scoreMax << endl;
-			cout << "Best indiv : [ ";
-			for (const auto& i : d_permutScoreMax)
-			{
-				cout << i.getId() << " ";
-			}
-			cout << " ]" << endl;
-
-			cout << "------------ITERATION " << iteration << "---------------" << endl;
-			iteration++;
 		}
 
-		vector<Polyedre> solution_merged = mergeAlgorithm(d_permutScoreMax);
-		string filename = GENERATE_OBJ_PATH + "FUSION." + to_string(solution_merged.size()) + ".obj";
-		OBJFileHandler::writeOBJ(d_vertices, solution_merged, filename);
-	}
+		//SI d_popsize = tgamma(d_dimension + 1) BREAK pck on a déja fait toutes les permutations
+		// donc il faut renvoyer le meilleur score. 
+		//if(d_popresized) { break; }
+		if (d_popResized)
+		{
+			vector<Polyedre> solution_merged = mergeAlgorithm(d_permutScoreMax);
 
+			//Ecriture de la solution puis fin de la boucle
+			string filename = GENERATE_OBJ_PATH + "FUSION." + to_string(solution_merged.size()) + ".obj";
+			OBJFileHandler::writeOBJ(d_vertices, solution_merged, filename);
 
+			return;
+		}
 
-	
+		else
+		{
+			//-----------------------------TANT QUE----------------------------------------------------
+			int iteration = 0;
+			while (iteration < d_maxIteration)
+			{
+
+				for (int individu = 0; individu < d_popSize; individu++)
+				{
+					//Selection
+					d_Selection->select(d_pop, d_score_pop);
+
+					//Création de proba croisement
+					int rdm_cross = rand() % 101;
+					if (rdm_cross < d_crossoverProba * 100)
+					{
+						//CROISEMENT
+					}
+
+					//Création de propba mutation
+					int rdm_mut = rand() % 101;
+					if (rdm_mut < d_mutationProba * 100)
+					{
+						d_Mutation->mutate(d_pop[individu]);
+					}
+
+					//Evaluer l'indiv modifier et modifier si besoin le scoreMax
+
+					vector<Polyedre> toEvaluate = perm2Poly(individu);
+					double new_indiv_score = (double)d_dimension / (double)evaluateSolution(toEvaluate);
+
+					if (new_indiv_score > scoreMax)
+					{
+						scoreMax = new_indiv_score;
+						d_permutScoreMax = toEvaluate;
+					}
+
+				}
+
+				cout << "Best score : " << scoreMax << endl;
+				cout << "Best indiv : [ ";
+				for (const auto& i : d_permutScoreMax)
+				{
+					cout << i.getId() << " ";
+				}
+				cout << " ]" << endl;
+
+				cout << "------------ITERATION " << iteration << "---------------" << endl;
+				iteration++;
+			}
+			vector<Polyedre> solution_merged = mergeAlgorithm(d_permutScoreMax);
+			string filename = GENERATE_OBJ_PATH + "FUSION." + to_string(solution_merged.size()) + ".obj";
+			OBJFileHandler::writeOBJ(d_vertices, solution_merged, filename);
+			
+			
+		}
 	
 
 }
