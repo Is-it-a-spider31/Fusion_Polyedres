@@ -133,10 +133,10 @@
     <ClCompile Include="genetic\GeneticAlgorithm.cpp" />
     <ClCompile Include="genetic\Crossover.cpp" />
     <ClCompile Include="genetic\Mutation.cpp" />
+    <ClCompile Include="genetic\NXCrossover.cpp" />
     <ClCompile Include="genetic\Population.cpp" />
     <ClCompile Include="genetic\Selection.cpp" />
     <ClCompile Include="genetic\InsertionMutation.cpp" />
-    <ClInclude Include="genetic\NXCrossover.cpp" />
     <ClCompile Include="genetic\TurnamentSelection.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OBJFileHandler.cpp" />
@@ -152,10 +152,10 @@
     <ClInclude Include="genetic\GeneticAlgorithm.h" />
     <ClInclude Include="genetic\Crossover.h" />
     <ClInclude Include="genetic\Mutation.h" />
+    <ClInclude Include="genetic\NXCrossover.h" />
     <ClInclude Include="genetic\Population.h" />
     <ClInclude Include="genetic\Selection.h" />
     <ClInclude Include="genetic\InsertionMutation.h" />
-    <ClInclude Include="genetic\NXCrossover.h" />
     <ClInclude Include="genetic\TurnamentSelection.h" />
     <ClInclude Include="OBJFileHandler.h" />
     <ClInclude Include="Plan.h" />
