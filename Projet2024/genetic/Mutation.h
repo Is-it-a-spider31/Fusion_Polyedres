@@ -11,7 +11,7 @@ public:
 	/**
 	 * @brief Mutation d'un individu 
 	*/
-	virtual void mutate(vector<int> individual) = 0;
+	virtual void mutate(vector<int>& individual) = 0;
 
 };
 

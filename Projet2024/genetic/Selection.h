@@ -11,6 +11,8 @@ class Selection
 public:
 
 	virtual void select(vector<vector<int>>& population, vector<double> score) = 0;
+	vector<int> getParent1() const;
+	vector<int> getParent2() const;
 
 protected:
 

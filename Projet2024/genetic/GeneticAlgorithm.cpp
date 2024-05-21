@@ -6,10 +6,11 @@
 */
 const string GeneticAlgorithm::GENERATE_OBJ_PATH = "Tests/generated/GeneticAlgo/";
 
-GeneticAlgorithm::GeneticAlgorithm(const string& filename, int popSize, double probaCross, double probaMut, int maxIter, Selection& selection) :
-	Algorithm(filename), d_popSize{ popSize }, d_crossoverProba{probaCross}, d_mutationProba{probaMut}
+GeneticAlgorithm::GeneticAlgorithm(const string& filename, int popSize, double probaCross, double probaMut, int maxIter, Selection& selection, Mutation& mutation) :
+	Algorithm(filename), d_popSize{ popSize }, d_crossoverProba{probaCross}, d_mutationProba{probaMut}, d_maxIteration{maxIter}
 {
 	d_Selection = &selection;
+	d_Mutation = &mutation;
 
 	d_dimension = d_polyhedra.size();
 
@@ -30,19 +31,14 @@ void GeneticAlgorithm::run()
 	printPopulation();
 
 	//Evaluation
-	double scoreMax = 0.0;
-	int index_scoreMax = -1;
 
-	//-----------------------------TANT QUE----------------------------------------------------
+	double scoreMax = 0.0;
+	
 	d_score_pop.clear();
 	for (int i = 0; i < d_popSize; i++)
 	{
 		//Transforme le tableau d'index en tableau de polyhedre
-		vector<Polyedre> solution;
-		for (int j = 0; j < d_dimension; j++)
-		{
-			solution.push_back(d_polyhedra[d_pop[i][j]]);
-		}
+		vector<Polyedre> solution = perm2Poly(i);
 
 		double current_indiv_score = (double)d_dimension / (double)evaluateSolution(solution);
 		d_score_pop.push_back(current_indiv_score);
@@ -50,10 +46,10 @@ void GeneticAlgorithm::run()
 		//MAJ du score max et index
 		if (current_indiv_score > scoreMax)
 		{
-			cout << "permutation n°" << i << " : score = " << current_indiv_score << " | NB POLYEDRE FINAL : " << evaluateSolution(solution) << endl;
+			//cout << "permutation n°" << i << " : score = " << current_indiv_score << " | NB POLYEDRE FINAL : " << evaluateSolution(solution) << endl;
 
 			scoreMax = current_indiv_score;
-			index_scoreMax = i;
+			d_permutScoreMax = solution;
 		}
 
 	}
@@ -63,19 +59,7 @@ void GeneticAlgorithm::run()
 	//if(d_popresized) { break; }
 	if (d_popResized)
 	{
-		vector<Polyedre> solution;
-		for (int gene = 0; gene < d_dimension; gene++)
-		{
-			if (index_scoreMax == -1)
-			{
-				cerr << "ERREUR" << endl;
-				break;
-			}
-
-			solution.push_back(d_polyhedra[d_pop[index_scoreMax][gene]]);
-		}
-
-		vector<Polyedre> solution_merged = mergeAlgorithm(solution);
+		vector<Polyedre> solution_merged = mergeAlgorithm(d_permutScoreMax);
 
 		//Ecriture de la solution puis fin de la boucle
 		string filename = GENERATE_OBJ_PATH+"FUSION."+ to_string(solution_merged.size()) + ".obj";
@@ -86,11 +70,61 @@ void GeneticAlgorithm::run()
 
 	else 
 	{
+	//-----------------------------TANT QUE----------------------------------------------------
+		int iteration = 0;
+		while (iteration < d_maxIteration)
+		{
 
-		//Selection
-		d_Selection->select(d_pop, d_score_pop);
+			for (int individu = 0; individu < d_popSize; individu++)
+			{
+				//Selection
+				d_Selection->select(d_pop, d_score_pop);
 
+				//Création de proba croisement
+				int rdm_cross = rand() % 101;
+				if (rdm_cross < d_crossoverProba * 100)
+				{
+					//CROISEMENT
+				}
+
+				//Création de propba mutation
+				int rdm_mut = rand() % 101;
+				if (rdm_mut < d_mutationProba * 100)
+				{
+					d_Mutation->mutate(d_pop[individu]);
+				}
+
+				//Evaluer l'indiv modifier et modifier si besoin le scoreMax
+
+				vector<Polyedre> toEvaluate = perm2Poly(individu);
+				double new_indiv_score = (double)d_dimension / (double)evaluateSolution(toEvaluate);
+
+				if (new_indiv_score > scoreMax)
+				{
+					scoreMax = new_indiv_score;
+					d_permutScoreMax = toEvaluate;
+				}
+
+			}
+
+			cout << "Best score : " << scoreMax << endl;
+			cout << "Best indiv : [ ";
+			for (const auto& i : d_permutScoreMax)
+			{
+				cout << i.getId() << " ";
+			}
+			cout << " ]" << endl;
+
+			cout << "------------ITERATION " << iteration << "---------------" << endl;
+			iteration++;
+		}
+
+		vector<Polyedre> solution_merged = mergeAlgorithm(d_permutScoreMax);
+		string filename = GENERATE_OBJ_PATH + "FUSION." + to_string(solution_merged.size()) + ".obj";
+		OBJFileHandler::writeOBJ(d_vertices, solution_merged, filename);
 	}
+
+
 
 	
 	
@@ -109,3 +143,15 @@ void GeneticAlgorithm::printPopulation() const
 		cout << "]" << endl;
 	}
 }
+
+vector<Polyedre> GeneticAlgorithm::perm2Poly(int index)
+{
+	vector<Polyedre> solution;
+	for (int j = 0; j < d_dimension; j++)
+	{
+		solution.push_back(d_polyhedra[d_pop[index][j]]);
+	}
+	return solution;
+}
+
+

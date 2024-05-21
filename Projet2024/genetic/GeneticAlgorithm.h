@@ -15,7 +15,7 @@ class GeneticAlgorithm : public Algorithm
 {
 
 public:
-	GeneticAlgorithm(const string& filename, int popSize, double probaCross, double probaMut, int maxIter, Selection& selection);
+	GeneticAlgorithm(const string& filename, int popSize, double probaCross, double probaMut, int maxIter, Selection& selection, Mutation& mutation);
 	//GeneticAlgorithm(const string& filename, int popSize, double probaCross, double probaMut, int maxIter);
 
 	void run() override;
@@ -85,6 +85,10 @@ private:
 	 * les solutions trouvees sous forme de fichiers .obj
 	*/
 	static const string GENERATE_OBJ_PATH;
+	
+	vector<Polyedre> perm2Poly(int index);
+	vector<Polyedre> d_permutScoreMax;
+	double d_scoreMax=0.0;
 
 };
 
