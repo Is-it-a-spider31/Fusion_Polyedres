@@ -18,7 +18,7 @@ void TurnamentSelection::select(vector<vector<int>>& population, vector<double> 
 		}
 	}
 
-	cout << "Index in turnament : [ ";
+	/*cout << "Index in turnament : [ ";
 	for (const auto& ind : indexToFight)
 	{
 		cout << ind << " ";
@@ -30,7 +30,7 @@ void TurnamentSelection::select(vector<vector<int>>& population, vector<double> 
 	{
 		cout << score[ind] << " ";
 	}
-	cout << " ]" << endl;
+	cout << " ]" << endl;*/
 
 	int winner1 = indexToFight[0];
 	int winner2 = indexToFight[0];
@@ -50,7 +50,7 @@ void TurnamentSelection::select(vector<vector<int>>& population, vector<double> 
 		}
 	}
 
-	cout << "Winner 1 = " << winner1 << " | Winner 2 = " << winner2 << endl;
+	//cout << "Winner 1 = " << winner1 << " | Winner 2 = " << winner2 << endl;
 	
 	d_parent_1 = population[winner1];
 	d_parent_2 = population[winner2];
