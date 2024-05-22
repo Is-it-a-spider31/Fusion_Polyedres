@@ -60,6 +60,14 @@ void RecuitSimuleAlgorithm::run()
 			{
 				currentSolution = neighborSolution;
 				currentEval = neighborEval;
+
+				// Afficher une solution
+				//for (auto& p : currentSolution)
+				//{
+				//	cout << p.getId() << " ";
+				//}
+				//cout << endl;
+
 			}
 			n+=0.15;
 		} 
