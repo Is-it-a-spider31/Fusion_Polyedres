@@ -244,9 +244,16 @@ void Polyedre::setMTL(string name)
 
 bool Polyedre::isConvex() const { return d_isConvex; }
 
+/**
+ * @brief Calcul si le polyedre est convexe ou pas
+ * 
+ * Pour savoir si un polyedre est convexe, le principe est de verifier
+ * si pour chaque face, tous les sommets sont du meme cote.
+ * 
+*/
 void Polyedre::computeConvexity()
 {
-    if (faces.size() == 1)  // POLYGONE (Poledre 2D, une seule face)
+    if (faces.size() == 1)  // POLYGONE (Poledre 2D, une seule face et volume nul)
     {
         d_isConvex = faces[0].isConvex();
         return;
@@ -255,14 +262,23 @@ void Polyedre::computeConvexity()
     // Pour chaques faces
     for (int i = 0; i < faces.size(); i++)
     {
+        // Creation d'un plan a patir de 3 points de la face
         Plan plan = Plan(faces[i].d_sommets[0], faces[i].d_sommets[1], faces[i].d_sommets[2]);
-        double sens = 0;
+        double sens = 0;    // sens de reference pour une face
+
+        // Indique de quel cote est un sommet par rapport a une face
+        // donc a gauche ou a droite
         bool pos;
 
+        // Pour chaque face
         for (int f = 0; f < faces.size(); f++)
         {
+            // Pour chaque sommet de la face
             for (int p2 = 0; p2 < faces[f].d_sommets.size(); p2++)
             {
+                // si = 0 alors le sommet est sur le meme plan, donc pas utilisable
+                // sinon indique de quel cote se trouve le sommet par rapport a la face courante
+                //  selon si sa valeur est > 0 ou < 0
                 double sens_point = plan.pointPositionFromPlan(faces[f].d_sommets[p2]);
 
                 // Pour determiner le sens de reference, il faut etre sur que le point
@@ -270,16 +286,20 @@ void Polyedre::computeConvexity()
                 // Ajout d'une marge d'erreur (exemple : 1.54 e-18 est considere comme 0)
                 if (sens_point != 0 && abs(sens_point) > 0.00001)
                 {
-                    if (sens == 0) {
-                        sens = sens_point;
-                        pos = (sens > 0);
+                    // Si sens de reference pas initilise
+                    if (sens == 0) 
+                    {   // Initialisation du sens de reference pour la face courante
+                        sens = sens_point;  // sens de reference pour la face courante
+                        pos = (sens > 0);   // a gauche ou a droite
                     }
-                    else {
+                    else // On a deja un sens de reference
+                    {
+                        // Si le sommet courant n'est pas du meme cote que le sommet de reference
                         if ( (   (sens_point > 0 && !pos) 
                             ||  (sens_point < 0 && pos))
                              && abs(sens_point) > 0.0001)
                         {
-                            d_isConvex = false;
+                            d_isConvex = false; // Pas convexe
                             return;
                         }
                     }
