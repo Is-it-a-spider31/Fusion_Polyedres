@@ -19,10 +19,13 @@ public:
 	/**
 	 * @brief Croisement en N points de 2 individus
 	 * 
+	 * Effectue le croisement des 2 parent et modifie
+	 * les enfants en parametres en consequence
+	 * 
 	 * @param parent1 
 	 * @param parent2 
-	 * @param child1 
-	 * @param child2 
+	 * @param child1 Enfant vide qui sera modifie
+	 * @param child2 Enfant vide qui sera modifie
 	*/
 	void cross(
 		const vector<int>& parent1, 
@@ -31,6 +34,9 @@ public:
 		vector<int>& child2
 	) override;
 
+	/**
+	 * @brief Permet de tester le fonctionnement de la classe
+	*/
 	void test();
 
 private:
@@ -40,8 +46,28 @@ private:
 	*/
 	int d_nbCrossoverPoints;
 
-	vector<int> chooseCrossoverPoints(int& size);
+	/**
+	 * @brief Selection aleatoire des points de croisement
+	 *
+	 * Le nombre de points de croisements depend
+	 * de l'attribut @ref NXCrossover::d_nbCrossoverPoints d_nbCrossoverPoints.
+	 * Ils sont dans l'interval [1, size-1]
+	 *
+	 * @param size Taille d'un individu
+	 * @return La liste des points de croisements slectionnes
+	*/
+	vector<int> chooseCrossoverPoints(const int& size);
 
+	/**
+	 * @brief Calcul un enfant en croisant 2 parents (croisement N points)
+	 *
+	 * Attention, l'ordre des parents en parametres a son importance.
+	 *
+	 * @param parent1 Parent de reference pour le calcul du croisement
+	 * @param parent2 Parent qui va servir a modifier les genes de l'enfant
+	 * @param child Enfant dont les genes de base sont ceux du parent1
+	 * @param crossoverPoints Liste des points de croisement
+	*/
 	void crossOneChild(
 		const vector<int>& parent1,
 		const vector<int>& parent2,

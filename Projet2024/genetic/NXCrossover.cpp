@@ -1,6 +1,6 @@
 #include "NXCrossover.h"
 
-#include <algorithm>    // Pour sort
+#include <algorithm>    // Pour std::sort et std::find
 #include <iostream>
 
 /**
@@ -13,10 +13,13 @@ NXCrossover::NXCrossover(int nbPoints) : d_nbCrossoverPoints{nbPoints} {}
 /**
  * @brief Croisement en N points de 2 individus
  *
+ * Effectue le croisement des 2 parent et modifie
+ * les enfants en parametres en consequence
+ *
  * @param parent1
  * @param parent2
- * @param child1
- * @param child2
+ * @param child1 Enfant vide qui sera modifie
+ * @param child2 Enfant vide qui sera modifie
 */
 void NXCrossover::cross(
 	const vector<int>& parent1, 
@@ -25,98 +28,85 @@ void NXCrossover::cross(
 	vector<int>& child2
 ){
     int size = parent1.size();
+    // Il faut moins de points de croisement que de genes
     if (size <= d_nbCrossoverPoints)
         return;
 
     // Liste des points de croisement
     vector<int> crossoverPoints = chooseCrossoverPoints(size);
 
-    /*cout << "crossover Points: ";
-    for (int num : crossoverPoints) {
-        cout << num << " ";
-    }
-    cout << endl;*/
-
-    child1.resize(size, -1);
-    child2.resize(size, -1);
-    int old = 0;
-    
-    // EXEMPLE
-    //N points : 6 8 9
-    //
-    //    Parent 1 : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    //    Parent 2 : [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
-    //
-    //                0   1  2  3  4  5     6  7     8     9
-    //    Parent 1 : [1,  2, 3, 4, 5, 6] | [7, 8] | [9] | [10]
-    //    Parent 2 : [10, 9, 8, 7, 6, 5] | [4, 3] | [2] | [1]
-    //
-    //    Parent 1 : [1,  2, 3, 4, 5, 6] | [-1, -1] | [9] | [-1]
-    //    Parent 2 : [10, 9, 8, 7, 6, 5] | [-1, -1] | [2] | [-1]
-    child1 = parent1;
-    child2 = parent2;
-
-    crossoverPoints.push_back(crossoverPoints[d_nbCrossoverPoints - 1]);
+    // Calcul des 2 enfants (attention a l'ordre des parametres)
     crossOneChild(parent1, parent2, child1, crossoverPoints);
     crossOneChild(parent2, parent1, child2, crossoverPoints);
 }
 
+/**
+ * @brief Permet de tester le fonctionnement de la classe
+*/
 void NXCrossover::test()
 {
     vector<int> parent1 = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
     vector<int> parent2 = { 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 };
 
     vector<int> child1, child2;
-    d_nbCrossoverPoints = 3; // Nombre de points de croisement
+    d_nbCrossoverPoints = 1; // Nombre de points de croisement
     cross(parent1, parent2, child1, child2);
 
-    //                0  1  2  3  4  5     6  7     8     9
-    //    Parent 1 : [1, 2, 3, 4, 5, 6] | [7, 8] | [9] | [10]
-    //auto it = std::find(
-    //    parent1.begin() + 9,    // Indice de debut
-    //    parent1.begin() + 9,        // Indice de fin
-    //    10      // Element a chercher
-    //);
+    /*  TEST DE LA FONCTION FIND
+    //            0  1  2  3  4  5     6  7     8     9
+    //Parent 1 : [1, 2, 3, 4, 5, 6] | [7, 8] | [9] | [10]
+    auto it = std::find(
+        parent1.begin() + 9,    // Indice de debut
+        parent1.begin() + 10,        // Indice de fin
+        10      // Element a chercher
+    );
+    if (it == parent1.end())
+        cout << "Pas trouve ..." << endl;
+    else    
+        cout << "Trouve !" << endl;
+    cout << "it = " << *it << endl;
+    */
 
-    //if (it == parent1.begin() + 8)
-    //    cout << "Pas trouve ..." << endl;
-    //else    
-    //    cout << "Trouve !" << endl;
-
+    // Affichage des resultats
     cout << "N : " << d_nbCrossoverPoints << endl;
-
     cout << "Parent 1: ";
     for (int num : parent1) {
         cout << num << " ";
     }
     cout << endl;
-
     cout << "Parent 2: ";
     for (int num : parent2) {
         cout << num << " ";
     }
     cout << endl;
-
     cout << "Enfant 1: ";
     for (int num : child1) {
         cout << num << " ";
     }
     cout << endl;
-
     cout << "Enfant 2: ";
     for (int num : child2) {
         cout << num << " ";
     }
     cout << endl;
-
 }
 
-vector<int> NXCrossover::chooseCrossoverPoints(int& size)
+/**
+ * @brief Selection aleatoire des points de croisement
+ * 
+ * Le nombre de points de croisements depend 
+ * de l'attribut @ref NXCrossover::d_nbCrossoverPoints d_nbCrossoverPoints.
+ * Ils sont dans l'interval [1, size-1]
+ * 
+ * @param size Taille d'un individu
+ * @return La liste des points de croisements slectionnes
+*/
+vector<int> NXCrossover::chooseCrossoverPoints(const int& size)
 {
     // Liste des points de croisement
     vector<int> crossoverPoints;
 
-    // Choix aléatoire des N points de croisement
+    // Choix alÃ©atoire des N points de croisement
     for (int i = 0; i < d_nbCrossoverPoints; i++) {
         int point;
 
@@ -128,11 +118,21 @@ vector<int> NXCrossover::chooseCrossoverPoints(int& size)
     }
 
     // Tri de la liste des points dans l'ordre
-    sort(crossoverPoints.begin(), crossoverPoints.end());
+    std::sort(crossoverPoints.begin(), crossoverPoints.end());
 
     return crossoverPoints;
 }
 
+/**
+ * @brief Calcul un enfant en croisant 2 parents (croisement N points)
+ * 
+ * Attention, l'ordre des parents en parametres a son importance.
+ * 
+ * @param parent1 Parent de reference pour le calcul du croisement
+ * @param parent2 Parent qui va servir a modifier les genes de l'enfant
+ * @param child Enfant dont les genes de base sont ceux du parent1
+ * @param crossoverPoints Liste des points de croisement
+*/
 void NXCrossover::crossOneChild(
     const vector<int>& parent1,
     const vector<int>& parent2,
@@ -140,51 +140,51 @@ void NXCrossover::crossOneChild(
     vector<int> crossoverPoints
 )
 {
-    int size = parent1.size();
-    bool swap = false;
+    // Initialisation de l'enfant avec les genes du parent1
+    child = parent1;
 
-    swap = true;
-    for (int i = 1; i < d_nbCrossoverPoints; i++)
+    // Ajout de l'indice de fin de la liste, pour la fonction std::find
+    crossoverPoints.push_back(parent1.size());
+
+    bool swap = true;   // Si vrai, interval a croiser
+    int borneInf = crossoverPoints[0];  // 1er point de croisement
+    int childIndex = borneInf;  // Indice du gene de l'enfant a modifier
+
+    // Pour chaque points de croisement sauf le premier,
+    // cad pour chaque interval de croisement
+    for (int i = 1; i <= d_nbCrossoverPoints; i++)
     {
-        int j = crossoverPoints[i - 1];
+        int borneSup = crossoverPoints[i];  // Point de croisement suivant
+        int parent2Index = 0;   // Indice courant pour parcourir le parent2
 
-        int index = 0;
-        while (j < crossoverPoints[i])
+        // Modification des genes de l'enfant dans l'interval courant
+        while (childIndex < borneSup)
         {
             if (swap)
-            {
-                // Cherche le premier element de parent1 qui n'est pas dans child1
-                auto it = parent1.begin() + crossoverPoints[i];
-                do {
+            {   // On est dans un interval dans lequel il faut
+                //  modifier les genes de l'enfants
+
+                vector<int>::const_iterator it; // Iterateur
+                // Cherche le premier element de parent2 qui est 
+                // dans l'interval [borneInf, borneSup[ de parent1
+                do 
+                {
+                   // Attention, avec std::find : interval [borneInf, borneSup[
                     it = std::find(
-                        parent1.begin() + crossoverPoints[i - 1],    // Indice de debut
-                        parent1.begin() + crossoverPoints[i],        // Indice de fin
-                        parent2[index]      // Element a chercher
+                        parent1.begin() + borneInf,     // Indice de debut
+                        parent1.begin() + borneSup,     // Indice de fin
+                        parent2[parent2Index]      // Element a chercher
                     );
-                    index++;
+                    parent2Index++; // Parcour du parent2 dans l'ordre
 
-                } while (it == parent1.begin() + crossoverPoints[i]);
-                child[j] = parent2[index - 1];
+                } while (it == parent1.begin() + borneSup);
+
+                // Modification du gene courant de l'enfant
+                child[childIndex] = parent2[parent2Index - 1];
             }
-            j++;
+            childIndex++;   // Gene suivant
         }
-        swap = !swap;
-    }
-
-    if (crossoverPoints[d_nbCrossoverPoints - 1] == size - 1) {
-
-        auto it = parent1.end();
-        int index = 0;
-        do {
-            auto it = std::find(
-                parent1.begin() + size - 1,    // Indice de debut
-                parent1.begin() + size - 1,    // Indice de fin
-                parent2[index]      // Element a chercher
-            );
-
-            index++;
-
-        } while (it == parent1.begin() + size - 1);
-        child[size - 1] = parent2[index - 1];
+        borneInf = borneSup;
+        swap = !swap;   // Croisement d'1 interval sur 2
     }
 }

@@ -73,6 +73,14 @@ public:
 
 
 	bool isConvex() const;
+
+	/**
+	 * @brief Calcul si le polyedre est convexe ou pas
+	 *
+	 * Pour savoir si un polyedre est convexe, le principe est de verifier
+	 * si pour chaque face, tous les sommets sont du meme cote.
+	 *
+	*/
 	void computeConvexity();
 
 	// GETTERS
