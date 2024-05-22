@@ -6,10 +6,11 @@
 */
 const string GeneticAlgorithm::GENERATE_OBJ_PATH = "Tests/generated/GeneticAlgo/";
 
-GeneticAlgorithm::GeneticAlgorithm(const string& filename, int popSize, double probaCross, double probaMut, int maxIter, Selection& selection, Mutation& mutation) :
+GeneticAlgorithm::GeneticAlgorithm(const string& filename, int popSize, double probaCross, double probaMut, int maxIter, Selection& selection, Crossover& crossover, Mutation& mutation) :
 	Algorithm(filename), d_popSize{ popSize }, d_crossoverProba{probaCross}, d_mutationProba{probaMut}, d_maxIteration{maxIter}
 {
 	d_Selection = &selection;
+	d_Crossover = &crossover;
 	d_Mutation = &mutation;
 
 	d_dimension = d_polyhedra.size();
@@ -29,8 +30,8 @@ void GeneticAlgorithm::run()
 		//Initialisation
 		d_Population = new Population{ d_dimension, d_popSize };
 		d_pop = d_Population->randomInit();
-
-		printPopulation();
+	
+		//printPopulation();
 
 		//Evaluation
 
@@ -56,6 +57,21 @@ void GeneticAlgorithm::run()
 
 		}
 
+		d_oldpop = d_pop;
+		d_oldscore_pop = d_score_pop;
+
+		//printPopulation();
+		
+		cout << "=====================================================================" << endl;
+		cout << "Meilleur score apres init : " << scoreMax << " | [ ";
+		for (const auto& i : d_permutScoreMax)
+		{
+			std::cout << i.getId() - 1 << " ";
+		}
+		cout << endl;
+		cout <<"=====================================================================" << endl;
+
+
 		//SI d_popsize = tgamma(d_dimension + 1) BREAK pck on a déja fait toutes les permutations
 		// donc il faut renvoyer le meilleur score. 
 		//if(d_popresized) { break; }
@@ -76,17 +92,49 @@ void GeneticAlgorithm::run()
 			int iteration = 0;
 			while (iteration < d_maxIteration)
 			{
+				cout << "----------------" << endl;
+				printPopulation();
+				cout << "----------------" << endl;
 
 				for (int individu = 0; individu < d_popSize; individu++)
 				{
 					//Selection
-					d_Selection->select(d_pop, d_score_pop);
+					d_Selection->select(d_oldpop, d_oldscore_pop);
+					
+					
+					cout << "------------------indiv " << individu << endl;
+					cout << "Parent 1 --> " << d_Selection->getId_p1() << " : [";
+					for (const auto& p : d_Selection->getParent1())
+					{
+						cout << p << " ";
+					}
+					cout << " ]" << endl;
+
+
+					cout << "Parent 2 --> " << d_Selection->getId_p2() << " : [";
+					for (const auto& p : d_Selection->getParent2())
+					{
+						cout << p << " ";
+					}
+					cout << " ]" << endl;
+
+
 
 					//Création de proba croisement
 					int rdm_cross = rand() % 101;
 					if (rdm_cross < d_crossoverProba * 100)
 					{
 						//CROISEMENT
+						vector<int> child1, child2;
+
+						cout << d_Selection->getParent2().size() << endl;
+
+						d_Crossover->cross(d_Selection->getParent1(), d_Selection->getParent2(), child1, child2);
+
+						
+						
+						d_pop[individu] = child1;
+
 					}
 
 					//Création de propba mutation
@@ -94,12 +142,14 @@ void GeneticAlgorithm::run()
 					if (rdm_mut < d_mutationProba * 100)
 					{
 						d_Mutation->mutate(d_pop[individu]);
+
 					}
 
 					//Evaluer l'indiv modifier et modifier si besoin le scoreMax
 
 					vector<Polyedre> toEvaluate = perm2Poly(individu);
 					double new_indiv_score = (double)d_dimension / (double)evaluateSolution(toEvaluate);
+					d_score_pop[individu] = new_indiv_score;
 
 					if (new_indiv_score > scoreMax)
 					{
@@ -113,12 +163,13 @@ void GeneticAlgorithm::run()
 				cout << "Best indiv : [ ";
 				for (const auto& i : d_permutScoreMax)
 				{
-					cout << i.getId() << " ";
+					cout << i.getId() - 1 << " ";
 				}
 				cout << " ]" << endl;
 
 				cout << "------------ITERATION " << iteration << "---------------" << endl;
 				iteration++;
+				d_oldpop = d_pop;
 			}
 			vector<Polyedre> solution_merged = mergeAlgorithm(d_permutScoreMax);
 			string filename = GENERATE_OBJ_PATH + "FUSION." + to_string(solution_merged.size()) + ".obj";
@@ -132,14 +183,14 @@ void GeneticAlgorithm::run()
 
 void GeneticAlgorithm::printPopulation() const
 {
-	for (const auto& i : d_pop)
+	for (int i = 0; i < d_pop.size(); i++)
 	{
 		cout << "[ ";
-		for (const auto& e : i)
+		for (int j = 0; j < d_dimension; j++)
 		{
-			cout << e << " ";
+			cout << d_pop[i][j] << " ";
 		}
-		cout << "]" << endl;
+		cout << "] ---- n"<< i << endl;
 	}
 }
 

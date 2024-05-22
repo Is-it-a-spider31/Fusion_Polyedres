@@ -31,11 +31,11 @@ void NXCrossover::cross(
     // Liste des points de croisement
     vector<int> crossoverPoints = chooseCrossoverPoints(size);
 
-    cout << "crossover Points: ";
+    /*cout << "crossover Points: ";
     for (int num : crossoverPoints) {
         cout << num << " ";
     }
-    cout << endl;
+    cout << endl;*/
 
     child1.resize(size, -1);
     child2.resize(size, -1);
