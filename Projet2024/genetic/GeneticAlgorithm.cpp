@@ -90,18 +90,22 @@ void GeneticAlgorithm::run()
 		{
 			//-----------------------------TANT QUE----------------------------------------------------
 			int iteration = 0;
-			while (iteration < d_maxIteration)
+			//while (iteration < d_maxIteration)
+			double stop = d_dimension / 5;
+			while(scoreMax < stop)
 			{
+				
 				cout << "----------------" << endl;
 				printPopulation();
 				cout << "----------------" << endl;
+				
 
 				for (int individu = 0; individu < d_popSize; individu++)
 				{
 					//Selection
 					d_Selection->select(d_oldpop, d_oldscore_pop);
 					
-					
+					/*
 					cout << "------------------indiv " << individu << endl;
 					cout << "Parent 1 --> " << d_Selection->getId_p1() << " : [";
 					for (const auto& p : d_Selection->getParent1())
@@ -117,6 +121,7 @@ void GeneticAlgorithm::run()
 						cout << p << " ";
 					}
 					cout << " ]" << endl;
+					*/
 
 
 
@@ -127,7 +132,7 @@ void GeneticAlgorithm::run()
 						//CROISEMENT
 						vector<int> child1, child2;
 
-						cout << d_Selection->getParent2().size() << endl;
+						//cout << d_Selection->getParent2().size() << endl;
 
 						d_Crossover->cross(d_Selection->getParent1(), d_Selection->getParent2(), child1, child2);
 

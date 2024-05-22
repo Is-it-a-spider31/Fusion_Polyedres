@@ -3,7 +3,7 @@
 void TurnamentSelection::select(vector<vector<int>>& population, vector<double> score)
 {
 	//nbIndivInTurnament = population.size() / 8;
-	nbIndivInTurnament = 2;
+	nbIndivInTurnament = 4;
 
 	vector<int> indexToFight(nbIndivInTurnament, -1);
 	int cpt_correct_number = 0;
