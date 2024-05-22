@@ -58,8 +58,10 @@ int main(int argc, char* argv[])
 	srand(time(NULL));
 	TurnamentSelection selection;
 	InsertionMutation mutation;
+	NXCrossover crossover(4);
+
 	//GeneticAlgorithm ga{MERGE_TEST_PATH+"exemple3.obj", 50, 0.5, 0.5, 200, selection, mutation};
-	GeneticAlgorithm ga{MERGE_TEST_PATH+"exemple_complexe.obj", 10000, 0.5, 0.5, 200, selection, mutation};
+	GeneticAlgorithm ga{MERGE_TEST_PATH+"exemple_complexe.obj", 30, 0.5, 0.1, 200, selection, crossover, mutation};
 	ga.run();
 
 

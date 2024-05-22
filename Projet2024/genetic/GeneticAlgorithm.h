@@ -11,11 +11,13 @@
 #include <cmath>
 #include "../OBJFileHandler.h"
 
+using namespace std;
+
 class GeneticAlgorithm : public Algorithm
 {
 
 public:
-	GeneticAlgorithm(const string& filename, int popSize, double probaCross, double probaMut, int maxIter, Selection& selection, Mutation& mutation);
+	GeneticAlgorithm(const string& filename, int popSize, double probaCross, double probaMut, int maxIter, Selection& selection, Crossover& crossover, Mutation& mutation);
 	//GeneticAlgorithm(const string& filename, int popSize, double probaCross, double probaMut, int maxIter);
 
 	void run() override;
@@ -65,7 +67,11 @@ protected:
 	double d_mutationProba;
 
 	vector<vector<int>> d_pop;
+	vector<vector<int>> d_oldpop;
+
+
 	vector<double> d_score_pop;
+	vector<double> d_oldscore_pop;
 	
 
 	vector<int> turnamentWinner;
