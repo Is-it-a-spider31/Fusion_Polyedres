@@ -106,7 +106,7 @@ vector<int> NXCrossover::chooseCrossoverPoints(const int& size)
     // Liste des points de croisement
     vector<int> crossoverPoints;
 
-    // Choix aléatoire des N points de croisement
+    // Choix alÃ©atoire des N points de croisement
     for (int i = 0; i < d_nbCrossoverPoints; i++) {
         int point;
 
