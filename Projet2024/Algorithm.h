@@ -1,10 +1,12 @@
 #pragma once
 
 #include <vector>
+#include <string>
+
 #include "Point.h"
 #include "Face.h"
 #include "Polyedre.h"
-#include <string>
+#include "Graph.h"
 
 using namespace std;
 
@@ -75,5 +77,17 @@ protected:
      * @brief Liste des polyedres
     */
     vector<Polyedre> d_polyhedra;
+
+    /**
+     * @brief Graphe des fusions convexes entre les polyedres
+    */
+    Graph d_mergeGraph;
+
+private:
+    /**
+     * Remplie le graphe des fusions convexes 
+     * a partir de la liste des polyedres
+    */
+    void initializeGraph();
 };
 

@@ -1,7 +1,8 @@
-#pragma 
+#pragma once
 
 #include <vector>
 #include <unordered_map>
+#include "Polyedre.h"
 
 using namespace std;
 
@@ -15,12 +16,14 @@ class Graph
 {
 public:
 
+    void test();
+
     /**
      * @brief Ajoute un sommet au graphe
      * 
      * @param vertex Sommet a ajouter
     */
-    void addVertex(int vertex);
+    void addVertex(const int vertex);
 
     /**
      * @brief Ajoute une arete au graphe entre 2 sommets
@@ -29,8 +32,9 @@ public:
      *
      * @param vertex1 1er sommet
      * @param vertex2 2eme sommet
+     * @param mergedPoly Polyedre resultant de la fusion des 2 sommets
     */
-    void addEdge(int vertex1, int vertex2);
+    void addEdge(const int vertex1, const int vertex2, const Polyedre& mergedPoly);
 
     /**
      * @brief Renvoie la liste des voisins d'un sommet
@@ -52,7 +56,7 @@ public:
      * @param endVertex Sommet de fin
      * @return La distance entre les 2 sommets (ou -1)
     */
-    int calculateDistance(int startVertex, int endVertex);
+    int calculateDistance(const int& startVertex, const int& endVertex);
     
     /**
      * Calcule le diametre du graphe, cad la distance maximale
@@ -64,10 +68,32 @@ public:
 
 private:
 
+
     /**
-     * @brief Associe a chaque sommet une liste de ses voisins
+     * @brief Associe a chaque sommet la liste de ses voisins
     */
     unordered_map<int, vector<int>> d_neighborsMap;
+
+    /**
+     * @brief Permet d'utiliser 2 clefs dans une map
+    */
+    struct pair_hash {
+        template <class T1, class T2>
+        size_t operator () (const std::pair<T1, T2>& p) const {
+            auto hash1 = std::hash<T1>{}(p.first);
+            auto hash2 = std::hash<T2>{}(p.second);
+            return hash1 ^ hash2;
+        }
+    };
+
+    /**
+     * @brief Associe a chaque arete (2 sommets) un polyedre
+     * 
+     * Il s'agit du polyedre resultant de la fusion des 2 polyedres 
+     * qui correspondent au sommets de l'arete
+    */
+    unordered_map<pair<int, int>, Polyedre, pair_hash> d_edgeWeights;
+
 
 };
 

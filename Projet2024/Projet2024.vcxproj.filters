@@ -62,7 +62,7 @@
     </ClCompile>
     <ClCompile Include="genetic\NXCrossover.cpp">
       <Filter>Fichiers sources\genetic</Filter>
-    </ClCompile>  
+    </ClCompile>
     <ClCompile Include="genetic\InsertionMutation.cpp">
       <Filter>Fichiers sources\genetic</Filter>
     </ClCompile>
@@ -71,6 +71,9 @@
     </ClCompile>
     <ClCompile Include="genetic\TurnamentSelection.cpp">
       <Filter>Fichiers sources\genetic</Filter>
+    </ClCompile>
+    <ClCompile Include="Graph.cpp">
+      <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -121,6 +124,9 @@
     </ClInclude>
     <ClInclude Include="genetic\TurnamentSelection.h">
       <Filter>Fichiers d%27en-tête\genetic</Filter>
+    </ClInclude>
+    <ClInclude Include="Graph.h">
+      <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

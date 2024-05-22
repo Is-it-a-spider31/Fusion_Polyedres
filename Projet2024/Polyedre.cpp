@@ -3,29 +3,18 @@
 
 #include <iostream>
 
+
 /**
- * @brief Constructeur par defaut
+* Constructeur par defaut
+*/
+Polyedre::Polyedre() : d_id(-1), d_isConvex(true) {}
+
+/**
+ * @brief Constructeur avec un identifiant
  *
  * @param id Identifiant unique
 */
 Polyedre::Polyedre(int id) : d_id(id), d_isConvex(true){}
-
-
-/**
- * @brief Constructeur par copie
- *
- * @param copy Polyedre a copier
-*/
-Polyedre::Polyedre(const Polyedre& copy)
-{
-    this->d_id = copy.d_id;
-    this->d_isConvex = copy.d_isConvex;
-
-    for (const Face faceCopy: copy.faces)
-    {
-        this->faces.push_back(faceCopy);
-    }
-}
 
 /**
  * @brief Constructeur par copie en excluant des faces
@@ -78,7 +67,6 @@ vector<Face> Polyedre::getSharedFaces(const Polyedre& poly1, const Polyedre& pol
     return sharedFaces;
 }
 
-
 /**
  * @brief Fusionne 2 polyedres
  * 
@@ -91,7 +79,7 @@ vector<Face> Polyedre::getSharedFaces(const Polyedre& poly1, const Polyedre& pol
  * 
  * @return Le polyedre resultant de la fusion
 */
-Polyedre Polyedre::merge2Polyhedra(const Polyedre& poly1, const Polyedre& poly2, const vector<Face> sharedFaces)
+Polyedre Polyedre::merge2AdjacentPolyhedra(const Polyedre& poly1, const Polyedre& poly2, const vector<Face> sharedFaces)
 {
     // Si poly2 a une seule face (polygone)
     // la fusion est egale a poly1
@@ -119,16 +107,46 @@ Polyedre Polyedre::merge2Polyhedra(const Polyedre& poly1, const Polyedre& poly2,
     return mergedPoly;
 }
 
-
-// GETTERS
-int Polyedre::getId() const { return d_id; }
-
-string Polyedre::getMTL() const
+/**
+ * @brief Fusionne 2 polyedres si possible
+ *
+ * Si la fusion n'est pas possible, retourne un polyedre
+ *	vide avec son id = -1
+ *
+ * @param poly1
+ * @param poly2
+ * @return Le polyedre fusionne (id = -1 si pas possible)
+*/
+Polyedre Polyedre::merge2Polyhedra(const Polyedre& poly1, const Polyedre& poly2)
 {
-    return d_texture;
-}
+    // id = -1 par defaut (fusion pas effectuee)
+    Polyedre mergedPoly(-1);
 
-vector<Face> Polyedre::getFaces() const { return faces; }
+    // recherche des faces communes entre les 2 polyedres
+    vector<Face> sharedFaces = Polyedre::getSharedFaces(poly1, poly2);
+
+    if (!sharedFaces.empty())	// S'il y a au moins une face commune
+    {
+        // Fusionne 2 polyedres
+        mergedPoly = Polyedre::merge2AdjacentPolyhedra(
+            poly1,
+            poly2,
+            sharedFaces
+        );
+    }
+    else	// Pas de faces communes
+    {
+        // Les 2 polyedres ont une seule face
+        if (poly1.faces.size() == poly2.faces.size()
+            && poly1.faces.size() == 1)
+        {
+            // Fusionne 2 polygones (polyedres volume nul)
+            //	id = -1 si pas possible
+            mergedPoly = Polyedre::merge2Polygones(poly1, poly2);
+        }
+    }
+    return mergedPoly;
+}
 
 /**
  * @brief Fusionne 2 polygones
@@ -138,7 +156,7 @@ vector<Face> Polyedre::getFaces() const { return faces; }
  *
  * @param poly1
  * @param poly2
- * @return Le polygone resultant de la fusion (si id=-1, alors fusion pas possible)
+ * @return Le polygone resultant de la fusion (id=-1 si fusion impossible)
 */
 Polyedre Polyedre::merge2Polygones(const Polyedre& poly1, const Polyedre& poly2)
 {
@@ -193,9 +211,7 @@ Polyedre Polyedre::merge2Polygones(const Polyedre& poly1, const Polyedre& poly2)
             // j : determine a partir de quel sommet de la 2eme face
             // on doit commencer la fusion
             if (sameEdge == -1)
-            {
                 j = (j + 1) % face2.d_sommets.size();
-            }
 
             mergedPoly = Polyedre(poly1);   // copie
 
@@ -237,13 +253,6 @@ Polyedre Polyedre::merge2Polygones(const Polyedre& poly1, const Polyedre& poly2)
     return mergedPoly;
 }
   
-void Polyedre::setMTL(string name)
-{
-    d_texture = "Texture/" + name + ".obj";
-}
-
-bool Polyedre::isConvex() const { return d_isConvex; }
-
 /**
  * @brief Calcul si le polyedre est convexe ou pas
  * 
@@ -310,6 +319,25 @@ void Polyedre::computeConvexity()
     d_isConvex = true;
     return;
 }
+
+
+// GETTERS
+
+int Polyedre::getId() const { return d_id; }
+
+string Polyedre::getMTL() const
+{
+    return d_texture;
+}
+
+vector<Face> Polyedre::getFaces() const { return faces; }
+
+void Polyedre::setMTL(string name)
+{
+    d_texture = "Texture/" + name + ".obj";
+}
+
+bool Polyedre::isConvex() const { return d_isConvex; }
 
 
 // OPERATEURS

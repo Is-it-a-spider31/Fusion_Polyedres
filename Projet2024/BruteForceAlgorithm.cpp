@@ -101,11 +101,11 @@ void BruteForceAlgorithm::run()
 
 	// Affichage des statistiques
 	cout << " ---  STATISTIQUES  ---" << endl;
-	cout << "Nb permutations effectuees : " << nbPermutaions << endl;
-	cout << "Nb solutions calculees entierement : " << nbFullSolutions << endl;
-	cout << "Nb solutions uniques calculees entierement: " << solutions.size() << endl;
-	cout << "Nb de solution optimales : " << nbOptimalSolutions << endl;
-	cout << "Nb optimale de poledres : " << minNbPolySolution << endl;
+	cout << "Nb de permutations effectuees : " << nbPermutaions << endl;
+	cout << "Nb de solutions calculees entierement : " << nbFullSolutions << endl;
+	cout << "Nb de solutions uniques calculees entierement: " << solutions.size() << endl;
+	cout << "Nb de solutions optimales : " << nbOptimalSolutions << endl;
+	cout << "Nb optimale de polyedres : " << minNbPolySolution << endl;
 }
 
 

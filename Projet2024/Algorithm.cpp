@@ -14,10 +14,14 @@ using namespace std;
  *
  * @param filename Nom du fichier .obj
 */
-Algorithm::Algorithm(const string& filename)
+Algorithm::Algorithm(const string& filename) : d_mergeGraph{Graph()}
 {
 	// Chargement des donnees a partir du fichier .obj
 	OBJFileHandler::loadOBJ(d_vertices, d_faces, d_polyhedra, filename);
+
+	// Calcul du graphe des fusiosn convexes
+	// d_mergeGraph = Graph();
+	// initializeGraph();
 }
 
 /**
@@ -54,40 +58,13 @@ vector<Polyedre> Algorithm::mergeAlgorithm(const vector<Polyedre>& solution, int
 		// Si les 2 polyedres sont convexes (cf. consignes du projet)
 		if (currentPolyhedron.isConvex() && nextPolyhedron.isConvex())
 		{
-			bool areMerged = false;
-			Polyedre mergedPoly(0);
+			// Fusion des 2 polyedres (id = -1 si impossible)
+			Polyedre mergedPoly = Polyedre::merge2Polyhedra(currentPolyhedron, nextPolyhedron);
 
-			// recherche des faces communes entre les 2 polyedres
-			vector<Face> sharedFaces = Polyedre::getSharedFaces(currentPolyhedron, nextPolyhedron);
-
-			if (!sharedFaces.empty())	// S'il y a au moins une face commune
-			{
-				// FUSION 2 Polyedres
-				mergedPoly = Polyedre::merge2Polyhedra(
-					currentPolyhedron,
-					nextPolyhedron,
-					sharedFaces
-				);
-				areMerged = true;
-			}
-			else	// Pas de faces communes
-			{
-				// Les 2 polyedres ont une seule face
-				if (currentPolyhedron.faces.size() == nextPolyhedron.faces.size()
-					&& currentPolyhedron.faces.size() == 1)
-				{
-					// FUSION 2 Polygones (une seule face + face pas commune aux 2)
-					mergedPoly = Polyedre::merge2Polygones(currentPolyhedron, nextPolyhedron);
-					if (mergedPoly.getId() != -1)
-					{
-						areMerged = true;
-					}
-				}
-			}
-
-			// Si fusion effectuee, teste si convexe
-			if (areMerged)
-			{
+			// Si fusion effectuee
+			if (mergedPoly.getId() != -1)
+			{	
+				// Teste si fusion convexe
 				mergedPoly.computeConvexity();
 				if (mergedPoly.isConvex())	// Fusion convexe
 				{
@@ -98,7 +75,7 @@ vector<Polyedre> Algorithm::mergeAlgorithm(const vector<Polyedre>& solution, int
 		} // if 2 polyedres convexes
 
 		if (!isMergeLegal)	// Si pas de fusion possible
-		{	// pas de face commune OU au moins 1 poly pas convexes OU fusion pas convexe
+		{	// Pas de face commune OU au moins 1 poly pas convexes OU fusion pas convexe
 			mergedPolyhedra.push_back(currentPolyhedron);
 			currentPolyhedron = solution[nextPolyId];
 
@@ -114,7 +91,6 @@ vector<Polyedre> Algorithm::mergeAlgorithm(const vector<Polyedre>& solution, int
 
 	if (!stopCurrentSolution)	// Solution calculee jusqu'au bout
 	{
-
 		// Ajout du dernier polyedre fusionne
 		mergedPolyhedra.push_back(currentPolyhedron);
 	}
@@ -125,7 +101,6 @@ vector<Polyedre> Algorithm::mergeAlgorithm(const vector<Polyedre>& solution, int
 
 	return mergedPolyhedra;
 }
-
 
 /**
  * @brief Fonction d'evaluation d'une solution
@@ -139,6 +114,48 @@ vector<Polyedre> Algorithm::mergeAlgorithm(const vector<Polyedre>& solution, int
 int Algorithm::evaluateSolution(const vector<Polyedre>& solution)
 {
 	return mergeAlgorithm(solution).size();
+}
+
+/**
+ * @brief 
+ * 
+ * Complexite : O(n^2)
+*/
+void Algorithm::initializeGraph()
+{
+	vector<Face> sharedFaces;
+	int size = d_polyhedra.size();
+	Polyedre poly1(-1), poly2(-1);	// Polyedres vides
+
+	// Parcour de toutes les paires uniques de polyedres
+	for (size_t i = 0; i < size - 1; i++)
+	{
+		poly1 = d_polyhedra[i];
+		for (size_t j = 1; j < size; j++)
+		{
+			poly2 = d_polyhedra[j];
+
+			if (poly1.isConvex() && poly2.isConvex())
+			{
+				// Fusion des 2 polyedres (id = -1 si impossible)
+				Polyedre mergedPoly = Polyedre::merge2Polyhedra(poly1, poly2);
+
+				if (mergedPoly.getId() != -1)	// Fusion effectuee
+				{
+					mergedPoly.computeConvexity();
+					if (mergedPoly.isConvex())	// Fusion convexe
+					{
+						// Ajout de l'arete avec le polyedre associe
+						d_mergeGraph.addEdge(
+							poly1.getId(),	// 1er sommet de l'arete
+							poly2.getId(),	// 2eme sommet de l'arete
+							mergedPoly		// Polyedre fusionne
+						);
+					}
+				}
+			} // poly1 & poly2 convexes
+		} // for
+	} // for
 }
 
 

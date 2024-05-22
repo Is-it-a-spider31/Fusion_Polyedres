@@ -12,18 +12,17 @@ class Polyedre
 public:
 
 	/**
-	 * @brief Constructeur par defaut
+	* Constructeur par defaut
+	*/
+	Polyedre();
+
+	/**
+	 * @brief Constructeur
 	 * 
 	 * @param id Identifiant unique
 	*/
 	Polyedre(int id);
-	/**
-	 * @brief Constructeur par copie
-	 * 
-	 * @param copy Polyedre a copier
-	*/
-	Polyedre(const Polyedre& copy);
-
+	
 	/**
 	 * @brief Constructeur par copie en excluant des faces
 	 * 
@@ -38,38 +37,16 @@ public:
 	vector<Face> faces;
 
 	/**
-	 * @brief Renvoie les faces communes entre 2 polyedres
-	 * 
-	 * @param poly1 
-	 * @param poly2 
-	 * @return la liste des faces communes entre les 2 polyedres
+	 * @brief Fusionne 2 polyedres si possible
+	 *
+	 * Si la fusion n'est pas possible, retourne un polyedre
+	 *	vide avec son id = -1
+	 *
+	 * @param poly1
+	 * @param poly2
+	 * @return Le polyedre fusionne (id = -1 si pas possible)
 	*/
-	static vector<Face> getSharedFaces(const Polyedre& poly1, const Polyedre& poly2);
-
-	/*
-	 * @brief Fusionne 2 polyedres
-	 * 
-	 * Au moins un des deux polyedres doit avoir plus d'une face.
-	 * 
-	 * @param poly1 1er polyedre
-	 * @param poly2 2eme polyedre
-	 * @param sharedFaces Liste des faces communes aux 2 polyedres
-	 * 
-	 * @return Le polyedre resultant de la fusion
-	*/
-	static Polyedre merge2Polyhedra(const Polyedre& poly1, const Polyedre& poly2, const vector<Face> sharedFaces);
-
-	/**
-	 * @brief Fusionne 2 polygones
-	 * 
-	 * Un polygone est un polyedre avec un volume nul
-	 * (c'est-a-dire un polyedre avec une seule face)
-	 * 
-	 * @param poly1 
-	 * @param poly2 
-	 * @return Le polygone resultant de la fusion (si id=-1, alors fusion pas possible)
-	*/
-	static Polyedre merge2Polygones(const Polyedre& poly1, const Polyedre& poly2);
+	static Polyedre merge2Polyhedra(const Polyedre& poly1, const Polyedre& poly2);
 
 
 	bool isConvex() const;
@@ -110,5 +87,40 @@ private:
 	bool d_isConvex;
 
 	string d_texture;
+
+	/**
+	 * @brief Renvoie les faces communes entre 2 polyedres
+	 *
+	 * @param poly1
+	 * @param poly2
+	 * @return la liste des faces communes entre les 2 polyedres
+	*/
+	static vector<Face> getSharedFaces(const Polyedre& poly1, const Polyedre& poly2);
+
+	/*
+	 * @brief Fusionne 2 polyedres
+	 *
+	 * Au moins un des deux polyedres doit avoir plus d'une face.
+	 *
+	 * @param poly1 1er polyedre
+	 * @param poly2 2eme polyedre
+	 * @param sharedFaces Liste des faces communes aux 2 polyedres
+	 *
+	 * @return Le polyedre resultant de la fusion
+	*/
+	static Polyedre merge2AdjacentPolyhedra(const Polyedre& poly1, const Polyedre& poly2, const vector<Face> sharedFaces);
+
+	/**
+	 * @brief Fusionne 2 polygones
+	 *
+	 * Un polygone est un polyedre avec un volume nul
+	 * (c'est-a-dire un polyedre avec une seule face)
+	 *
+	 * @param poly1
+	 * @param poly2
+	 * @return Le polygone resultant de la fusion (si id=-1, alors fusion pas possible)
+	*/
+	static Polyedre merge2Polygones(const Polyedre& poly1, const Polyedre& poly2);
+
 };
 
