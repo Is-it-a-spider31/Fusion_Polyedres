@@ -14,13 +14,15 @@ using namespace std;
  *
  * @param filename Nom du fichier .obj
 */
-Algorithm::Algorithm(const string& filename) : d_nbGraphUsage{0}, d_nbMergeTry{0}
+Algorithm::Algorithm(const string& filename) 
+	: d_nbGraphUsage{0}, d_nbMergeTry{0}, d_sumDistances{0}
 {
 	// Chargement des donnees a partir du fichier .obj
 	OBJFileHandler::loadOBJ(d_vertices, d_faces, d_polyhedra, filename);
 
 	// Calcul du graphe des fusiosn convexes
 	initializeGraph();
+	d_mergeGraph.calculateDiameter();
 	//cout << d_mergeGraph;	// Affichage du graphe
 }
 
@@ -40,6 +42,8 @@ vector<Polyedre> Algorithm::mergeAlgorithm(const vector<Polyedre>& solution, int
 {
 	Polyedre currentPolyhedron = solution[0];
 	Polyedre nextPolyhedron(0);
+	
+	d_sumDistances = 0;
 
 	// Liste des polyedres avec fusion
 	vector<Polyedre> mergedPolyhedra;
@@ -62,6 +66,12 @@ vector<Polyedre> Algorithm::mergeAlgorithm(const vector<Polyedre>& solution, int
 			&& d_mergeGraph.isVertexInGraph(nextPolyhedron.getId()))
 		{
 			d_nbGraphUsage++;	// Pour les statistiques
+
+			// Maj de la distance entre les 2 sommets qu'on essaye de fusionner
+			d_sumDistances += d_mergeGraph.calculateDistance(
+				currentPolyhedron.getId(),
+				nextPolyhedron.getId()
+			);
 
 			// Indique si la fusion est possible
 			isMergeLegal = d_mergeGraph.areVerticesNeighbors(
@@ -128,11 +138,11 @@ vector<Polyedre> Algorithm::mergeAlgorithm(const vector<Polyedre>& solution, int
 		nextPolyId++;
 	}	// while
 
-
 	if (!stopCurrentSolution)	// Solution calculee jusqu'au bout
 	{
 		// Ajout du dernier polyedre fusionne
 		mergedPolyhedra.push_back(currentPolyhedron);
+		cout << "Somme des distances : " << d_sumDistances << endl;
 	}
 	else	// Si l'algo a ete arrete en cours d'execution, renvoie une liste vide
 	{
@@ -151,9 +161,12 @@ vector<Polyedre> Algorithm::mergeAlgorithm(const vector<Polyedre>& solution, int
  * @param solution liste de polyedres
  * @return nombre de polyedres apres l'algo de fusion
 */
-int Algorithm::evaluateSolution(const vector<Polyedre>& solution)
+double Algorithm::evaluateSolution(const vector<Polyedre>& solution)
 {
-	return mergeAlgorithm(solution).size();
+	int size = mergeAlgorithm(solution).size();
+	double objective =
+		d_sumDistances / (d_mergeGraph.getDiameter() * (size - 1));
+	return objective;
 }
 
 /**
@@ -168,6 +181,8 @@ void Algorithm::initializeGraph()
 	int size = d_polyhedra.size();
 	Polyedre poly1(-1), poly2(-1);	// Polyedres vides
 
+	int nbTestedMerge = 0;
+
 	// Parcour de toutes les paires uniques de polyedres
 	for (size_t i = 0; i < size - 1; i++)
 	{
@@ -178,6 +193,7 @@ void Algorithm::initializeGraph()
 
 		for (size_t j = i+1; j < size; j++)
 		{
+			nbTestedMerge++;
 			poly2 = d_polyhedra[j];
 
 			if (poly1.isConvex() && poly2.isConvex())
@@ -205,6 +221,7 @@ void Algorithm::initializeGraph()
 		d_mergeGraph.addVertex(poly2.getId());
 
 	} // for
+	cout << "Nombre de fusions testees dans le graphe : " << nbTestedMerge << endl;
 }
 
 

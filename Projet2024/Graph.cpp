@@ -3,6 +3,8 @@
 #include <iostream>
 #include <queue>
 
+Graph::Graph() : d_diameter{-1} {}
+
 void Graph::test()
 {
     // cf. dessin papier
@@ -206,10 +208,8 @@ int Graph::calculateDistance(const int& startVertex, const int& endVertex)
  * les 2 sommets les plus eloignes
  * 
  * Complexite : O(nbSommets^2 x (nbSommets + nbAretes))
- *
- * @return La distance maximale entre 2 sommets
 */
-int Graph::calculateDiameter()
+void Graph::calculateDiameter()
 {
     int maxDiameter = 0;    // Distance maximale trouvee
 
@@ -229,7 +229,15 @@ int Graph::calculateDiameter()
             }
         }
     }
-    return maxDiameter;
+    d_diameter = maxDiameter;
+}
+
+/**
+ * @return La distance maximale possible entre 2 sommets
+*/
+int Graph::getDiameter()
+{
+    return d_diameter;
 }
 
 

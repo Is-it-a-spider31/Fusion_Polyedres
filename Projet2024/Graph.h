@@ -17,6 +17,8 @@ class Graph
 {
 public:
 
+    Graph();
+
     void test();
 
     /**
@@ -69,12 +71,17 @@ public:
     int calculateDistance(const int& startVertex, const int& endVertex);
     
     /**
-     * Calcule le diametre du graphe, cad la distance maximale
-     * possible entre 2 sommets
-     * 
+     * Renvoie le diametre du graphe, cad la distance entre
+     * les 2 sommets les plus eloignes
+     *
+     * Complexite : O(nbSommets^2 x (nbSommets + nbAretes))
+    */
+    void calculateDiameter();
+
+    /**
      * @return La distance maximale possible entre 2 sommets
     */
-    int calculateDiameter();
+    int getDiameter();
 
     // OPERATEUR
 
@@ -107,6 +114,11 @@ private:
      * qui correspondent au sommets de l'arete
     */
     unordered_map<pair<int, int>, Polyedre, pair_hash> d_edgeWeights;
+
+    /**
+     * @brief Distance maximale possible entre 2 sommets
+    */
+    int d_diameter;
 
     /**
      * @brief Ajoute un nouveau voisin a un sommet
