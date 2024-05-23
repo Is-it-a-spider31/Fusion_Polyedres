@@ -128,6 +128,7 @@ Polyedre Graph::getEdgeWeight(const int& vertex1, const int& vertex2)
         // Acces au polyedre associe a l'arete
         mergedPoly = d_edgeWeights[myPair];
     }
+    return mergedPoly;
 }
 
 /**
