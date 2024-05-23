@@ -12,6 +12,13 @@ class Polyedre
 public:
 
 	/**
+	 * Attribut statique qui s'incremente a chaque fois 
+	 * qu'un nouveau polyedre est cree.
+	 * Cela sert a avoir un identifiant unique pour chaque polyedre.
+	*/
+	static int s_uniqueIncrementedId;
+
+	/**
 	* Constructeur par defaut
 	*/
 	Polyedre();

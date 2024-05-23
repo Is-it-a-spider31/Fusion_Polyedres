@@ -14,14 +14,14 @@ using namespace std;
  *
  * @param filename Nom du fichier .obj
 */
-Algorithm::Algorithm(const string& filename) 
+Algorithm::Algorithm(const string& filename) : d_nbGraphUsage{0}, d_nbMergeTry{0}
 {
 	// Chargement des donnees a partir du fichier .obj
 	OBJFileHandler::loadOBJ(d_vertices, d_faces, d_polyhedra, filename);
 
 	// Calcul du graphe des fusiosn convexes
 	initializeGraph();
-	// cout << d_mergeGraph;	// Affichage du graphe
+	//cout << d_mergeGraph;	// Affichage du graphe
 }
 
 /**
@@ -54,13 +54,50 @@ vector<Polyedre> Algorithm::mergeAlgorithm(const vector<Polyedre>& solution, int
 	{
 		bool isMergeLegal = false;	// true : la fusion est possible et convexe
 		nextPolyhedron = solution[nextPolyId];
+		d_nbMergeTry++;
 
-		// Si les 2 polyedres sont convexes (cf. consignes du projet)
-		if (currentPolyhedron.isConvex() && nextPolyhedron.isConvex())
+		// Si les 2 polyedres sont dans le graphe, 
+		//	cad que leur fusion a deja ete pre-calculee
+		if (d_mergeGraph.isVertexInGraph(currentPolyhedron.getId())
+			&& d_mergeGraph.isVertexInGraph(nextPolyhedron.getId()))
+		{
+			d_nbGraphUsage++;	// Pour les statistiques
+
+			// Indique si la fusion est possible
+			isMergeLegal = d_mergeGraph.areVerticesNeighbors(
+				currentPolyhedron.getId(),
+				nextPolyhedron.getId()
+			);
+
+			if (isMergeLegal)	// Si la fusion est possible
+			{
+				// On recupere le polyedre fusionne pre-calcule
+				currentPolyhedron = d_mergeGraph.getEdgeWeight(
+					currentPolyhedron.getId(),
+					nextPolyhedron.getId()
+				);
+
+				// Theoriquement, comme on a deja verifie que les 2 polyedres 
+				//	sont voisins dans le graphe, on ne devrait jamais rencontrer ce cas.
+				//	Cela signifierait un probleme dans la strcuture de donnees
+				if (currentPolyhedron.getId() == -1)
+				{
+					isMergeLegal = false;
+					cerr << "Graph::getEdgeWeight et Graph::areVerticesNeighbors "
+						<< " ne sont pas coherents !" << endl
+						<< "cf. Algorithm::mergeAlgorithm" << endl;
+				}
+			}
+		}
+		// Sinon, si les 2 polyedres sont convexes (cf. consignes du projet)
+		else if (currentPolyhedron.isConvex() && nextPolyhedron.isConvex())
 		{
 			// Fusion des 2 polyedres (id = -1 si impossible)
-			Polyedre mergedPoly = Polyedre::merge2Polyhedra(currentPolyhedron, nextPolyhedron);
-
+			Polyedre mergedPoly = Polyedre::merge2Polyhedra(
+				currentPolyhedron, 
+				nextPolyhedron
+			);
+			//cout << "id = " << mergedPoly.getId() << endl;
 			// Si fusion effectuee
 			if (mergedPoly.getId() != -1)
 			{	
@@ -75,7 +112,10 @@ vector<Polyedre> Algorithm::mergeAlgorithm(const vector<Polyedre>& solution, int
 		} // if 2 polyedres convexes
 
 		if (!isMergeLegal)	// Si pas de fusion possible
-		{	// Pas de face commune OU au moins 1 poly pas convexes OU fusion pas convexe
+		{	// cad Pas de face commune 
+			//	OU au moins 1 poly pas convexes 
+			//	OU fusion pas convexe
+
 			mergedPolyhedra.push_back(currentPolyhedron);
 			currentPolyhedron = solution[nextPolyId];
 
@@ -117,7 +157,8 @@ int Algorithm::evaluateSolution(const vector<Polyedre>& solution)
 }
 
 /**
- * @brief 
+ * Construit le graphe des fusions convexes
+ * a partir de la liste des polyedres.
  * 
  * Complexite : O(n^2)
 */
@@ -131,6 +172,10 @@ void Algorithm::initializeGraph()
 	for (size_t i = 0; i < size - 1; i++)
 	{
 		poly1 = d_polyhedra[i];
+
+		// Mise a jour du graphe avec un nouveau sommet/polyedre
+		d_mergeGraph.addVertex(poly1.getId());
+
 		for (size_t j = i+1; j < size; j++)
 		{
 			poly2 = d_polyhedra[j];
@@ -155,6 +200,10 @@ void Algorithm::initializeGraph()
 				}
 			} // poly1 & poly2 convexes
 		} // for
+
+		// Ajout du dernier polyedre en tant que sommet du graphe
+		d_mergeGraph.addVertex(poly2.getId());
+
 	} // for
 }
 

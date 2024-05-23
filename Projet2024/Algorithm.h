@@ -25,13 +25,13 @@ public:
     Algorithm(const string &filename);
 
     /**
-     * @brief Algorithme principal de fusion
+     * @brief Algorithme principal de fusion.
      * Methode abstraite !
     */
     virtual void run() = 0;
 
     /**
-     * @brief Algorithme de fusion d'une solution (liste de polyedres)
+     * @brief Algorithme de fusion d'une solution (liste de polyedres).
      * 
      * Effectue les fusions possibles dans l'ordre pour 
      * un ensemble de polyedres donnes.
@@ -40,12 +40,13 @@ public:
      * 
      * @param solution  liste de polyedres
      * @param limitNbPoly Nombre limite de polyedres (-1 par defaut, pas de limite) 
-     * @return nombre polyedres apres fusions
+     * @param nbGraphUsage Nombre de fois que le graphe des fusions a ete utilise
+     * @return nombre de polyedres apres fusions
     */
     vector<Polyedre> mergeAlgorithm(const vector<Polyedre>& solution, int limitNbPoly=-1);
 
     /**
-     * @brief Fonction d'evaluation d'une solution
+     * @brief Fonction d'evaluation d'une solution.
      * 
      * Renvoie le nombre de polyedres resultants de l'Algorithme
      * de fusion.
@@ -83,10 +84,22 @@ protected:
     */
     Graph d_mergeGraph;
 
+    /**
+     * @brief Nombre de fois que le graphe des fusions a ete utilise
+    */
+    int d_nbGraphUsage;
+
+    /**
+     * @brief Nombre de fusions testees
+    */
+    int d_nbMergeTry;
+
 private:
     /**
-     * Remplie le graphe des fusions convexes 
-     * a partir de la liste des polyedres
+     * Construit le graphe des fusions convexes
+     * a partir de la liste des polyedres.
+     *
+     * Complexite : O(n^2)
     */
     void initializeGraph();
 };

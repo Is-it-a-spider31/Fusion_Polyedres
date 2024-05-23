@@ -5,26 +5,41 @@
 
 
 /**
+ * Attribut statique qui s'incremente a chaque fois
+ * qu'un nouveau polyedre est cree.
+ * Cela sert a avoir un identifiant unique pour chaque polyedre.
+*/
+int Polyedre::s_uniqueIncrementedId = 1;
+
+/**
 * Constructeur par defaut
 */
-Polyedre::Polyedre() : d_id(-1), d_isConvex(true) {}
+Polyedre::Polyedre() : d_id(-1), d_isConvex(true) 
+{
+    s_uniqueIncrementedId++;
+}
 
 /**
  * @brief Constructeur avec un identifiant
  *
  * @param id Identifiant unique
 */
-Polyedre::Polyedre(int id) : d_id(id), d_isConvex(true){}
+Polyedre::Polyedre(int id) : d_id(id), d_isConvex(true)
+{
+    s_uniqueIncrementedId++;
+}
 
 /**
- * @brief Constructeur par copie en excluant des faces
+ * Constructeur par copie en excluant des faces.
+ * Donne un nouvel id unique au polyedre.
  *
  * @param copy Polyedre a copier
  * @param sharedFaces Faces a ne pas copier
 */
 Polyedre::Polyedre(const Polyedre& copy, const vector<Face>& excludedFaces)
 {
-    this->d_id = copy.d_id;
+    s_uniqueIncrementedId++;
+    this->d_id = s_uniqueIncrementedId;
     this->d_isConvex = copy.d_isConvex;
 
     // Pour chaque face à copier
@@ -213,7 +228,9 @@ Polyedre Polyedre::merge2Polygones(const Polyedre& poly1, const Polyedre& poly2)
             if (sameEdge == -1)
                 j = (j + 1) % face2.d_sommets.size();
 
-            mergedPoly = Polyedre(poly1);   // copie
+            mergedPoly = poly1;   // copie, mais nouvel identifiant unique
+            s_uniqueIncrementedId++;
+            mergedPoly.d_id = s_uniqueIncrementedId;
 
             // Insertion des sommets de la 2ème faces dans la 1ere
             // si ils ne sont pas deja dans la 1er face

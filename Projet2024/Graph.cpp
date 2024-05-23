@@ -69,6 +69,16 @@ void Graph::addEdge(const int vertex1, const int vertex2, const Polyedre& merged
 }
 
 /**
+ * @return true si le sommet est dans le graphe
+*/
+bool Graph::isVertexInGraph(const int& vertex)
+{
+    if(d_neighborsMap.find(vertex) != d_neighborsMap.end())
+        return true;
+    return false;
+}
+
+/**
  * @brief Ajoute un nouveau voisin a un sommet
  *
  * @param vertex Sommet
@@ -82,26 +92,42 @@ void Graph::addNeighbor(int vertex, int neighbor)
 }
 
 /**
- * @brief Renvoie la liste des voisins d'un sommet
- *
- * Le sommet doit deja etre dans le graphe
- * 
- * @param vertex Sommet dont on cherche les voisins
- * @return La liste des voisins
+ * @return true si les 2 sommets sont voisins, false sinon
 */
-unordered_set<int> Graph::getNeighbors(int vertex)
+bool Graph::areVerticesNeighbors(const int& vertex1, const int& vertex2)
 {
-    if (d_neighborsMap.find(vertex) != d_neighborsMap.end())
-    {   // Si le sommet existe
-        return d_neighborsMap[vertex];
+    bool areNeighbors = false;
+    // Si les sommets sont dans le graphe
+    if (d_neighborsMap.find(vertex1) != d_neighborsMap.end())
+    {   
+        // Si le sommet 2 est dans la liste des voisins du sommet 1
+        if (d_neighborsMap[vertex1].find(vertex2) != d_neighborsMap[vertex1].end())
+            areNeighbors = true;
     }
-    else
-    {   // Le sommet n'est pas dans le graphe
-        cerr << "Appelle de Graph::getNeighbors (" << vertex << ")" << endl;
-        cerr << "Le sommet " << vertex << "n'existe pas !" << endl;
-    }
+    return areNeighbors;
+}
 
-    return unordered_set<int>();
+/**
+ * @brief Renvoie le polyedre resultant de la fusion des 2 sommets
+ *
+ * @param vertex1 1er polyedre
+ * @param vertex2 2eme polyedre
+ * @return polyedre resultant de la fusion
+*/
+Polyedre Graph::getEdgeWeight(const int& vertex1, const int& vertex2)
+{
+    Polyedre mergedPoly(-1);
+
+    // Creation d'une paire de clefs correspondant a une arete
+    pair<int, int> myPair = std::make_pair(vertex1, vertex2);
+
+    // Verification si la paire de cles a ete trouvee
+    auto it = d_edgeWeights.find(myPair);
+    if (it != d_edgeWeights.end()) 
+    {
+        // Acces au polyedre associe a l'arete
+        mergedPoly = d_edgeWeights[myPair];
+    }
 }
 
 /**

@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
 
 	//TEST ALGO BRUTE-FORCE
 	BruteForceAlgorithm bruteforce(MERGE_TEST_PATH+"exemple3.obj");
-	//bruteforce.run();
+	bruteforce.run();
 
 	//TEST RECUIT SIMULE
 	//RecuitSimuleAlgorithm recuit(MERGE_TEST_PATH+"exemple3.obj");

@@ -38,14 +38,23 @@ public:
     void addEdge(const int vertex1, const int vertex2, const Polyedre& mergedPoly);
 
     /**
-     * @brief Renvoie la liste des voisins d'un sommet
-     *
-     * Le sommet devrait deja etre dans le graphe
-     *
-     * @param vertex Sommet dont on cherche les voisins
-     * @return La liste des voisins
+     * @return true si le sommet est dans le graphe
     */
-    unordered_set<int> getNeighbors(int vertex);
+    bool isVertexInGraph(const int& vertex);
+
+    /**
+     * @return true si les 2 sommets sont voisins, false sinon
+    */
+    bool areVerticesNeighbors(const int& vertex1, const int& vertex2);
+
+    /**
+     * @brief Renvoie le polyedre resultant de la fusion des 2 sommets
+     * 
+     * @param vertex1 1er polyedre
+     * @param vertex2 2eme polyedre
+     * @return polyedre resultant de la fusion
+    */
+    Polyedre getEdgeWeight(const int& vertex1, const int& vertex2);
 
     /**
      * @brief Renvoie la distance entre deux sommets en utilisant BFS
