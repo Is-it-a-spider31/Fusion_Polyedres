@@ -1,17 +1,15 @@
 #include <iostream>
-#include "Algorithm.h"
+#include <cstdlib> // Pour la fonction system()
+#include <string>
 
+#include "Algorithm.h"
 #include "BruteForceAlgorithm.h"
 #include "RecuitSimuleAlgorithm.h"
-#include "genetic/GeneticAlgorithm.h"
 
+#include "genetic/GeneticAlgorithm.h"
 #include "genetic/TurnamentSelection.h"
 #include "genetic/NXCrossover.h"
 #include "genetic/InsertionMutation.h"
-
-
-#include <cstdlib> // Pour la fonction system()
-#include <string>
 
 using namespace std;
 
@@ -31,7 +29,7 @@ int main(int argc, char* argv[])
 	const string BUGS_TEST_PATH = "Tests/BugsTests/";
 
 	//TEST ALGO BRUTE-FORCE
-	//BruteForceAlgorithm bruteforce(MERGE_TEST_PATH+"exemple2.obj");
+	BruteForceAlgorithm bruteforce(MERGE_TEST_PATH+"exemple3.obj");
 	//bruteforce.run();
 
 	//TEST RECUIT SIMULE
@@ -49,12 +47,17 @@ int main(int argc, char* argv[])
 	//algo.test_WriteObj();
 	//algo.test_LoadObj();
 
-	//------------------------------------------
+	// TEST GRAPH
+	//Graph g;
+	//g.test();
+
+	// TESTS ALGO GENETIQUE ------------------------------------------
 
 	// Test Crossover
 	/*NXCrossover crossover(3);
 	crossover.test();*/
 
+	/*
 	srand(time(NULL));
 	TurnamentSelection selection;
 	InsertionMutation mutation;
@@ -63,9 +66,7 @@ int main(int argc, char* argv[])
 	//GeneticAlgorithm ga{MERGE_TEST_PATH+"exemple3.obj", 50, 0.5, 0.5, 200, selection, mutation};
 	GeneticAlgorithm ga{MERGE_TEST_PATH+"exemple_complexe.obj", 30, 0.5, 0.1, 200, selection, crossover, mutation};
 	ga.run();
-
-
-	
+	*/
 
 	//faire gaffe si la population est petite et la dimension aussi
 

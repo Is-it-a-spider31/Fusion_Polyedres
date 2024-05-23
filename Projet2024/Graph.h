@@ -1,7 +1,8 @@
 #pragma once
 
-#include <vector>
 #include <unordered_map>
+#include <unordered_set>
+
 #include "Polyedre.h"
 
 using namespace std;
@@ -44,7 +45,7 @@ public:
      * @param vertex Sommet dont on cherche les voisins
      * @return La liste des voisins
     */
-    vector<int> getNeighbors(int vertex);
+    unordered_set<int> getNeighbors(int vertex);
 
     /**
      * @brief Renvoie la distance entre deux sommets en utilisant BFS
@@ -66,13 +67,17 @@ public:
     */
     int calculateDiameter();
 
+    // OPERATEUR
+
+    friend std::ostream& operator<<(std::ostream& os, const Graph& p);
+
 private:
 
 
     /**
-     * @brief Associe a chaque sommet la liste de ses voisins
+     * @brief Associe a chaque sommet la liste de ses voisins sans doublons
     */
-    unordered_map<int, vector<int>> d_neighborsMap;
+    unordered_map<int, unordered_set<int>> d_neighborsMap;
 
     /**
      * @brief Permet d'utiliser 2 clefs dans une map
@@ -94,6 +99,12 @@ private:
     */
     unordered_map<pair<int, int>, Polyedre, pair_hash> d_edgeWeights;
 
-
+    /**
+     * @brief Ajoute un nouveau voisin a un sommet
+     *
+     * @param vertex Sommet
+     * @param neigbhor Voisin a ajouter
+    */
+    void addNeighbor(int vertex, int neighbor);
 };
 

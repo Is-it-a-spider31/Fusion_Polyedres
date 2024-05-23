@@ -14,14 +14,14 @@ using namespace std;
  *
  * @param filename Nom du fichier .obj
 */
-Algorithm::Algorithm(const string& filename) : d_mergeGraph{Graph()}
+Algorithm::Algorithm(const string& filename) 
 {
 	// Chargement des donnees a partir du fichier .obj
 	OBJFileHandler::loadOBJ(d_vertices, d_faces, d_polyhedra, filename);
 
 	// Calcul du graphe des fusiosn convexes
-	// d_mergeGraph = Graph();
-	// initializeGraph();
+	initializeGraph();
+	// cout << d_mergeGraph;	// Affichage du graphe
 }
 
 /**
@@ -131,7 +131,7 @@ void Algorithm::initializeGraph()
 	for (size_t i = 0; i < size - 1; i++)
 	{
 		poly1 = d_polyhedra[i];
-		for (size_t j = 1; j < size; j++)
+		for (size_t j = i+1; j < size; j++)
 		{
 			poly2 = d_polyhedra[j];
 
@@ -147,8 +147,8 @@ void Algorithm::initializeGraph()
 					{
 						// Ajout de l'arete avec le polyedre associe
 						d_mergeGraph.addEdge(
-							poly1.getId(),	// 1er sommet de l'arete
-							poly2.getId(),	// 2eme sommet de l'arete
+							poly1.getId(),	// 1er sommet de l'arete (polygone 1)
+							poly2.getId(),	// 2eme sommet de l'arete (polygone 2)
 							mergedPoly		// Polyedre fusionne
 						);
 					}

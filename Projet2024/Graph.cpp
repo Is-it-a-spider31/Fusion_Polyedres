@@ -21,7 +21,6 @@ void Graph::test()
     cout << "Distance of the graph: " << calculateDistance(6, 2) << endl;*/
 
     //cout << "Diametter of the graph: " << calculateDiameter(6, 2) << endl;
-
 }
 
 /**
@@ -36,7 +35,7 @@ void Graph::addVertex(const int vertex)
     // Si le sommet n'est pas deja dans le graphe
     if (d_neighborsMap.find(vertex) == d_neighborsMap.end())
     {
-        d_neighborsMap[vertex] = vector<int>();  // Ajout du sommet
+        d_neighborsMap[vertex] = unordered_set<int>();  // Ajout du sommet
     }
 }
 
@@ -53,13 +52,16 @@ void Graph::addVertex(const int vertex)
 */
 void Graph::addEdge(const int vertex1, const int vertex2, const Polyedre& mergedPoly)
 {
+    if (vertex1 == vertex2)
+        return;
+
     // Ajout des sommets s'ils ne sont pas dans le graphe 
     addVertex(vertex1);
     addVertex(vertex2);
 
     // Mise a jour des voisins
-    d_neighborsMap[vertex1].push_back(vertex2);
-    d_neighborsMap[vertex2].push_back(vertex1);
+    addNeighbor(vertex1, vertex2);
+    addNeighbor(vertex2, vertex1);
 
     // Association du polyedre fusionne a l'arete
     d_edgeWeights[{vertex1, vertex2}] = mergedPoly;
@@ -67,14 +69,27 @@ void Graph::addEdge(const int vertex1, const int vertex2, const Polyedre& merged
 }
 
 /**
+ * @brief Ajoute un nouveau voisin a un sommet
+ *
+ * @param vertex Sommet
+ * @param neigbhor Voisin a ajouter
+*/
+void Graph::addNeighbor(int vertex, int neighbor)
+{
+    // Insertion du voisin s'il n'est pas deja dans la liste
+    // (Rappel : d_neighborsMap[vertex] est un set, pas de doublons)
+    d_neighborsMap[vertex].insert(neighbor);
+}
+
+/**
  * @brief Renvoie la liste des voisins d'un sommet
  *
- * Le sommet soit deja etre dans le graphe
+ * Le sommet doit deja etre dans le graphe
  * 
  * @param vertex Sommet dont on cherche les voisins
  * @return La liste des voisins
 */
-vector<int> Graph::getNeighbors(int vertex)
+unordered_set<int> Graph::getNeighbors(int vertex)
 {
     if (d_neighborsMap.find(vertex) != d_neighborsMap.end())
     {   // Si le sommet existe
@@ -86,7 +101,7 @@ vector<int> Graph::getNeighbors(int vertex)
         cerr << "Le sommet " << vertex << "n'existe pas !" << endl;
     }
 
-    return vector<int>();
+    return unordered_set<int>();
 }
 
 /**
@@ -188,4 +203,23 @@ int Graph::calculateDiameter()
         }
     }
     return maxDiameter;
+}
+
+
+// OPERATEUR
+
+std::ostream& operator<<(std::ostream& os, const Graph& p)
+{
+    os << "Graphe : " << endl;
+    for (const auto& pair : p.d_neighborsMap)
+    {
+        os << "Sommet " << pair.first << endl;
+        os << "\t Voisins : ";
+        for (const int& i : pair.second)
+        {
+            os << i << ", ";
+        }
+        os << endl;
+    }
+    return os;
 }
