@@ -12,13 +12,6 @@ class Polyedre
 public:
 
 	/**
-	 * Attribut statique qui s'incremente a chaque fois 
-	 * qu'un nouveau polyedre est cree.
-	 * Cela sert a avoir un identifiant unique pour chaque polyedre.
-	*/
-	static int s_uniqueIncrementedId;
-
-	/**
 	* Constructeur par defaut
 	*/
 	Polyedre();
@@ -67,6 +60,22 @@ public:
 	*/
 	void computeConvexity();
 
+	/**
+	 * @brief Genere un identifiant unique a partir d'une paire (a,b).
+	 * 
+	 * a et b sont interchangeables.
+	 * 
+	 * @param id1 Id d'un polyedre
+	 * @param id2 Id d'un autre polyedre
+	 * @param min Nombre minimum qui peut etre genere
+	 * @return un identifiant unique
+	*/
+	static int getUniqueIdFrom2Ids(
+		const int& id1, 
+		const int& id2, 
+		const int& min
+	);
+
 	// GETTERS
 	int getId() const;
 	string getMTL() const;
@@ -74,6 +83,7 @@ public:
 
 	//SETTERS
 	void setMTL(string name);
+	void setId(const int id);
 
 	// OPERATEURS
 	bool operator<(const Polyedre& poly) const;
@@ -105,7 +115,7 @@ private:
 	static vector<Face> getSharedFaces(const Polyedre& poly1, const Polyedre& poly2);
 
 	/*
-	 * @brief Fusionne 2 polyedres
+	 * @brief Fusionne 2 polyedres adjacents (au moins une face commune).
 	 *
 	 * Au moins un des deux polyedres doit avoir plus d'une face.
 	 *

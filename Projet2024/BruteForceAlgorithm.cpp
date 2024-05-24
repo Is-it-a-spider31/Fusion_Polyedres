@@ -107,6 +107,8 @@ void BruteForceAlgorithm::run()
 	cout << "Nb de fusions testees : " << d_nbMergeTry << endl;
 	cout << "Nb utilisations du graphe : " << d_nbGraphUsage << endl << endl;
 	cout << "Nb optimale de polyedres : " << minNbPolySolution << endl;
+
+	cout << endl << d_mergeGraph;	// Affichage du graphe
 }
 
 

@@ -30,8 +30,8 @@ void RecuitSimuleAlgorithm::run()
 	vector<Polyedre> currentSolution = d_polyhedra;
 	vector<Polyedre> neighborSolution = d_polyhedra;	// Solution voisine
 
-	int currentEval = this->evaluateSolution(currentSolution);
-	int neighborEval;
+	double currentEval = this->evaluateSolution(currentSolution);
+	double neighborEval;
 	double palier;
 	double n = 0;
 
@@ -54,6 +54,7 @@ void RecuitSimuleAlgorithm::run()
 
 			// EVALUATION
 			neighborEval = this->evaluateSolution(neighborSolution);
+			cout << "Eval : " << neighborEval << endl;
 
 			// ACCEPTATION
 			if (isNeighborAccepted(currentEval, neighborEval))
@@ -117,7 +118,7 @@ void RecuitSimuleAlgorithm::permute2Elements(vector<Polyedre>& polyhedra)
   *
   * @return true si solution voisine acceptee, false sinon
  */
-bool RecuitSimuleAlgorithm::isNeighborAccepted(const int& currentEval, const int& neighborEval)
+bool RecuitSimuleAlgorithm::isNeighborAccepted(const double& currentEval, const double& neighborEval)
 {
 	bool isAccepted = true;
 

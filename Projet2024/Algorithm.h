@@ -99,6 +99,8 @@ protected:
     */
     int d_sumDistances;
 
+    double d_objectiveValue;
+
 private:
     /**
      * Construit le graphe des fusions convexes

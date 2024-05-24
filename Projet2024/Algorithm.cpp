@@ -15,7 +15,7 @@ using namespace std;
  * @param filename Nom du fichier .obj
 */
 Algorithm::Algorithm(const string& filename) 
-	: d_nbGraphUsage{0}, d_nbMergeTry{0}, d_sumDistances{0}
+	: d_nbGraphUsage{0}, d_nbMergeTry{0}, d_sumDistances{0}, d_objectiveValue{0}
 {
 	// Chargement des donnees a partir du fichier .obj
 	OBJFileHandler::loadOBJ(d_vertices, d_faces, d_polyhedra, filename);
@@ -44,6 +44,7 @@ vector<Polyedre> Algorithm::mergeAlgorithm(const vector<Polyedre>& solution, int
 	Polyedre nextPolyhedron(0);
 	
 	d_sumDistances = 0;
+	int nbConsecutiveMerges = 0;
 
 	// Liste des polyedres avec fusion
 	vector<Polyedre> mergedPolyhedra;
@@ -107,7 +108,7 @@ vector<Polyedre> Algorithm::mergeAlgorithm(const vector<Polyedre>& solution, int
 				currentPolyhedron, 
 				nextPolyhedron
 			);
-			//cout << "id = " << mergedPoly.getId() << endl;
+
 			// Si fusion effectuee
 			if (mergedPoly.getId() != -1)
 			{	
@@ -115,6 +116,19 @@ vector<Polyedre> Algorithm::mergeAlgorithm(const vector<Polyedre>& solution, int
 				mergedPoly.computeConvexity();
 				if (mergedPoly.isConvex())	// Fusion convexe
 				{
+					// Mise a jour de l'identifiant
+					mergedPoly.setId(Polyedre::getUniqueIdFrom2Ids(
+						currentPolyhedron.getId(),
+						nextPolyhedron.getId(),
+						solution.size()	// Minimum
+					));
+					// Mise a jour du graphe
+					d_mergeGraph.addEdge(
+						currentPolyhedron.getId(),	// 1er sommet de l'arete (polygone 1)
+						nextPolyhedron.getId(),	// 2eme sommet de l'arete (polygone 2)
+						mergedPoly		// Polyedre fusionne
+					);
+
 					currentPolyhedron = mergedPoly;
 					isMergeLegal = true;
 				}
@@ -135,6 +149,10 @@ vector<Polyedre> Algorithm::mergeAlgorithm(const vector<Polyedre>& solution, int
 				stopCurrentSolution = true;
 			}
 		}
+		else 
+		{
+			nbConsecutiveMerges++;
+		}
 		nextPolyId++;
 	}	// while
 
@@ -142,12 +160,18 @@ vector<Polyedre> Algorithm::mergeAlgorithm(const vector<Polyedre>& solution, int
 	{
 		// Ajout du dernier polyedre fusionne
 		mergedPolyhedra.push_back(currentPolyhedron);
-		cout << "Somme des distances : " << d_sumDistances << endl;
 	}
 	else	// Si l'algo a ete arrete en cours d'execution, renvoie une liste vide
 	{
 		mergedPolyhedra.clear();
 	}
+
+	// Evaluation de la soluion courante
+	d_objectiveValue = d_sumDistances - d_mergeGraph.getDiameter() + 1;
+	// On applique une penalite
+	double penality =
+		d_sumDistances / (d_mergeGraph.getDiameter() * (solution.size()));
+	d_objectiveValue += penality;
 
 	return mergedPolyhedra;
 }
@@ -163,10 +187,10 @@ vector<Polyedre> Algorithm::mergeAlgorithm(const vector<Polyedre>& solution, int
 */
 double Algorithm::evaluateSolution(const vector<Polyedre>& solution)
 {
-	int size = mergeAlgorithm(solution).size();
-	double objective =
+	double size = mergeAlgorithm(solution).size();
+	double penality =
 		d_sumDistances / (d_mergeGraph.getDiameter() * (size - 1));
-	return objective;
+	return penality;
 }
 
 /**
@@ -206,6 +230,12 @@ void Algorithm::initializeGraph()
 					mergedPoly.computeConvexity();
 					if (mergedPoly.isConvex())	// Fusion convexe
 					{
+						// Mise a jour de l'identifiant
+						mergedPoly.setId(Polyedre::getUniqueIdFrom2Ids(
+							poly1.getId(),
+							poly2.getId(),
+							size	// Minimum
+						));
 						// Ajout de l'arete avec le polyedre associe
 						d_mergeGraph.addEdge(
 							poly1.getId(),	// 1er sommet de l'arete (polygone 1)

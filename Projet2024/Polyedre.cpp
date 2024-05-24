@@ -5,29 +5,16 @@
 
 
 /**
- * Attribut statique qui s'incremente a chaque fois
- * qu'un nouveau polyedre est cree.
- * Cela sert a avoir un identifiant unique pour chaque polyedre.
-*/
-int Polyedre::s_uniqueIncrementedId = 1;
-
-/**
 * Constructeur par defaut
 */
-Polyedre::Polyedre() : d_id(-1), d_isConvex(true) 
-{
-    s_uniqueIncrementedId++;
-}
+Polyedre::Polyedre() : d_id(-1), d_isConvex(true) {}
 
 /**
  * @brief Constructeur avec un identifiant
  *
  * @param id Identifiant unique
 */
-Polyedre::Polyedre(int id) : d_id(id), d_isConvex(true)
-{
-    s_uniqueIncrementedId++;
-}
+Polyedre::Polyedre(int id) : d_id(id), d_isConvex(true) {}
 
 /**
  * Constructeur par copie en excluant des faces.
@@ -38,8 +25,7 @@ Polyedre::Polyedre(int id) : d_id(id), d_isConvex(true)
 */
 Polyedre::Polyedre(const Polyedre& copy, const vector<Face>& excludedFaces)
 {
-    s_uniqueIncrementedId++;
-    this->d_id = s_uniqueIncrementedId;
+    this->d_id = copy.d_id;
     this->d_isConvex = copy.d_isConvex;
 
     // Pour chaque face à copier
@@ -83,7 +69,7 @@ vector<Face> Polyedre::getSharedFaces(const Polyedre& poly1, const Polyedre& pol
 }
 
 /**
- * @brief Fusionne 2 polyedres
+ * @brief Fusionne 2 polyedres adjacents (au moins une face commune).
  * 
  * Les 2 polyedres doivent avoir au moins une face commune.
  * La fusion fonctionne si les polyedres ont une seule face (volume nul)
@@ -94,7 +80,11 @@ vector<Face> Polyedre::getSharedFaces(const Polyedre& poly1, const Polyedre& pol
  * 
  * @return Le polyedre resultant de la fusion
 */
-Polyedre Polyedre::merge2AdjacentPolyhedra(const Polyedre& poly1, const Polyedre& poly2, const vector<Face> sharedFaces)
+Polyedre Polyedre::merge2AdjacentPolyhedra(
+    const Polyedre& poly1, 
+    const Polyedre& poly2, 
+    const vector<Face> sharedFaces
+)
 {
     // Si poly2 a une seule face (polygone)
     // la fusion est egale a poly1
@@ -228,9 +218,7 @@ Polyedre Polyedre::merge2Polygones(const Polyedre& poly1, const Polyedre& poly2)
             if (sameEdge == -1)
                 j = (j + 1) % face2.d_sommets.size();
 
-            mergedPoly = poly1;   // copie, mais nouvel identifiant unique
-            s_uniqueIncrementedId++;
-            mergedPoly.d_id = s_uniqueIncrementedId;
+            mergedPoly = poly1;   // copie
 
             // Insertion des sommets de la 2ème faces dans la 1ere
             // si ils ne sont pas deja dans la 1er face
@@ -337,6 +325,21 @@ void Polyedre::computeConvexity()
     return;
 }
 
+/**
+ * @brief Genere un identifiant unique a partir d'une paire (a,b).
+ *
+ * a et b sont interchangeables.
+ *
+ * @param id1 Id d'un polyedre
+ * @param id2 Id d'un autre polyedre
+ * @param min Nombre minimum qui peut etre genere
+ * @return un identifiant unique
+*/
+int Polyedre::getUniqueIdFrom2Ids(const int& id1, const int& id2, const int& min)
+{
+    return ((id1 + id2 - 1) * (id1 + id2 - 2)) / 2 + min;
+}
+
 
 // GETTERS
 
@@ -352,6 +355,11 @@ vector<Face> Polyedre::getFaces() const { return faces; }
 void Polyedre::setMTL(string name)
 {
     d_texture = "Texture/" + name + ".obj";
+}
+
+void Polyedre::setId(const int id)
+{
+    d_id = id;
 }
 
 bool Polyedre::isConvex() const { return d_isConvex; }

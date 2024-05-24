@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <queue>
+#include <string>
 
 Graph::Graph() : d_diameter{-1} {}
 
@@ -250,11 +251,18 @@ std::ostream& operator<<(std::ostream& os, const Graph& p)
     {
         os << "Sommet " << pair.first << endl;
         os << "\t Voisins : ";
+        string neighborsList = "";
         for (const int& i : pair.second)
         {
-            os << i << ", ";
+            neighborsList += to_string(i) + ", ";
         }
-        os << endl;
+        // Pour ne pas afficher la derniere virgule
+        if (!neighborsList.empty()) 
+        {
+            neighborsList.pop_back();  // Supprime l'espace
+            neighborsList.pop_back();  // Supprime la virgule
+        }
+        os << neighborsList << endl;
     }
     return os;
 }

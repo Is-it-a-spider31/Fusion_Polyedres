@@ -59,6 +59,6 @@ private:
      *
      * @return true si solution voisine acceptee, false sinon
     */
-    bool isNeighborAccepted(const int& currentEval, const int& neighborEval);
+    bool isNeighborAccepted(const double& currentEval, const double& neighborEval);
 
 };
