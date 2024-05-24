@@ -61,14 +61,18 @@ void Graph::addEdge(const int vertex1, const int vertex2, const Polyedre& merged
     // Ajout des sommets s'ils ne sont pas dans le graphe 
     addVertex(vertex1);
     addVertex(vertex2);
+    addVertex(mergedPoly.getId());
 
-    // Mise a jour des voisins
+    // Mise a jour des voisins (dans les 2 sens)
     addNeighbor(vertex1, vertex2);
-    addNeighbor(vertex2, vertex1);
 
     // Association du polyedre fusionne a l'arete
     d_edgeWeights[{vertex1, vertex2}] = mergedPoly;
     d_edgeWeights[{vertex2, vertex1}] = mergedPoly;
+    
+    // Marquer les aretes suivantes comme verifiees
+    markEdgeAsChecked(vertex1, mergedPoly.getId());
+    markEdgeAsChecked(vertex2, mergedPoly.getId());
 }
 
 /**
@@ -82,7 +86,7 @@ bool Graph::isVertexInGraph(const int& vertex)
 }
 
 /**
- * @brief Ajoute un nouveau voisin a un sommet
+ * @brief Ajoute un nouveau voisin a un sommet (et reciproquement)
  *
  * @param vertex Sommet
  * @param neigbhor Voisin a ajouter
@@ -92,6 +96,10 @@ void Graph::addNeighbor(int vertex, int neighbor)
     // Insertion du voisin s'il n'est pas deja dans la liste
     // (Rappel : d_neighborsMap[vertex] est un set, pas de doublons)
     d_neighborsMap[vertex].insert(neighbor);
+    d_neighborsMap[neighbor].insert(vertex);
+
+    // Marque l'arete comme verifiee
+    markEdgeAsChecked(vertex, neighbor);
 }
 
 /**
@@ -241,6 +249,31 @@ int Graph::getDiameter()
     return d_diameter;
 }
 
+/**
+ * @brief Marque une arete comme verifiee
+ * @param vertex1
+ * @param vertex2
+*/
+void Graph::markEdgeAsChecked(const int& vertex1, const int& vertex2)
+{
+    d_checkedEdges.insert({ vertex1, vertex2 });
+    d_checkedEdges.insert({ vertex2, vertex1 });
+}
+
+/**
+ * @return true si la fusion entre les 2 sommets a deja ete verifiee
+*/
+bool Graph::isEdgeAlreadyChecked(const int& vertex1, const int& vertex2)
+{
+    // Pas besoin de tester les 2 sens
+    pair<int, int> edge = { vertex1, vertex2 };
+    if (d_checkedEdges.find(edge) != d_checkedEdges.end())
+    {
+        return true;
+    }
+    return false;
+}
+
 
 // OPERATEUR
 
@@ -263,6 +296,12 @@ std::ostream& operator<<(std::ostream& os, const Graph& p)
             neighborsList.pop_back();  // Supprime la virgule
         }
         os << neighborsList << endl;
+    }
+
+    os << endl << "Fusions : " << endl;
+    for (const auto& pair : p.d_edgeWeights) {
+        os << "Fusion (" << pair.first.first << ", " << pair.first.second << ") : ";
+        os << pair.second.getId() << endl;
     }
     return os;
 }

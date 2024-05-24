@@ -2,6 +2,8 @@
 
 #include <unordered_map>
 #include <unordered_set>
+#include <utility> // Pour std::pair
+#include <functional> // Pour std::hash
 
 #include "Polyedre.h"
 
@@ -83,6 +85,18 @@ public:
     */
     int getDiameter();
 
+    /**
+     * @brief Marque une arete comme verifiee
+     * @param vertex1 
+     * @param vertex2 
+    */
+    void markEdgeAsChecked(const int& vertex1, const int& vertex2);
+
+    /**
+     * @return true si la fusion entre les 2 sommets a deja ete verifiee
+    */
+    bool isEdgeAlreadyChecked(const int& vertex1, const int& vertex2);
+
     // OPERATEUR
 
     friend std::ostream& operator<<(std::ostream& os, const Graph& p);
@@ -101,14 +115,12 @@ private:
     struct pair_hash {
         template <class T1, class T2>
         size_t operator () (const std::pair<T1, T2>& p) const {
-            auto hash1 = std::hash<T1>{}(p.first);
-            auto hash2 = std::hash<T2>{}(p.second);
-            return hash1 ^ hash2;
+            return std::hash<T1>()(p.first) ^ std::hash<T2>()(p.second);
         }
     };
 
     /**
-     * @brief Associe a chaque arete (2 sommets) un polyedre
+     * @brief Associe a chaque arete (2 sommets) un polyedre  .  
      * 
      * Il s'agit du polyedre resultant de la fusion des 2 polyedres 
      * qui correspondent au sommets de l'arete
@@ -116,12 +128,17 @@ private:
     unordered_map<pair<int, int>, Polyedre, pair_hash> d_edgeWeights;
 
     /**
+     * @brief Aretes dont la fusion des sommets a deja ete testee
+    */
+    unordered_set<pair<int, int>, pair_hash> d_checkedEdges;
+
+    /**
      * @brief Distance maximale possible entre 2 sommets
     */
     int d_diameter;
 
     /**
-     * @brief Ajoute un nouveau voisin a un sommet
+     * @brief Ajoute un nouveau voisin a un sommet (et reciproquement)
      *
      * @param vertex Sommet
      * @param neigbhor Voisin a ajouter

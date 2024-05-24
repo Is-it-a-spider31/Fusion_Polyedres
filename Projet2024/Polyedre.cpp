@@ -161,7 +161,7 @@ Polyedre Polyedre::merge2Polyhedra(const Polyedre& poly1, const Polyedre& poly2)
  *
  * @param poly1
  * @param poly2
- * @return Le polygone resultant de la fusion (id=-1 si fusion impossible)
+ * @return Le polygone resultant de la fusion (id = -1 si fusion impossible)
 */
 Polyedre Polyedre::merge2Polygones(const Polyedre& poly1, const Polyedre& poly2)
 {

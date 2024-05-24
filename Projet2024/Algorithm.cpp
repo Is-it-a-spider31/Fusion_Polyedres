@@ -22,7 +22,6 @@ Algorithm::Algorithm(const string& filename)
 
 	// Calcul du graphe des fusiosn convexes
 	initializeGraph();
-	d_mergeGraph.calculateDiameter();
 	//cout << d_mergeGraph;	// Affichage du graphe
 }
 
@@ -61,10 +60,16 @@ vector<Polyedre> Algorithm::mergeAlgorithm(const vector<Polyedre>& solution, int
 		nextPolyhedron = solution[nextPolyId];
 		d_nbMergeTry++;
 
-		// Si les 2 polyedres sont dans le graphe, 
-		//	cad que leur fusion a deja ete pre-calculee
+		bool isEdgeChecked = d_mergeGraph.isEdgeAlreadyChecked(
+			currentPolyhedron.getId(),
+			nextPolyhedron.getId()
+		);
+
+		// Si les 2 polyedres sont dans le graphe 
+		// et que leur fusion a deja ete testee
 		if (d_mergeGraph.isVertexInGraph(currentPolyhedron.getId())
-			&& d_mergeGraph.isVertexInGraph(nextPolyhedron.getId()))
+			&& d_mergeGraph.isVertexInGraph(nextPolyhedron.getId())
+			&& isEdgeChecked)
 		{
 			d_nbGraphUsage++;	// Pour les statistiques
 
@@ -107,6 +112,12 @@ vector<Polyedre> Algorithm::mergeAlgorithm(const vector<Polyedre>& solution, int
 			Polyedre mergedPoly = Polyedre::merge2Polyhedra(
 				currentPolyhedron, 
 				nextPolyhedron
+			);
+
+			// Indique que la fusion de ces 2 polyedres a ete testee
+			d_mergeGraph.markEdgeAsChecked(
+				currentPolyhedron.getId(), 
+				nextPolyhedron.getId()
 			);
 
 			// Si fusion effectuee
@@ -244,7 +255,10 @@ void Algorithm::initializeGraph()
 						);
 					}
 				}
-			} // poly1 & poly2 convexes
+			} // if poly1 & poly2 convexes
+
+			// Indique que la fusion de ces 2 polyedres a ete testee
+			d_mergeGraph.markEdgeAsChecked(poly1.getId(), poly2.getId());
 		} // for
 
 		// Ajout du dernier polyedre en tant que sommet du graphe
