@@ -20,7 +20,8 @@ protected:
 
 	vector<int> d_parent_1;
 	vector<int> d_parent_2;
-	int d_id_p1, d_id_p2;
+	
+	vector<vector<int>> d_parents;
 
 };
 

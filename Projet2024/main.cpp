@@ -8,6 +8,7 @@
 #include "genetic/TurnamentSelection.h"
 #include "genetic/NXCrossover.h"
 #include "genetic/InsertionMutation.h"
+#include "genetic/BestScoreSelection.h"
 
 
 #include <cstdlib> // Pour la fonction system()
@@ -56,12 +57,13 @@ int main(int argc, char* argv[])
 	crossover.test();*/
 
 	srand(time(NULL));
-	TurnamentSelection selection;
+	//TurnamentSelection selection;
+	BestScoreSelection selection;
 	InsertionMutation mutation;
 	NXCrossover crossover(5);
 
 	//GeneticAlgorithm ga{MERGE_TEST_PATH+"exemple3.obj", 50, 0.5, 0.5, 200, selection, mutation};
-	GeneticAlgorithm ga{MERGE_TEST_PATH+"exemple_complexe.obj", 50, 0.6, 0.4, 10000, selection, crossover, mutation};
+	GeneticAlgorithm ga{MERGE_TEST_PATH+"exemple_complexe.obj", 50, 0.9, 0.9, 10000, selection, crossover, mutation};
 	ga.run();
 
 

@@ -130,6 +130,7 @@
     <ClCompile Include="Algorithm.cpp" />
     <ClCompile Include="BruteForceAlgorithm.cpp" />
     <ClCompile Include="Face.cpp" />
+    <ClCompile Include="genetic\BestScoreSelection.cpp" />
     <ClCompile Include="genetic\GeneticAlgorithm.cpp" />
     <ClCompile Include="genetic\Crossover.cpp" />
     <ClCompile Include="genetic\Mutation.cpp" />
@@ -149,6 +150,7 @@
     <ClInclude Include="Algorithm.h" />
     <ClInclude Include="BruteForceAlgorithm.h" />
     <ClInclude Include="Face.h" />
+    <ClInclude Include="genetic\BestScoreSelection.h" />
     <ClInclude Include="genetic\GeneticAlgorithm.h" />
     <ClInclude Include="genetic\Crossover.h" />
     <ClInclude Include="genetic\Mutation.h" />

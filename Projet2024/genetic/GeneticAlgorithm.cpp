@@ -75,7 +75,7 @@ void GeneticAlgorithm::run()
 		//SI d_popsize = tgamma(d_dimension + 1) BREAK pck on a déja fait toutes les permutations
 		// donc il faut renvoyer le meilleur score. 
 		//if(d_popresized) { break; }
-		if (d_popResized)
+		if(d_popResized)
 		{
 			vector<Polyedre> solution_merged = mergeAlgorithm(d_permutScoreMax);
 
@@ -92,19 +92,25 @@ void GeneticAlgorithm::run()
 			int iteration = 0;
 			//while (iteration < d_maxIteration)
 			double stop = d_dimension / 5;
+
+			//index pour qu'il reste que des paires
+			int index_lasthalf = d_popSize / 2;
+			if (index_lasthalf % 2 != 0)
+			{
+				index_lasthalf--;
+			}
+
 			while(scoreMax < stop)
 			{
 				
-				cout << "----------------" << endl;
+				cout << "------ITERATION " << iteration << " --------" << endl;
 				printPopulation();
 				cout << "----------------" << endl;
 				
-
-				for (int individu = 0; individu < d_popSize; individu++)
+				for (int individu = ; individu < d_popSize; individu++)
 				{
 					//Selection
 					d_Selection->select(d_oldpop, d_oldscore_pop);
-					
 					/*
 					cout << "------------------indiv " << individu << endl;
 					cout << "Parent 1 --> " << d_Selection->getId_p1() << " : [";
@@ -172,7 +178,7 @@ void GeneticAlgorithm::run()
 				}
 				cout << " ]" << endl;
 
-				cout << "------------ITERATION " << iteration << "---------------" << endl;
+				//cout << "------------ITERATION " << iteration << "---------------" << endl;
 				iteration++;
 				d_oldpop = d_pop;
 			}

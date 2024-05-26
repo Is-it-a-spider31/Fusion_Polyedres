@@ -75,6 +75,7 @@ protected:
 	
 
 	vector<int> turnamentWinner;
+	vector<int> parents;
 
 	bool d_popResized = false;
 
