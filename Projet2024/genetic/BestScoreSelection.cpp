@@ -25,7 +25,17 @@ void BestScoreSelection::select(vector<vector<int>>& population, vector<double> 
 	population = sorted_population;
 	score = sorted_scores;
 
-	for(int i = population.size(); i < )
+	int index_lasthalf = population.size() / 2;
+	if (index_lasthalf % 2 != 0)
+	{
+		index_lasthalf--;
+	}
+
+	for (int i = population.size() - 1; i >= index_lasthalf; i--)
+	{
+		d_parents.push_back(population[i]);
+	}
+
 
 	/*for (int i = 0; i < population.size(); i++)
 	{

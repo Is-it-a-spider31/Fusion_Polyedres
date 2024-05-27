@@ -14,10 +14,28 @@
 #include <cstdlib> // Pour la fonction system()
 #include <string>
 
+#include <csignal>
+
 using namespace std;
+
+GeneticAlgorithm* ptr_ga = nullptr;
+
+void signalHandler(int signum) {
+	std::cout << "Interruption signal (" << signum << ") reçue." << std::endl;	
+	if (ptr_ga != nullptr)
+	{
+		ptr_ga->exportBest();	
+	}
+	
+	exit(signum);
+}
 
 int main(int argc, char* argv[])
 {
+
+	signal(SIGINT, signalHandler);
+
+
 	// Script qui supprime les fichiers .obj eventuellement generes 
 	// par d'anciennes executions du programme
 	#ifdef _WIN32 // OS Windows
@@ -63,7 +81,9 @@ int main(int argc, char* argv[])
 	NXCrossover crossover(5);
 
 	//GeneticAlgorithm ga{MERGE_TEST_PATH+"exemple3.obj", 50, 0.5, 0.5, 200, selection, mutation};
-	GeneticAlgorithm ga{MERGE_TEST_PATH+"exemple_complexe.obj", 50, 0.9, 0.9, 10000, selection, crossover, mutation};
+	GeneticAlgorithm ga{MERGE_TEST_PATH+"exemple_complexe.obj", 500, 0.7, 0.7, 10000, selection, crossover, mutation};
+	ptr_ga = &ga;
+
 	ga.run();
 
 

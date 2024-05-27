@@ -30,7 +30,7 @@ public:
 	double getProbaMut() const;
 	void printPopulation() const;
 
-	
+	void exportBest();
 
 	// FONCTIONS TYPIQUE DU GA
 

@@ -16,6 +16,10 @@ public:
 	int getId_p2() const;
 	vector<int> getParent2() const;
 
+	void clearParentsList();
+
+	vector<vector<int>> getParents() const;
+
 protected:
 
 	vector<int> d_parent_1;
