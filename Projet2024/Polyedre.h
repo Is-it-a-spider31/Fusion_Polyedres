@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Face.h"
+#include <set>
 
 
 /**
@@ -61,23 +62,22 @@ public:
 	void computeConvexity();
 
 	/**
-	 * @brief Genere un identifiant unique a partir d'une paire (a,b).
+	 * @brief Met a jour l'id et les composants du polyedre.
 	 * 
-	 * a et b sont interchangeables.
+	 * Met a jour l'ensemble des composants a partir de ceux des 2
+	 * polyedres en parametre.
+	 * Puis met a jour l'identifiant a partir de cet ensemble
 	 * 
-	 * @param id1 Id d'un polyedre
-	 * @param id2 Id d'un autre polyedre
-	 * @param min Nombre minimum qui peut etre genere
-	 * @return un identifiant unique
+	 * @param poly1
+	 * @param poly2 
 	*/
-	static int getUniqueIdFrom2Ids(
-		const int& id1, 
-		const int& id2, 
-		const int& min
+	void updateIdAndCompnenents(
+		const Polyedre& poly1,
+		const Polyedre& poly2
 	);
 
 	// GETTERS
-	int getId() const;
+	string getId() const;
 	string getMTL() const;
 	vector<Face> getFaces() const;
 
@@ -96,12 +96,17 @@ private:
 	/**
 	 * @brief Identifiant unique du polyedre
 	*/
-	int d_id;
+	string d_id;
 
 	/**
 	 * @brief Etat convexe / non convexe du polyèdre
 	*/
 	bool d_isConvex;
+
+	/**
+	 * @brief Sous polyedres qui constituent le polyedre actuel
+	*/
+	set<int> d_components;
 
 	string d_texture;
 

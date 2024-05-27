@@ -2,19 +2,23 @@
 #include "Plan.h"
 
 #include <iostream>
+#include <string>
 
 
 /**
 * Constructeur par defaut
 */
-Polyedre::Polyedre() : d_id(-1), d_isConvex(true) {}
+Polyedre::Polyedre() : d_id(""), d_isConvex(true) {}
 
 /**
  * @brief Constructeur avec un identifiant
  *
  * @param id Identifiant unique
 */
-Polyedre::Polyedre(int id) : d_id(id), d_isConvex(true) {}
+Polyedre::Polyedre(int id) : d_id(to_string(id)), d_isConvex(true) 
+{
+    d_components.insert(id);
+}
 
 /**
  * Constructeur par copie en excluant des faces.
@@ -116,16 +120,16 @@ Polyedre Polyedre::merge2AdjacentPolyhedra(
  * @brief Fusionne 2 polyedres si possible
  *
  * Si la fusion n'est pas possible, retourne un polyedre
- *	vide avec son id = -1
+ *	vide avec son id vide
  *
  * @param poly1
  * @param poly2
- * @return Le polyedre fusionne (id = -1 si pas possible)
+ * @return Le polyedre fusionne (id vide si pas possible)
 */
 Polyedre Polyedre::merge2Polyhedra(const Polyedre& poly1, const Polyedre& poly2)
 {
-    // id = -1 par defaut (fusion pas effectuee)
-    Polyedre mergedPoly(-1);
+    // id vide par defaut (fusion pas effectuee)
+    Polyedre mergedPoly;
 
     // recherche des faces communes entre les 2 polyedres
     vector<Face> sharedFaces = Polyedre::getSharedFaces(poly1, poly2);
@@ -138,6 +142,8 @@ Polyedre Polyedre::merge2Polyhedra(const Polyedre& poly1, const Polyedre& poly2)
             poly2,
             sharedFaces
         );
+        // Mise a jour de l'identifiant
+        mergedPoly.updateIdAndCompnenents(poly1, poly2);
     }
     else	// Pas de faces communes
     {
@@ -148,6 +154,8 @@ Polyedre Polyedre::merge2Polyhedra(const Polyedre& poly1, const Polyedre& poly2)
             // Fusionne 2 polygones (polyedres volume nul)
             //	id = -1 si pas possible
             mergedPoly = Polyedre::merge2Polygones(poly1, poly2);
+            // Mise a jour de l'identifiant
+            mergedPoly.updateIdAndCompnenents(poly1, poly2);
         }
     }
     return mergedPoly;
@@ -161,11 +169,11 @@ Polyedre Polyedre::merge2Polyhedra(const Polyedre& poly1, const Polyedre& poly2)
  *
  * @param poly1
  * @param poly2
- * @return Le polygone resultant de la fusion (id = -1 si fusion impossible)
+ * @return Le polygone resultant de la fusion (id vide si fusion impossible)
 */
 Polyedre Polyedre::merge2Polygones(const Polyedre& poly1, const Polyedre& poly2)
 {
-    Polyedre mergedPoly(-1);    // -1 par defaut : pas de fusion
+    Polyedre mergedPoly;    // Id vide par defaut
     const Face& face1 = poly1.faces[0];
     const Face& face2 = poly2.faces[0];
 
@@ -326,24 +334,35 @@ void Polyedre::computeConvexity()
 }
 
 /**
- * @brief Genere un identifiant unique a partir d'une paire (a,b).
+ * @brief Met a jour l'id et les composants du polyedre.
  *
- * a et b sont interchangeables.
+ * Met a jour l'ensemble des composants a partir de ceux des 2
+ * polyedres en parametre.
+ * Puis met a jour l'identifiant a partir de cet ensemble
  *
- * @param id1 Id d'un polyedre
- * @param id2 Id d'un autre polyedre
- * @param min Nombre minimum qui peut etre genere
- * @return un identifiant unique
+ * @param poly1
+ * @param poly2
 */
-int Polyedre::getUniqueIdFrom2Ids(const int& id1, const int& id2, const int& min)
+void Polyedre::updateIdAndCompnenents(const Polyedre& poly1, const Polyedre& poly2)
 {
-    return ((id1 + id2 - 1) * (id1 + id2 - 2)) / 2 + min;
+    d_components.insert(
+        poly1.d_components.begin(), 
+        poly1.d_components.end()
+    );
+    d_components.insert(
+        poly2.d_components.begin(), 
+        poly2.d_components.end()
+    );
+    d_id = "";
+    for (int elem : d_components) {
+        d_id += to_string(elem);
+    }
 }
 
 
 // GETTERS
 
-int Polyedre::getId() const { return d_id; }
+string Polyedre::getId() const { return d_id; }
 
 string Polyedre::getMTL() const
 {
@@ -359,7 +378,7 @@ void Polyedre::setMTL(string name)
 
 void Polyedre::setId(const int id)
 {
-    d_id = id;
+    d_id = to_string(id);
 }
 
 bool Polyedre::isConvex() const { return d_isConvex; }

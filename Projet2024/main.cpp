@@ -50,6 +50,7 @@ int main(int argc, char* argv[])
 	// TEST GRAPH
 	//Graph g;
 	//g.test();
+	//cout << g << endl;
 
 	// TESTS ALGO GENETIQUE ------------------------------------------
 

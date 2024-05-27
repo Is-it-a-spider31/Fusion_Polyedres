@@ -66,7 +66,7 @@ void GeneticAlgorithm::run()
 		cout << "Meilleur score apres init : " << scoreMax << " | [ ";
 		for (const auto& i : d_permutScoreMax)
 		{
-			std::cout << i.getId() - 1 << " ";
+			std::cout << i.getId() << " ";
 		}
 		cout << endl;
 		cout <<"=====================================================================" << endl;
@@ -163,7 +163,7 @@ void GeneticAlgorithm::run()
 				cout << "Best indiv : [ ";
 				for (const auto& i : d_permutScoreMax)
 				{
-					cout << i.getId() - 1 << " ";
+					cout << i.getId() << " ";
 				}
 				cout << " ]" << endl;
 

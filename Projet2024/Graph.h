@@ -28,7 +28,7 @@ public:
      * 
      * @param vertex Sommet a ajouter
     */
-    void addVertex(const int vertex);
+    void addVertex(const string vertex);
 
     /**
      * @brief Ajoute une arete au graphe entre 2 sommets
@@ -39,17 +39,17 @@ public:
      * @param vertex2 2eme sommet
      * @param mergedPoly Polyedre resultant de la fusion des 2 sommets
     */
-    void addEdge(const int vertex1, const int vertex2, const Polyedre& mergedPoly);
+    void addEdge(const string vertex1, const string vertex2, const Polyedre& mergedPoly);
 
     /**
      * @return true si le sommet est dans le graphe
     */
-    bool isVertexInGraph(const int& vertex);
+    bool isVertexInGraph(const string& vertex);
 
     /**
      * @return true si les 2 sommets sont voisins, false sinon
     */
-    bool areVerticesNeighbors(const int& vertex1, const int& vertex2);
+    bool areVerticesNeighbors(const string& vertex1, const string& vertex2);
 
     /**
      * @brief Renvoie le polyedre resultant de la fusion des 2 sommets
@@ -58,7 +58,7 @@ public:
      * @param vertex2 2eme polyedre
      * @return polyedre resultant de la fusion
     */
-    Polyedre getEdgeWeight(const int& vertex1, const int& vertex2);
+    Polyedre getEdgeWeight(const string& vertex1, const string& vertex2);
 
     /**
      * @brief Renvoie la distance entre deux sommets en utilisant BFS
@@ -70,7 +70,7 @@ public:
      * @param endVertex Sommet de fin
      * @return La distance entre les 2 sommets (ou -1)
     */
-    int calculateDistance(const int& startVertex, const int& endVertex);
+    int calculateDistance(const string& startVertex, const string& endVertex);
     
     /**
      * Renvoie le diametre du graphe, cad la distance entre
@@ -90,12 +90,12 @@ public:
      * @param vertex1 
      * @param vertex2 
     */
-    void markEdgeAsChecked(const int& vertex1, const int& vertex2);
+    void markEdgeAsChecked(const string& vertex1, const string& vertex2);
 
     /**
      * @return true si la fusion entre les 2 sommets a deja ete verifiee
     */
-    bool isEdgeAlreadyChecked(const int& vertex1, const int& vertex2);
+    bool isEdgeAlreadyChecked(const string& vertex1, const string& vertex2);
 
     // OPERATEUR
 
@@ -107,7 +107,7 @@ private:
     /**
      * @brief Associe a chaque sommet la liste de ses voisins sans doublons
     */
-    unordered_map<int, unordered_set<int>> d_neighborsMap;
+    unordered_map<string, unordered_set<string>> d_neighborsMap;
 
     /**
      * @brief Permet d'utiliser 2 clefs dans une map
@@ -125,12 +125,12 @@ private:
      * Il s'agit du polyedre resultant de la fusion des 2 polyedres 
      * qui correspondent au sommets de l'arete
     */
-    unordered_map<pair<int, int>, Polyedre, pair_hash> d_edgeWeights;
+    unordered_map<pair<string, string>, Polyedre, pair_hash> d_edgeWeights;
 
     /**
      * @brief Aretes dont la fusion des sommets a deja ete testee
     */
-    unordered_set<pair<int, int>, pair_hash> d_checkedEdges;
+    unordered_set<pair<string, string>, pair_hash> d_checkedEdges;
 
     /**
      * @brief Distance maximale possible entre 2 sommets
@@ -143,6 +143,6 @@ private:
      * @param vertex Sommet
      * @param neigbhor Voisin a ajouter
     */
-    void addNeighbor(int vertex, int neighbor);
+    void addNeighbor(string vertex, string neighbor);
 };
 

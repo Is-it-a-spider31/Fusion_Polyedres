@@ -96,7 +96,7 @@ vector<Polyedre> Algorithm::mergeAlgorithm(const vector<Polyedre>& solution, int
 				// Theoriquement, comme on a deja verifie que les 2 polyedres 
 				//	sont voisins dans le graphe, on ne devrait jamais rencontrer ce cas.
 				//	Cela signifierait un probleme dans la strcuture de donnees
-				if (currentPolyhedron.getId() == -1)
+				if (currentPolyhedron.getId().empty())
 				{
 					isMergeLegal = false;
 					cerr << "Graph::getEdgeWeight et Graph::areVerticesNeighbors "
@@ -108,7 +108,7 @@ vector<Polyedre> Algorithm::mergeAlgorithm(const vector<Polyedre>& solution, int
 		// Sinon, si les 2 polyedres sont convexes (cf. consignes du projet)
 		else if (currentPolyhedron.isConvex() && nextPolyhedron.isConvex())
 		{
-			// Fusion des 2 polyedres (id = -1 si impossible)
+			// Fusion des 2 polyedres (id vide si impossible)
 			Polyedre mergedPoly = Polyedre::merge2Polyhedra(
 				currentPolyhedron, 
 				nextPolyhedron
@@ -121,18 +121,12 @@ vector<Polyedre> Algorithm::mergeAlgorithm(const vector<Polyedre>& solution, int
 			);
 
 			// Si fusion effectuee
-			if (mergedPoly.getId() != -1)
+			if (!mergedPoly.getId().empty())
 			{	
 				// Teste si fusion convexe
 				mergedPoly.computeConvexity();
 				if (mergedPoly.isConvex())	// Fusion convexe
 				{
-					// Mise a jour de l'identifiant
-					mergedPoly.setId(Polyedre::getUniqueIdFrom2Ids(
-						currentPolyhedron.getId(),
-						nextPolyhedron.getId(),
-						solution.size()	// Minimum
-					));
 					// Mise a jour du graphe
 					d_mergeGraph.addEdge(
 						currentPolyhedron.getId(),	// 1er sommet de l'arete (polygone 1)
@@ -214,7 +208,7 @@ void Algorithm::initializeGraph()
 {
 	vector<Face> sharedFaces;
 	int size = d_polyhedra.size();
-	Polyedre poly1(-1), poly2(-1);	// Polyedres vides
+	Polyedre poly1, poly2;	// Polyedres vides
 
 	int nbTestedMerge = 0;
 
@@ -236,17 +230,11 @@ void Algorithm::initializeGraph()
 				// Fusion des 2 polyedres (id = -1 si impossible)
 				Polyedre mergedPoly = Polyedre::merge2Polyhedra(poly1, poly2);
 
-				if (mergedPoly.getId() != -1)	// Fusion effectuee
+				if (!mergedPoly.getId().empty())	// Fusion effectuee
 				{
 					mergedPoly.computeConvexity();
 					if (mergedPoly.isConvex())	// Fusion convexe
 					{
-						// Mise a jour de l'identifiant
-						mergedPoly.setId(Polyedre::getUniqueIdFrom2Ids(
-							poly1.getId(),
-							poly2.getId(),
-							size	// Minimum
-						));
 						// Ajout de l'arete avec le polyedre associe
 						d_mergeGraph.addEdge(
 							poly1.getId(),	// 1er sommet de l'arete (polygone 1)

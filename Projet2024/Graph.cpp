@@ -10,16 +10,15 @@ void Graph::test()
 {
     // cf. dessin papier
     // Les sommets sont ajoutes automatiquement
-    Polyedre p(-1);
-    addEdge(1, 2, p);
-    addEdge(2, 3, p);
-    addEdge(3, 4, p);
-    addEdge(3, 5, p);
-    addEdge(1, 5, p);
-    addEdge(1, 5, p);
-    addEdge(6, 5, p);
-    addEdge(1, 6, p);
-
+    Polyedre p(51);
+    addEdge("1", "2", p);
+    addEdge("2", "3", p);
+    addEdge("3", "4", p);
+    addEdge("3", "5", p);
+    addEdge("1", "5", p);
+    addEdge("1", "5", p);
+    addEdge("6", "5", p);
+    addEdge("1", "6", p);
     /*cout << "Distance of the graph: " << calculateDistance(2, 4) << endl;
     cout << "Distance of the graph: " << calculateDistance(6, 2) << endl;*/
 
@@ -33,12 +32,12 @@ void Graph::test()
  *
  * @param vertex Sommet a ajouter
 */
-void Graph::addVertex(const int vertex)
+void Graph::addVertex(const string vertex)
 {
     // Si le sommet n'est pas deja dans le graphe
     if (d_neighborsMap.find(vertex) == d_neighborsMap.end())
     {
-        d_neighborsMap[vertex] = unordered_set<int>();  // Ajout du sommet
+        d_neighborsMap[vertex] = unordered_set<string>();  // Ajout du sommet
     }
 }
 
@@ -53,7 +52,7 @@ void Graph::addVertex(const int vertex)
  * @param vertex2 2eme sommet
  * @param mergedPoly Polyedre resultant de la fusion des 2 sommets
 */
-void Graph::addEdge(const int vertex1, const int vertex2, const Polyedre& mergedPoly)
+void Graph::addEdge(const string vertex1, const string vertex2, const Polyedre& mergedPoly)
 {
     if (vertex1 == vertex2)
         return;
@@ -78,7 +77,7 @@ void Graph::addEdge(const int vertex1, const int vertex2, const Polyedre& merged
 /**
  * @return true si le sommet est dans le graphe
 */
-bool Graph::isVertexInGraph(const int& vertex)
+bool Graph::isVertexInGraph(const string& vertex)
 {
     if(d_neighborsMap.find(vertex) != d_neighborsMap.end())
         return true;
@@ -91,7 +90,7 @@ bool Graph::isVertexInGraph(const int& vertex)
  * @param vertex Sommet
  * @param neigbhor Voisin a ajouter
 */
-void Graph::addNeighbor(int vertex, int neighbor)
+void Graph::addNeighbor(string vertex, string neighbor)
 {
     // Insertion du voisin s'il n'est pas deja dans la liste
     // (Rappel : d_neighborsMap[vertex] est un set, pas de doublons)
@@ -105,7 +104,7 @@ void Graph::addNeighbor(int vertex, int neighbor)
 /**
  * @return true si les 2 sommets sont voisins, false sinon
 */
-bool Graph::areVerticesNeighbors(const int& vertex1, const int& vertex2)
+bool Graph::areVerticesNeighbors(const string& vertex1, const string& vertex2)
 {
     bool areNeighbors = false;
     // Si les sommets sont dans le graphe
@@ -125,12 +124,12 @@ bool Graph::areVerticesNeighbors(const int& vertex1, const int& vertex2)
  * @param vertex2 2eme polyedre
  * @return polyedre resultant de la fusion
 */
-Polyedre Graph::getEdgeWeight(const int& vertex1, const int& vertex2)
+Polyedre Graph::getEdgeWeight(const string& vertex1, const string& vertex2)
 {
     Polyedre mergedPoly(-1);
 
     // Creation d'une paire de clefs correspondant a une arete
-    pair<int, int> myPair = std::make_pair(vertex1, vertex2);
+    pair<string, string> myPair = std::make_pair(vertex1, vertex2);
 
     // Verification si la paire de cles a ete trouvee
     auto it = d_edgeWeights.find(myPair);
@@ -154,7 +153,7 @@ Polyedre Graph::getEdgeWeight(const int& vertex1, const int& vertex2)
  * @param endVertex Sommet de fin
  * @return La distance entre les 2 sommets (ou -1)
 */
-int Graph::calculateDistance(const int& startVertex, const int& endVertex)
+int Graph::calculateDistance(const string& startVertex, const string& endVertex)
 {
     // Si au moins un des deux sommets n'est pas dans le graphe
     if (d_neighborsMap.find(startVertex) == d_neighborsMap.end() 
@@ -165,11 +164,11 @@ int Graph::calculateDistance(const int& startVertex, const int& endVertex)
 
     // Associe a chaque sommet sa distance 
     //  avec le sommet de debut (-1 par defaut)
-    unordered_map<int, int> distancesMap; 
+    unordered_map<string, int> distancesMap;
 
     // File d'attente des sommets a traiter,
     //  cad les sommets dont on doit calculer la distance de leurs voisins
-    queue<int> verticesToProcess;           
+    queue<string> verticesToProcess;
 
     // Initialisation des distances a -1 pour indiquer
     //  q'elles ne sont pas encore calculees.
@@ -185,13 +184,13 @@ int Graph::calculateDistance(const int& startVertex, const int& endVertex)
     while (!verticesToProcess.empty()) 
     {
         // Sommet a traiter
-        int currentVertex = verticesToProcess.front();
+        string currentVertex = verticesToProcess.front();
         // Le sommet est retire de la file d'attente
         verticesToProcess.pop();
 
         // Parcours les voisins du sommet en cours de traitement
         //  et calcul de la distance pour chaque voisin si besoin
-        for (int neighbor : d_neighborsMap[currentVertex])
+        for (string neighbor : d_neighborsMap[currentVertex])
         {
             if (distancesMap[neighbor] == -1) // Si distance pas deja calculee
             {
@@ -254,7 +253,7 @@ int Graph::getDiameter()
  * @param vertex1
  * @param vertex2
 */
-void Graph::markEdgeAsChecked(const int& vertex1, const int& vertex2)
+void Graph::markEdgeAsChecked(const string& vertex1, const string& vertex2)
 {
     d_checkedEdges.insert({ vertex1, vertex2 });
     d_checkedEdges.insert({ vertex2, vertex1 });
@@ -263,10 +262,10 @@ void Graph::markEdgeAsChecked(const int& vertex1, const int& vertex2)
 /**
  * @return true si la fusion entre les 2 sommets a deja ete verifiee
 */
-bool Graph::isEdgeAlreadyChecked(const int& vertex1, const int& vertex2)
+bool Graph::isEdgeAlreadyChecked(const string& vertex1, const string& vertex2)
 {
     // Pas besoin de tester les 2 sens
-    pair<int, int> edge = { vertex1, vertex2 };
+    pair<string, string> edge = { vertex1, vertex2 };
     if (d_checkedEdges.find(edge) != d_checkedEdges.end())
     {
         return true;
@@ -285,9 +284,9 @@ std::ostream& operator<<(std::ostream& os, const Graph& p)
         os << "Sommet " << pair.first << endl;
         os << "\t Voisins : ";
         string neighborsList = "";
-        for (const int& i : pair.second)
+        for (const string& i : pair.second)
         {
-            neighborsList += to_string(i) + ", ";
+            neighborsList += i + ", ";
         }
         // Pour ne pas afficher la derniere virgule
         if (!neighborsList.empty()) 
