@@ -104,7 +104,8 @@ private:
 	bool d_isConvex;
 
 	/**
-	 * @brief Sous polyedres qui constituent le polyedre actuel
+	 * @brief Sous polyedres qui constituent le polyedre actuel.
+	 * Ordonne, pas de doublons
 	*/
 	set<int> d_components;
 

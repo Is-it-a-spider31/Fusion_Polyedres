@@ -54,7 +54,7 @@ void RecuitSimuleAlgorithm::run()
 
 			// EVALUATION
 			neighborEval = this->evaluateSolution(neighborSolution);
-			cout << "Eval : " << neighborEval << endl;
+			//cout << "Eval : " << neighborEval << endl;
 
 			// ACCEPTATION
 			if (isNeighborAccepted(currentEval, neighborEval))

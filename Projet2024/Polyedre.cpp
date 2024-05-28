@@ -353,7 +353,7 @@ void Polyedre::updateIdAndCompnenents(const Polyedre& poly1, const Polyedre& pol
         poly2.d_components.begin(), 
         poly2.d_components.end()
     );
-    d_id = "";
+    d_id = "0";
     for (int elem : d_components) {
         d_id += to_string(elem);
     }

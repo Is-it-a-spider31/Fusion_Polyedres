@@ -19,10 +19,10 @@ void Graph::test()
     addEdge("1", "5", p);
     addEdge("6", "5", p);
     addEdge("1", "6", p);
-    /*cout << "Distance of the graph: " << calculateDistance(2, 4) << endl;
-    cout << "Distance of the graph: " << calculateDistance(6, 2) << endl;*/
-
-    //cout << "Diametter of the graph: " << calculateDiameter(6, 2) << endl;
+    addVertex("9");
+    calculateDiameter();
+    cout << "Distance of the graph: " << calculateDistance("1", "9") << endl;
+    // cout << "Diametter of the graph: " << d_diameter << endl;
 }
 
 /**
@@ -208,6 +208,8 @@ int Graph::calculateDistance(const string& startVertex, const string& endVertex)
     }
 
     // Distance entre les 2 sommets
+    if (distancesMap[endVertex] == -1)
+        return d_diameter + 1;
     return distancesMap[endVertex];
 }
 

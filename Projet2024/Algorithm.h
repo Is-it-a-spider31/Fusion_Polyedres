@@ -95,10 +95,8 @@ protected:
     int d_nbMergeTry;
 
     /**
-     * @brief Somme des distances pour une solution
+     * @brief Valeur de l'evaluation de la derniere solution calculee
     */
-    int d_sumDistances;
-
     double d_objectiveValue;
 
 private:

@@ -15,13 +15,15 @@ using namespace std;
  * @param filename Nom du fichier .obj
 */
 Algorithm::Algorithm(const string& filename) 
-	: d_nbGraphUsage{0}, d_nbMergeTry{0}, d_sumDistances{0}, d_objectiveValue{0}
+	: d_nbGraphUsage{0}, d_nbMergeTry{0}, d_objectiveValue{0}
 {
 	// Chargement des donnees a partir du fichier .obj
 	OBJFileHandler::loadOBJ(d_vertices, d_faces, d_polyhedra, filename);
 
 	// Calcul du graphe des fusiosn convexes
 	initializeGraph();
+	d_mergeGraph.calculateDiameter();
+	cout << "DIAMETRE : " << d_mergeGraph.getDiameter() << endl;
 	//cout << d_mergeGraph;	// Affichage du graphe
 }
 
@@ -42,8 +44,9 @@ vector<Polyedre> Algorithm::mergeAlgorithm(const vector<Polyedre>& solution, int
 	Polyedre currentPolyhedron = solution[0];
 	Polyedre nextPolyhedron(0);
 	
-	d_sumDistances = 0;
-	int nbConsecutiveMerges = 0;
+	double sumDistances = 0.0;
+	double nbConsecutiveMerges = 0;
+	double reward  = 0.0;
 
 	// Liste des polyedres avec fusion
 	vector<Polyedre> mergedPolyhedra;
@@ -67,14 +70,12 @@ vector<Polyedre> Algorithm::mergeAlgorithm(const vector<Polyedre>& solution, int
 
 		// Si les 2 polyedres sont dans le graphe 
 		// et que leur fusion a deja ete testee
-		if (d_mergeGraph.isVertexInGraph(currentPolyhedron.getId())
-			&& d_mergeGraph.isVertexInGraph(nextPolyhedron.getId())
-			&& isEdgeChecked)
+		if (isEdgeChecked)
 		{
 			d_nbGraphUsage++;	// Pour les statistiques
 
-			// Maj de la distance entre les 2 sommets qu'on essaye de fusionner
-			d_sumDistances += d_mergeGraph.calculateDistance(
+			// Maj de la distance entre les 2 sommets qu'on a essaye de fusionner
+			sumDistances += d_mergeGraph.calculateDistance(
 				currentPolyhedron.getId(),
 				nextPolyhedron.getId()
 			);
@@ -134,6 +135,13 @@ vector<Polyedre> Algorithm::mergeAlgorithm(const vector<Polyedre>& solution, int
 						mergedPoly		// Polyedre fusionne
 					);
 
+
+					// Maj de la distance entre les 2 sommets qu'on a essaye de fusionner
+					sumDistances += d_mergeGraph.calculateDistance(
+						currentPolyhedron.getId(),
+						nextPolyhedron.getId()
+					);
+
 					currentPolyhedron = mergedPoly;
 					isMergeLegal = true;
 				}
@@ -148,6 +156,11 @@ vector<Polyedre> Algorithm::mergeAlgorithm(const vector<Polyedre>& solution, int
 			mergedPolyhedra.push_back(currentPolyhedron);
 			currentPolyhedron = solution[nextPolyId];
 
+			// Somme des nbConsecutiveMerges (pour calculer la moyenne plus tard)
+			if (nbConsecutiveMerges >  1)
+				reward += pow(nbConsecutiveMerges, 2);
+			nbConsecutiveMerges = 0;
+
 			// Si on a deja une meilleur solution
 			if (limitNbPoly != -1 && mergedPolyhedra.size() >= limitNbPoly)
 			{
@@ -158,6 +171,7 @@ vector<Polyedre> Algorithm::mergeAlgorithm(const vector<Polyedre>& solution, int
 		{
 			nbConsecutiveMerges++;
 		}
+
 		nextPolyId++;
 	}	// while
 
@@ -171,12 +185,25 @@ vector<Polyedre> Algorithm::mergeAlgorithm(const vector<Polyedre>& solution, int
 		mergedPolyhedra.clear();
 	}
 
+	// EVALUATION
+	//cout << endl << "------------------" << endl;
+	// Calcul de la penalite penalite (d_sumDistances >= 1)
+	// cout << "sum distances = " << sumDistances << endl;
+	double penality = pow(sumDistances/d_mergeGraph.getDiameter()/solution.size(), 2)/3;
+	// cout << "Penalite : " << penality << endl;
+	// Calcul de la recompense
+	// cout << "Val reward avant calcul : " << reward << endl;
+	double min = 0;
+	double max = pow((solution.size() - 1), 2);
+	reward = (reward - min)/(max-min)*2;
+	// cout << "Recompense : " << reward << endl;
 	// Evaluation de la soluion courante
-	d_objectiveValue = d_sumDistances - d_mergeGraph.getDiameter() + 1;
-	// On applique une penalite
-	double penality =
-		d_sumDistances / (d_mergeGraph.getDiameter() * (solution.size()));
-	d_objectiveValue += penality;
+	// cout << "nb poly : " << mergedPolyhedra.size() << endl;
+	d_objectiveValue = 1 + (
+		static_cast<double>(mergedPolyhedra.size()) 
+		/ static_cast<double>(solution.size())
+		) + penality - reward;
+	// cout << "Objectif = " << d_objectiveValue << endl;
 
 	return mergedPolyhedra;
 }
@@ -192,10 +219,9 @@ vector<Polyedre> Algorithm::mergeAlgorithm(const vector<Polyedre>& solution, int
 */
 double Algorithm::evaluateSolution(const vector<Polyedre>& solution)
 {
-	double size = mergeAlgorithm(solution).size();
-	double penality =
-		d_sumDistances / (d_mergeGraph.getDiameter() * (size - 1));
-	return penality;
+	// d_objectiveValue mis a jour dans la fonction 'mergeAlgorithm'
+	mergeAlgorithm(solution);
+	return d_objectiveValue;
 }
 
 /**
