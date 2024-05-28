@@ -3,7 +3,7 @@
 void TurnamentSelection::select(vector<vector<int>>& population, vector<double> score)
 {
 	//nbIndivInTurnament = population.size() / 8;
-	nbIndivInTurnament = 2;
+	nbIndivInTurnament = population.size() / 2;
 
 	vector<int> indexToFight(nbIndivInTurnament, -1);
 	int cpt_correct_number = 0;
@@ -42,7 +42,7 @@ void TurnamentSelection::select(vector<vector<int>>& population, vector<double> 
 
 	//cout << "Winner 1 = " << winner1 << " | Winner 2 = " << winner2 << endl;
 	d_parent_1 = population[winner1];
-	d_id_p1 = winner1;
+	//d_id_p1 = winner1;
 	cpt_correct_number = 0;
 
 	vector<int> indexToFight2(nbIndivInTurnament, -1);
@@ -71,6 +71,6 @@ void TurnamentSelection::select(vector<vector<int>>& population, vector<double> 
 	}
 
 	d_parent_2 = population[winner2];
-	d_id_p2 = winner2;
+	//d_id_p2 = winner2;
 	
 }

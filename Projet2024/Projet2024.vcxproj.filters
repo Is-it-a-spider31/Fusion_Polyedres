@@ -74,6 +74,8 @@
     </ClCompile>
     <ClCompile Include="Graph.cpp">
       <Filter>Fichiers sources</Filter>
+    <ClCompile Include="genetic\BestScoreSelection.cpp">
+      <Filter>Fichiers sources\genetic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -127,6 +129,8 @@
     </ClInclude>
     <ClInclude Include="Graph.h">
       <Filter>Fichiers d%27en-tête</Filter>
+    <ClInclude Include="genetic\BestScoreSelection.h">
+      <Filter>Fichiers d%27en-tête\genetic</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
