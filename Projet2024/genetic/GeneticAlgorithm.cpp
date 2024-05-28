@@ -98,6 +98,7 @@ void GeneticAlgorithm::run()
 				
 				cout << "------ITERATION " << iteration << " --------" << endl;
 				//printPopulation();
+				if(iteration % 10 == 0) printPopulation();
 				cout << "----------------" << endl;
 				
 				//Selection
@@ -133,14 +134,67 @@ void GeneticAlgorithm::run()
 
 				//SUPPRIMER LES TRUCS EN TROP DE LA POPULATION NORMALE
 				d_pop.clear();
-					
+
+				/*---------------------------------------------------------------------------------------------------------
+
+				vector<vector<int>> tmpParents;
+				tmpParents = d_Selection->getParents();
+
+				cout << "---------------LISTE PARENTS--------------------" << tmpParents.size() << endl;
+				for (int t = 0; t < tmpParents.size(); t++)
+				{
+					cout << "[ ";
+					for (int k = 0; k < tmpParents[t].size(); k++)
+					{
+						cout << tmpParents[t][k] << " ";
+					}
+					cout << " ] ----- Parent numero " << t << endl;
+				}
+					*/
 						vector<int> child1, child2;
-						for (int i = 0; i < d_Selection->getParents().size() - 1; i++)
+						for (int i = 0; i < d_Selection->getParents().size() - 1; i=i+2)
 						{
+
 							child1.clear();
 							child2.clear();
-							d_Crossover->cross(d_Selection->getParents()[i], d_Selection->getParents()[i+1], child1, child2);
+
+							vector<int> tmpP1, tmpP2;
+							tmpP1 = d_Selection->getParents()[i];
+							tmpP2 = d_Selection->getParents()[i+1];
 							
+							d_Crossover->cross(d_Selection->getParents()[i], d_Selection->getParents()[i + 1], child1, child2);
+
+							/*
+							cout << "Parent 1 : [ ";
+							for (const auto& p : tmpP1)
+							{
+								cout << p << " ";
+							}
+							cout << " ]" << endl;
+
+							cout << "Parent 2 : [ ";
+							for (const auto& p : tmpP2)
+							{
+								cout << p << " ";
+							}
+							cout << " ]" << endl;
+
+							cout << "Enfant 1 : [ ";
+							for (const auto& p : child1)
+							{
+								cout << p << " ";
+							}
+							cout << " ]" << endl;
+
+							cout << "Enfant 2 : [ ";
+							for (const auto& p : child2)
+							{
+								cout << p << " ";
+							}
+							cout << " ]" << endl;
+							*/
+
+
 							int rdm_mut = rand() % 101;
 							if (rdm_mut < d_mutationProba * 100)
 							{
