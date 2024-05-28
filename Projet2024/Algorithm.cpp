@@ -24,7 +24,7 @@ Algorithm::Algorithm(const string& filename)
 	initializeGraph();
 	d_mergeGraph.calculateDiameter();
 	cout << "DIAMETRE : " << d_mergeGraph.getDiameter() << endl;
-	//cout << d_mergeGraph;	// Affichage du graphe
+	// cout << d_mergeGraph;	// Affichage du graphe
 }
 
 /**
