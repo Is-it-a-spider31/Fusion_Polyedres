@@ -6,6 +6,7 @@ class TurnamentSelection : public Selection
 public:
 
 	void select(vector<vector<int>>& population, vector<double> score) override;
+	void oneWinnerTurnament(vector<vector<int>>& population, vector<double>& score, int& winner);
 
 private:
 

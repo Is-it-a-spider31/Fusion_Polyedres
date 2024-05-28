@@ -35,7 +35,7 @@ void GeneticAlgorithm::run()
 
 		//Evaluation
 
-		double scoreMax = 0.0;
+		double scoreMin = 10e6;
 
 		d_score_pop.clear();
 		for (int i = 0; i < d_popSize; i++)
@@ -43,15 +43,15 @@ void GeneticAlgorithm::run()
 			//Transforme le tableau d'index en tableau de polyhedre
 			vector<Polyedre> solution = perm2Poly(i);
 
-			double current_indiv_score = (double)d_dimension / (double)evaluateSolution(solution);
+			double current_indiv_score = evaluateSolution(solution);
 			d_score_pop.push_back(current_indiv_score);
 
 			//MAJ du score max et index
-			if (current_indiv_score > scoreMax)
+			if (current_indiv_score < scoreMin)
 			{
 				//cout << "permutation n°" << i << " : score = " << current_indiv_score << " | NB POLYEDRE FINAL : " << evaluateSolution(solution) << endl;
 
-				scoreMax = current_indiv_score;
+				scoreMin = current_indiv_score;
 				d_permutScoreMax = solution;
 			}
 
@@ -63,7 +63,7 @@ void GeneticAlgorithm::run()
 		//printPopulation();
 		
 		cout << "=====================================================================" << endl;
-		cout << "Meilleur score apres init : " << scoreMax << " | [ ";
+		cout << "Meilleur score apres init : " << scoreMin << " | [ ";
 		for (const auto& i : d_permutScoreMax)
 		{
 			std::cout << i.getId() << " ";
@@ -91,9 +91,9 @@ void GeneticAlgorithm::run()
 			//-----------------------------TANT QUE----------------------------------------------------
 			int iteration = 0;
 			//while (iteration < d_maxIteration)
-			double stop = d_dimension / 5;
+			//double stop = 20;
 
-			while(scoreMax < stop)
+			while(true)
 			{
 				
 				cout << "------ITERATION " << iteration << " --------" << endl;
@@ -236,12 +236,12 @@ void GeneticAlgorithm::run()
 						for (int indice = 0; indice < d_pop.size(); indice++)
 						{
 							vector<Polyedre> toEvaluate = perm2Poly(indice);
-							double new_indiv_score = (double)d_dimension / (double)evaluateSolution(toEvaluate);
+							double new_indiv_score = evaluateSolution(toEvaluate);
 							d_score_pop[indice] = new_indiv_score;
 
-							if (new_indiv_score > scoreMax)
+							if (new_indiv_score < scoreMin)
 							{
-								scoreMax = new_indiv_score;
+								scoreMin = new_indiv_score;
 								d_permutScoreMax = toEvaluate;
 							}
 							
@@ -249,7 +249,7 @@ void GeneticAlgorithm::run()
 						}
 					
 
-				cout << "Best score : " << scoreMax << endl;
+				cout << "Best score : " << scoreMin << endl;
 				cout << "Best indiv : [ ";
 				for (const auto& i : d_permutScoreMax)
 				{
