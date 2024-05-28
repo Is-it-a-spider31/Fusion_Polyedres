@@ -190,12 +190,12 @@ void OBJFileHandler::loadOBJ(vector<Point>& vertices, vector<Face>& faces, vecto
                 delete iss;
             }
            
-
+            // Calcul de la convexite pour chaque polyedre
             for (auto& p : polyhedrons)
             {
                 p.computeConvexity();
             }
-        }
+        } // if file open
 
         objFile.close();
 

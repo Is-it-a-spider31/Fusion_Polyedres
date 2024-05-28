@@ -42,11 +42,12 @@ private:
     std::mt19937 d_randomGenerator;
 
     /**
-     * @brief Permute 2 elements dans la liste
+     * @brief Permute N > 1 elements dans la liste
      *
      * @param polyhedra Liste de polyedres a permuter
+     * @param n nombre d'elements a permuter
     */
-    void permute2Elements(vector<Polyedre>& polyhedra);
+    void permuteNElements(vector<Polyedre>& polyhedra, const size_t n);
 
     /**
      * @brief Teste si la solution voisine est acceptee ou pas
@@ -59,6 +60,6 @@ private:
      *
      * @return true si solution voisine acceptee, false sinon
     */
-    bool isNeighborAccepted(const int& currentEval, const int& neighborEval);
+    bool isNeighborAccepted(const double& currentEval, const double& neighborEval);
 
 };

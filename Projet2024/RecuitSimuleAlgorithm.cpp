@@ -30,10 +30,11 @@ void RecuitSimuleAlgorithm::run()
 	vector<Polyedre> currentSolution = d_polyhedra;
 	vector<Polyedre> neighborSolution = d_polyhedra;	// Solution voisine
 
-	int currentEval = this->evaluateSolution(currentSolution);
-	int neighborEval;
+	double currentEval = this->evaluateSolution(currentSolution);
+	double neighborEval;
 	double palier;
 	double n = 0;
+	int maxIter = 10000;
 
 	while (d_temperature > 1)	// Critere d'arret (a changer)
 	{
@@ -45,15 +46,16 @@ void RecuitSimuleAlgorithm::run()
 		//cout << "palier : " << palier << endl;
 		n = 0;
 
-		while (n < palier)
+		while (n < maxIter)
 		{
 			//cout << "\tn : " << n << endl;
 			// PERTURBATION
 			neighborSolution = currentSolution;
-			this->permute2Elements(neighborSolution);
+			this->permuteNElements(neighborSolution, 3);
 
 			// EVALUATION
 			neighborEval = this->evaluateSolution(neighborSolution);
+			//cout << "Eval : " << neighborEval << endl;
 
 			// ACCEPTATION
 			if (isNeighborAccepted(currentEval, neighborEval))
@@ -69,7 +71,7 @@ void RecuitSimuleAlgorithm::run()
 				//cout << endl;
 
 			}
-			n+=0.15;
+			n++;
 		} 
 	}
 
@@ -83,27 +85,39 @@ void RecuitSimuleAlgorithm::run()
 }
 
 /**
- * @brief Permute 2 elements dans la liste
+ * @brief Permute N > 1 elements dans la liste
  *
- * @param polyhedra Reference vers la liste de polyedres a permuter
+ * @param polyhedra Liste de polyedres a permuter
+ * @param n nombre d'elements a permuter
 */
-void RecuitSimuleAlgorithm::permute2Elements(vector<Polyedre>& polyhedra)
+void RecuitSimuleAlgorithm::permuteNElements(vector<Polyedre>& polyhedra, const size_t n)
 {
-	if (!polyhedra.empty())
+	// Si liste vide ou n < 2 : permutation impossible
+	if (polyhedra.empty() || n < 2 || n > polyhedra.size())
+		return;
+
+	std::uniform_int_distribution<size_t> dis(0, polyhedra.size() - 1);
+	vector<size_t> indices;	// indices des N elements a permuter
+
+	// Liste des N indices a permuter
+	while (indices.size() < n) 
 	{
-		// Genere un index aléatoire dans l'interval [0, size()-1]
-		// selon une loi de distribution uniforme
-		std::uniform_int_distribution<size_t> dis(0, polyhedra.size() - 1);
-
-		size_t index = dis(d_randomGenerator);
-
-		size_t index2 = dis(d_randomGenerator);
-		while (index2 == index)
-			index2 = dis(d_randomGenerator);
-
-		// Permute l'element à l'index avec un autre element choisi aleatoirement
-		std::swap(polyhedra[index], polyhedra[index2]);
+		size_t index = dis(d_randomGenerator);	// Indice aleatoire
+		// Il faut que l'indice soit different des precedents
+		if (std::find(indices.begin(), indices.end(), index) == indices.end())
+			indices.push_back(index);	// Ajout de l'indice
 	}
+
+	// Ajout des elements a permuter dans une liste temporaire
+	vector<Polyedre> temp(n);
+	for (size_t i = 0; i < n; ++i) 
+		temp[i] = polyhedra[indices[i]];
+	// Melange des elements
+	std::shuffle(temp.begin(), temp.end(), d_randomGenerator);
+
+	// Modification de la liste initiale
+	for (size_t i = 0; i < n; ++i)
+		polyhedra[indices[i]] = temp[i];
 }
 
 /**
@@ -117,7 +131,7 @@ void RecuitSimuleAlgorithm::permute2Elements(vector<Polyedre>& polyhedra)
   *
   * @return true si solution voisine acceptee, false sinon
  */
-bool RecuitSimuleAlgorithm::isNeighborAccepted(const int& currentEval, const int& neighborEval)
+bool RecuitSimuleAlgorithm::isNeighborAccepted(const double& currentEval, const double& neighborEval)
 {
 	bool isAccepted = true;
 

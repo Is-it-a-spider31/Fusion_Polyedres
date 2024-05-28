@@ -72,6 +72,8 @@
     <ClCompile Include="genetic\TurnamentSelection.cpp">
       <Filter>Fichiers sources\genetic</Filter>
     </ClCompile>
+    <ClCompile Include="Graph.cpp">
+      <Filter>Fichiers sources</Filter>
     <ClCompile Include="genetic\BestScoreSelection.cpp">
       <Filter>Fichiers sources\genetic</Filter>
     </ClCompile>
@@ -125,6 +127,8 @@
     <ClInclude Include="genetic\TurnamentSelection.h">
       <Filter>Fichiers d%27en-tête\genetic</Filter>
     </ClInclude>
+    <ClInclude Include="Graph.h">
+      <Filter>Fichiers d%27en-tête</Filter>
     <ClInclude Include="genetic\BestScoreSelection.h">
       <Filter>Fichiers d%27en-tête\genetic</Filter>
     </ClInclude>

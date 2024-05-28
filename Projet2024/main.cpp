@@ -1,15 +1,16 @@
 #include <iostream>
-#include "Algorithm.h"
+#include <cstdlib> // Pour la fonction system()
+#include <string>
 
+#include "Algorithm.h"
 #include "BruteForceAlgorithm.h"
 #include "RecuitSimuleAlgorithm.h"
-#include "genetic/GeneticAlgorithm.h"
 
+#include "genetic/GeneticAlgorithm.h"
 #include "genetic/TurnamentSelection.h"
 #include "genetic/NXCrossover.h"
 #include "genetic/InsertionMutation.h"
 #include "genetic/BestScoreSelection.h"
-
 
 #include <cstdlib> // Pour la fonction system()
 #include <string>
@@ -21,7 +22,7 @@ using namespace std;
 GeneticAlgorithm* ptr_ga = nullptr;
 
 void signalHandler(int signum) {
-	std::cout << "Interruption signal (" << signum << ") reçue." << std::endl;	
+	std::cout << "Interruption signal (" << signum << ") reÃ§ue." << std::endl;	
 	if (ptr_ga != nullptr)
 	{
 		ptr_ga->exportBest();	
@@ -50,7 +51,7 @@ int main(int argc, char* argv[])
 	const string BUGS_TEST_PATH = "Tests/BugsTests/";
 
 	//TEST ALGO BRUTE-FORCE
-	//BruteForceAlgorithm bruteforce(MERGE_TEST_PATH+"exemple2.obj");
+	//BruteForceAlgorithm bruteforce(MERGE_TEST_PATH+"exemple3.obj");
 	//bruteforce.run();
 
 	//TEST RECUIT SIMULE
@@ -68,12 +69,18 @@ int main(int argc, char* argv[])
 	//algo.test_WriteObj();
 	//algo.test_LoadObj();
 
-	//------------------------------------------
+	// TEST GRAPH
+	//Graph g;
+	//g.test();
+	//cout << g << endl;
+
+	// TESTS ALGO GENETIQUE ------------------------------------------
 
 	// Test Crossover
 	/*NXCrossover crossover(3);
 	crossover.test();*/
 
+	/*
 	srand(time(NULL));
 	//TurnamentSelection selection;
 	BestScoreSelection selection;
@@ -85,9 +92,7 @@ int main(int argc, char* argv[])
 	ptr_ga = &ga;
 
 	ga.run();
-
-
-	
+	*/
 
 	//faire gaffe si la population est petite et la dimension aussi
 

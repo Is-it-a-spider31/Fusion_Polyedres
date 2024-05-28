@@ -22,10 +22,10 @@ public:
 	 * Effectue le croisement des 2 parent et modifie
 	 * les enfants en parametres en consequence
 	 * 
-	 * @param parent1 
-	 * @param parent2 
-	 * @param child1 Enfant vide qui sera modifie
-	 * @param child2 Enfant vide qui sera modifie
+	 * @param[in] parent1 
+	 * @param[in] parent2 
+	 * @param[out] child1 Enfant vide qui sera modifie
+	 * @param[out] child2 Enfant vide qui sera modifie
 	*/
 	void cross(
 		const vector<int>& parent1, 
