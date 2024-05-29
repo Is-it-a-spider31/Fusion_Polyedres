@@ -142,6 +142,7 @@
     <ClCompile Include="genetic\TurnamentSelection.cpp" />
     <ClCompile Include="Graph.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="myUtils.cpp" />
     <ClCompile Include="OBJFileHandler.cpp" />
     <ClCompile Include="Plan.cpp" />
     <ClCompile Include="Point.cpp" />
@@ -163,6 +164,7 @@
     <ClInclude Include="genetic\InsertionMutation.h" />
     <ClInclude Include="genetic\TurnamentSelection.h" />
     <ClInclude Include="Graph.h" />
+    <ClInclude Include="myUtils.h" />
     <ClInclude Include="OBJFileHandler.h" />
     <ClInclude Include="Plan.h" />
     <ClInclude Include="Point.h" />

@@ -55,7 +55,7 @@ int main(int argc, char* argv[])
 	//bruteforce.run();
 
 	//TEST RECUIT SIMULE
-	RecuitSimuleAlgorithm recuit(MERGE_TEST_PATH+"exemple3.obj");
+	RecuitSimuleAlgorithm recuit(MERGE_TEST_PATH+"exemple.obj");
 	recuit.run();
 
 	// TESTS CONVEXITE
