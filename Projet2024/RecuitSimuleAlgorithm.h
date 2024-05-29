@@ -18,6 +18,11 @@ public:
     */
     void run() override;
 
+    /**
+     * @brief Affiche le graphique qui montre l'evolution des donnees de l'algo
+     */
+    void printDataChart() override;
+
 private:
 
     /**

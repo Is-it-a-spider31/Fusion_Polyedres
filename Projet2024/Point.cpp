@@ -2,6 +2,15 @@
 
 
 /**
+ * @brief Constructeur a partir de 2 coordonnees.
+ * La coordonnee en z est ignoree
+ *
+ * @param x coordonnee en x
+ * @param y coordonnee en y
+*/
+Point::Point(double x, double y) : d_id(-1), d_x(x), d_y(y), d_z(0) {}
+
+/**
  * @brief Constructeur a partir de 3 coordonnees
  *
  * @param id identifiant unique du point
@@ -27,7 +36,7 @@ Point::Point(const Point& p)
 Point::~Point() {}
 
 /**
- * @brief Teste si 2 arretes sont identiques
+ * @brief Teste si 2 arretes sont identiques.
  *
  * Teste si les segments [p1, p2] et [q1, q2]
  * sont identiques et si les points des 2 arretes

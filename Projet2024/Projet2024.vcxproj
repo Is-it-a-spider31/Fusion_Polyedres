@@ -129,6 +129,7 @@
   <ItemGroup>
     <ClCompile Include="Algorithm.cpp" />
     <ClCompile Include="BruteForceAlgorithm.cpp" />
+    <ClCompile Include="ExportAlgoData.cpp" />
     <ClCompile Include="Face.cpp" />
     <ClCompile Include="genetic\GeneticAlgorithm.cpp" />
     <ClCompile Include="genetic\Crossover.cpp" />
@@ -149,6 +150,7 @@
   <ItemGroup>
     <ClInclude Include="Algorithm.h" />
     <ClInclude Include="BruteForceAlgorithm.h" />
+    <ClInclude Include="ExportAlgoData.h" />
     <ClInclude Include="Face.h" />
     <ClInclude Include="genetic\GeneticAlgorithm.h" />
     <ClInclude Include="genetic\Crossover.h" />
