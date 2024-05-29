@@ -7,6 +7,7 @@
 #include "Face.h"
 #include "Polyedre.h"
 #include "Graph.h"
+#include "ExportAlgoData.h"
 
 using namespace std;
 
@@ -29,21 +30,6 @@ public:
      * Methode abstraite !
     */
     virtual void run() = 0;
-
-    /**
-     * @brief Algorithme de fusion d'une solution (liste de polyedres).
-     * 
-     * Effectue les fusions possibles dans l'ordre pour 
-     * un ensemble de polyedres donnes.
-     * On arrete l'Algorithme de fusion si le nombre de polyedres depasse
-     * la limite fixee (si -1 alors pas de limite).
-     * 
-     * @param solution  liste de polyedres
-     * @param limitNbPoly Nombre limite de polyedres (-1 par defaut, pas de limite) 
-     * @param nbGraphUsage Nombre de fois que le graphe des fusions a ete utilise
-     * @return nombre de polyedres apres fusions
-    */
-    vector<Polyedre> mergeAlgorithm(const vector<Polyedre>& solution, int limitNbPoly=-1);
 
     /**
      * @brief Fonction d'evaluation d'une solution.
@@ -98,6 +84,27 @@ protected:
      * @brief Valeur de l'evaluation de la derniere solution calculee
     */
     double d_objectiveValue;
+
+    /**
+     * @brief Permet de stocker et ecrire des donnes de l'algo
+    */
+    ExportAlgoData d_dataWriter;
+
+
+    /**
+     * @brief Algorithme de fusion d'une solution (liste de polyedres).
+     *
+     * Effectue les fusions possibles dans l'ordre pour
+     * un ensemble de polyedres donnes.
+     * On arrete l'Algorithme de fusion si le nombre de polyedres depasse
+     * la limite fixee (si -1 alors pas de limite).
+     *
+     * @param solution  liste de polyedres
+     * @param limitNbPoly Nombre limite de polyedres (-1 par defaut, pas de limite)
+     * @param nbGraphUsage Nombre de fois que le graphe des fusions a ete utilise
+     * @return nombre de polyedres apres fusions
+    */
+    vector<Polyedre> mergeAlgorithm(const vector<Polyedre>& solution, int limitNbPoly = -1);
 
 private:
     /**

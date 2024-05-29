@@ -77,7 +77,7 @@
 *.lib
 
 # Ignorer les fichiers exécutables
-*.exe
+# *.exe
 *.out
 *.app
 
@@ -88,3 +88,11 @@ Anciens_Groupes/projetNathan/ProjectNathanVS/ProjectNathanVS/x64/Debug/vc143.idb
 */*/generated/*.obj
 */Projet2024/x64/*
 *.blend1
+
+
+# PYTHON PYCHARM
+*.toc
+*.html
+*.pyc
+*/scripts/pythonGenerateGraph/build/*
+*/scripts/pythonGenerateGraph/.idea/*

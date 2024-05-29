@@ -10,9 +10,9 @@
 const string RecuitSimuleAlgorithm::GENERATE_OBJ_PATH = "Tests/generated/RecuitSimule/";
 
 
-RecuitSimuleAlgorithm::RecuitSimuleAlgorithm(const string& filename) 
-	: Algorithm(filename), 
-	d_coolingFactor(0.99), 
+RecuitSimuleAlgorithm::RecuitSimuleAlgorithm(const string& filename)
+	: Algorithm(filename),
+	d_coolingFactor(0.99),
 	d_temperature(10000),
 	d_randomGenerator(std::random_device()())
 {
@@ -34,7 +34,11 @@ void RecuitSimuleAlgorithm::run()
 	double neighborEval;
 	double palier;
 	double n = 0;
-	int maxIter = 10000;
+
+	// Parametres
+	const int maxIter = 32;
+	const int initialTemp = d_temperature;
+	const int nbPermutations = 4;
 
 	while (d_temperature > 1)	// Critere d'arret (a changer)
 	{
@@ -42,16 +46,18 @@ void RecuitSimuleAlgorithm::run()
 		d_temperature *= d_coolingFactor;
 		palier = std::exp(1 / (d_temperature * d_coolingFactor));
 
-		//cout << "temperature : " << d_temperature << endl;
+		// cout << "temperature : " << d_temperature << endl;
 		//cout << "palier : " << palier << endl;
 		n = 0;
+
+		d_dataWriter.addPoint(d_temperature, currentEval);
 
 		while (n < maxIter)
 		{
 			//cout << "\tn : " << n << endl;
 			// PERTURBATION
 			neighborSolution = currentSolution;
-			this->permuteNElements(neighborSolution, 3);
+			this->permuteNElements(neighborSolution, nbPermutations);
 
 			// EVALUATION
 			neighborEval = this->evaluateSolution(neighborSolution);
@@ -72,16 +78,28 @@ void RecuitSimuleAlgorithm::run()
 
 			}
 			n++;
-		} 
+		}
 	}
 
-	// ECRITURE
-
+	// ECRITURE DE LA MEILLEURE SOLUTION EN OBJ
 	cout << "SIZE : " << currentSolution.size() << endl;
 	// Ecriture du fichier OBJ pour cette solution
-	string filename = GENERATE_OBJ_PATH  + "FUSION." 
+	string filename = GENERATE_OBJ_PATH + "FUSION."
 		+ to_string(currentSolution.size()) + ".obj";
 	OBJFileHandler::writeOBJ(d_vertices, currentSolution, filename);
+
+	// AFFICHAGE DU GRAPHIQUE
+
+	string info = "Nb permutations : " + to_string(nbPermutations) + "\\n";
+	info += "Initial temp : " + to_string(initialTemp) + "\\n";
+	info += "Nb iteration par palier : " + to_string(maxIter) + "\\n";
+	info += "Best eval : " + to_string(currentEval)+ "\\n";
+	info += "Solution : ";
+	for (auto& p : currentSolution)	// Affiche la solution
+		info += p.getId() + " ";
+
+	cout << info << endl;
+	this->printDataChart(info);
 }
 
 /**
@@ -100,7 +118,7 @@ void RecuitSimuleAlgorithm::permuteNElements(vector<Polyedre>& polyhedra, const 
 	vector<size_t> indices;	// indices des N elements a permuter
 
 	// Liste des N indices a permuter
-	while (indices.size() < n) 
+	while (indices.size() < n)
 	{
 		size_t index = dis(d_randomGenerator);	// Indice aleatoire
 		// Il faut que l'indice soit different des precedents
@@ -110,7 +128,7 @@ void RecuitSimuleAlgorithm::permuteNElements(vector<Polyedre>& polyhedra, const 
 
 	// Ajout des elements a permuter dans une liste temporaire
 	vector<Polyedre> temp(n);
-	for (size_t i = 0; i < n; ++i) 
+	for (size_t i = 0; i < n; ++i)
 		temp[i] = polyhedra[indices[i]];
 	// Melange des elements
 	std::shuffle(temp.begin(), temp.end(), d_randomGenerator);
@@ -147,9 +165,27 @@ bool RecuitSimuleAlgorithm::isNeighborAccepted(const double& currentEval, const 
 		//cout << "proba" << proba << endl;
 		//cout << "random" << random << endl;
 
-		if (random >= proba)
+		//if (random >= proba)
 			isAccepted = false;
 	}
 
 	return isAccepted;
+}
+
+/**
+ * @brief Affiche le graphique qui montre l'evolution des donnees de l'algo
+ */
+void RecuitSimuleAlgorithm::printDataChart(const string& info)
+{
+	const string legend = "";
+	const string title = "Evolution de l'objectif en fonction de la temperature";
+	d_dataWriter.writeDataToFile(
+		GENERATE_OBJ_PATH+"RecuitChart",	// Nom fichier
+		"Temperature",	// Axe X
+		"Objectif",		// Axe Y
+		legend,
+		title,
+		info,
+		true	// Invertion de l'axe X
+	);
 }

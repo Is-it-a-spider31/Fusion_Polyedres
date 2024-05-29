@@ -19,6 +19,10 @@ public:
     void run() override;
 
 private:
+    /**
+     * @brief Affiche le graphique qui montre l'evolution des donnees de l'algo
+     */
+    void printDataChart(const string& info);
 
     /**
      * Chemin du repertoire ves lequel l'agoritme ecrit
