@@ -2,11 +2,11 @@ Title: Evolution de l'objectif en fonction de la temperature
 X-Axis: Temperature
 Y-Axis: Objectif
 Legend: 
-InfoBox: 4 permutations
+InfoBox: Nb permutations : 4\nInitial temp : 10000\nNb iteration par palier : 32\nBest eval : 1.376417\nSolution : 4 3 2 5 7 6 1 
 InvertX: 1
 Data:
 9900,1.74872
-9801,1.64328
+9801,1.40065
 9702.99,1.37642
 9605.96,1.37642
 9509.9,1.37642

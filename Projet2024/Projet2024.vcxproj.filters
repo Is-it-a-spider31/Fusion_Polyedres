@@ -78,6 +78,9 @@
     <ClCompile Include="ExportAlgoData.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="genetic\BestScoreSelection.cpp">
+      <Filter>Fichiers sources\genetic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Polyedre.h">
@@ -133,6 +136,9 @@
     </ClInclude>
     <ClInclude Include="ExportAlgoData.h">
       <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="genetic\BestScoreSelection.h">
+      <Filter>Fichiers d%27en-tête\genetic</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

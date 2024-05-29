@@ -77,7 +77,7 @@
 *.lib
 
 # Ignorer les fichiers exécutables
-*.exe
+# *.exe
 *.out
 *.app
 

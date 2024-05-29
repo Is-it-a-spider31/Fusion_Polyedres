@@ -32,11 +32,6 @@ public:
     virtual void run() = 0;
 
     /**
-     * @brief Affiche le graphique qui montre l'evolution des donnees de l'algo
-     */
-    virtual void printDataChart() = 0;
-
-    /**
      * @brief Fonction d'evaluation d'une solution.
      * 
      * Renvoie le nombre de polyedres resultants de l'Algorithme

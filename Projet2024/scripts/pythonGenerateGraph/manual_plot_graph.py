@@ -8,7 +8,7 @@ if __name__ == "__main__":
 
     script_dir = os.path.dirname(os.path.abspath(__file__))
 
-    filename = "RecuitChart_2024-05-29-102414" + ".txt"
+    filename = "RecuitChart_2024-05-29-115502" + ".txt"
     file_path = "../../Tests/generated/RecuitSimule/" + filename
     # path = "/../../Tests/generated/GeneticAlgo/" + filename
     # path = "/../../Tests/generated/BruteForce/" + filename

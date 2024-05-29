@@ -11,7 +11,12 @@ def read_data_from_file(filename):
     x_axis_name = lines[1].split(':')[1].strip()
     y_axis_name = lines[2].split(':')[1].strip()
     legend = lines[3].split(':')[1].strip()
-    info_box = lines[4].split(':')[1].strip()
+
+    # Extraction du texte après le premier ":"
+    info_box = lines[4].split(':', 1)[1].strip()
+    # Remplacement des \\n par \n
+    info_box = info_box.replace("\\n", "\n")
+
     invert_x = lines[5].split(':')[1].strip() == "1" # 1 => True
 
     data_points = []

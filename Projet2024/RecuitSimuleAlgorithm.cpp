@@ -34,7 +34,11 @@ void RecuitSimuleAlgorithm::run()
 	double neighborEval;
 	double palier;
 	double n = 0;
-	int maxIter = 32;
+
+	// Parametres
+	const int maxIter = 32;
+	const int initialTemp = d_temperature;
+	const int nbPermutations = 4;
 
 	while (d_temperature > 1)	// Critere d'arret (a changer)
 	{
@@ -53,7 +57,7 @@ void RecuitSimuleAlgorithm::run()
 			//cout << "\tn : " << n << endl;
 			// PERTURBATION
 			neighborSolution = currentSolution;
-			this->permuteNElements(neighborSolution, 4);
+			this->permuteNElements(neighborSolution, nbPermutations);
 
 			// EVALUATION
 			neighborEval = this->evaluateSolution(neighborSolution);
@@ -77,22 +81,25 @@ void RecuitSimuleAlgorithm::run()
 		}
 	}
 
-	cout << "Eval Finale : " << currentEval << endl;
-
-	// Afficher une solution
-	for (auto& p : currentSolution)
-	{
-		cout << p.getId() << " ";
-	}
-	cout << endl;
-
-	// ECRITURE
-
+	// ECRITURE DE LA MEILLEURE SOLUTION EN OBJ
 	cout << "SIZE : " << currentSolution.size() << endl;
 	// Ecriture du fichier OBJ pour cette solution
 	string filename = GENERATE_OBJ_PATH + "FUSION."
 		+ to_string(currentSolution.size()) + ".obj";
 	OBJFileHandler::writeOBJ(d_vertices, currentSolution, filename);
+
+	// AFFICHAGE DU GRAPHIQUE
+
+	string info = "Nb permutations : " + to_string(nbPermutations) + "\\n";
+	info += "Initial temp : " + to_string(initialTemp) + "\\n";
+	info += "Nb iteration par palier : " + to_string(maxIter) + "\\n";
+	info += "Best eval : " + to_string(currentEval)+ "\\n";
+	info += "Solution : ";
+	for (auto& p : currentSolution)	// Affiche la solution
+		info += p.getId() + " ";
+
+	cout << info << endl;
+	this->printDataChart(info);
 }
 
 /**
@@ -168,10 +175,9 @@ bool RecuitSimuleAlgorithm::isNeighborAccepted(const double& currentEval, const 
 /**
  * @brief Affiche le graphique qui montre l'evolution des donnees de l'algo
  */
-void RecuitSimuleAlgorithm::printDataChart()
+void RecuitSimuleAlgorithm::printDataChart(const string& info)
 {
 	const string legend = "";
-	const string info = "4 permutations";
 	const string title = "Evolution de l'objectif en fonction de la temperature";
 	d_dataWriter.writeDataToFile(
 		GENERATE_OBJ_PATH+"RecuitChart",	// Nom fichier

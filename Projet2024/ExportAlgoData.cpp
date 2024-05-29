@@ -39,14 +39,15 @@ void ExportAlgoData::writeDataToFile(
     const string fullPath = filename + "_" + this->getCurrentDateTime() + ".txt";
     ofstream file(fullPath);
 
+    /*
     cout << "File path : " << fullPath << endl;
-
     #ifdef _WIN32
         wchar_t cwd[260];
         if (GetCurrentDirectory(260, cwd) != 0) {
-            std::wcout << "Répertoire courant : " << cwd << std::endl;
+            std::wcout << "Repertoire courant : " << cwd << std::endl;
         }
     #endif
+    */
 
     if (file.is_open()) {
         file << "Title: " << title << "\n";
