@@ -17,6 +17,7 @@
 #include <string>
 
 #include <csignal>
+#include <ctime>
 
 using namespace std;
 
@@ -90,7 +91,7 @@ int main(int argc, char* argv[])
 	NXCrossover crossover(4);
 
 	//GeneticAlgorithm ga{MERGE_TEST_PATH+"exemple3.obj", 50, 0.5, 0.5, 200, selection, mutation};
-	GeneticAlgorithm ga{MERGE_TEST_PATH+"exemple_complexe.obj", 10, 0.7, 0.8, 10000, selection, crossover, mutation};
+	GeneticAlgorithm ga{MERGE_TEST_PATH+"exemple_complexe.obj", 100, 0.7, 0.8, 10000, selection, crossover, mutation};
 	ptr_ga = &ga;
 
 	ga.run();

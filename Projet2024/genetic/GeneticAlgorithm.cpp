@@ -25,16 +25,11 @@ GeneticAlgorithm::GeneticAlgorithm(const string& filename, int popSize, double p
 
 void GeneticAlgorithm::run()
 {
-	int nbPoly = d_polyhedra.size();
-
 		//Initialisation
 		d_Population = new Population{ d_dimension, d_popSize };
 		d_pop = d_Population->randomInit();
-	
-		//printPopulation();
 
 		//Evaluation
-
 		double scoreMin = 10e6;
 
 		d_score_pop.clear();
@@ -50,7 +45,6 @@ void GeneticAlgorithm::run()
 			if (current_indiv_score < scoreMin)
 			{
 				//cout << "permutation n°" << i << " : score = " << current_indiv_score << " | NB POLYEDRE FINAL : " << evaluateSolution(solution) << endl;
-
 				scoreMin = current_indiv_score;
 				d_permutScoreMax = solution;
 			}
