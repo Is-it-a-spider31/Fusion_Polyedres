@@ -10,11 +10,33 @@
 #include "genetic/TurnamentSelection.h"
 #include "genetic/NXCrossover.h"
 #include "genetic/InsertionMutation.h"
+#include "genetic/BestScoreSelection.h"
+
+#include <cstdlib> // Pour la fonction system()
+#include <string>
+
+#include <csignal>
 
 using namespace std;
 
+GeneticAlgorithm* ptr_ga = nullptr;
+
+void signalHandler(int signum) {
+	std::cout << "Interruption signal (" << signum << ") reçue." << std::endl;	
+	if (ptr_ga != nullptr)
+	{
+		ptr_ga->exportBest();	
+	}
+	
+	exit(signum);
+}
+
 int main(int argc, char* argv[])
 {
+
+	signal(SIGINT, signalHandler);
+
+
 	// Script qui supprime les fichiers .obj eventuellement generes 
 	// par d'anciennes executions du programme
 	#ifdef _WIN32 // OS Windows
@@ -61,12 +83,15 @@ int main(int argc, char* argv[])
 
 	/*
 	srand(time(NULL));
-	TurnamentSelection selection;
+	//TurnamentSelection selection;
+	BestScoreSelection selection;
 	InsertionMutation mutation;
 	NXCrossover crossover(4);
 
 	//GeneticAlgorithm ga{MERGE_TEST_PATH+"exemple3.obj", 50, 0.5, 0.5, 200, selection, mutation};
-	GeneticAlgorithm ga{MERGE_TEST_PATH+"exemple_complexe.obj", 30, 0.5, 0.1, 200, selection, crossover, mutation};
+	GeneticAlgorithm ga{MERGE_TEST_PATH+"exemple_complexe.obj", 300, 0.7, 0.8, 10000, selection, crossover, mutation};
+	ptr_ga = &ga;
+
 	ga.run();
 	*/
 

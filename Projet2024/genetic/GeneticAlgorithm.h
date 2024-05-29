@@ -30,7 +30,7 @@ public:
 	double getProbaMut() const;
 	void printPopulation() const;
 
-	
+	void exportBest();
 
 	// FONCTIONS TYPIQUE DU GA
 
@@ -75,6 +75,7 @@ protected:
 	
 
 	vector<int> turnamentWinner;
+	vector<int> parents;
 
 	bool d_popResized = false;
 
