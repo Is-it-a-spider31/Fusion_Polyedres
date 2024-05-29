@@ -1,4 +1,5 @@
 #include "GeneticAlgorithm.h"
+#include <time.h>
 
 /**
  * Chemin du repertoire ves lequel l'agoritme ecrit
@@ -25,6 +26,9 @@ GeneticAlgorithm::GeneticAlgorithm(const string& filename, int popSize, double p
 
 void GeneticAlgorithm::run()
 {
+	clock_t tStart = clock();
+	
+
 		//Initialisation
 		d_Population = new Population{ d_dimension, d_popSize };
 		d_pop = d_Population->randomInit();
@@ -87,9 +91,10 @@ void GeneticAlgorithm::run()
 			//while (iteration < d_maxIteration)
 			//double stop = 20;
 
-			while(true)
+			while(iteration < d_maxIteration)
 			{
-				
+				d_dataWriter.addPoint(iteration, scoreMin);
+
 				cout << "------ITERATION " << iteration << " --------" << endl;
 				//printPopulation();
 				if(iteration % 10 == 0) printPopulation();
@@ -97,54 +102,11 @@ void GeneticAlgorithm::run()
 				
 				//Selection
 				d_Selection->select(d_oldpop, d_oldscore_pop);
-				/*
-					cout << "------------------indiv " << individu << endl;
-					cout << "Parent 1 --> " << d_Selection->getId_p1() << " : [";
-					for (const auto& p : d_Selection->getParent1())
-					{
-						cout << p << " ";
-					}
-					cout << " ]" << endl;
 
-
-					cout << "Parent 2 --> " << d_Selection->getId_p2() << " : [";
-					for (const auto& p : d_Selection->getParent2())
-					{
-						cout << p << " ";
-					}
-					cout << " ]" << endl;
-					*/
-
-
-
-					//Création de proba croisement
-					//int rdm_cross = rand() % 101;
-					//if (rdm_cross < d_crossoverProba * 100)
-					//{
-						//CROISEMENT
-						
-
-						//cout << d_Selection->getParent2().size() << endl;
 
 				//SUPPRIMER LES TRUCS EN TROP DE LA POPULATION NORMALE
 				d_pop.clear();
 
-				/*---------------------------------------------------------------------------------------------------------
-
-				vector<vector<int>> tmpParents;
-				tmpParents = d_Selection->getParents();
-
-				cout << "---------------LISTE PARENTS--------------------" << tmpParents.size() << endl;
-				for (int t = 0; t < tmpParents.size(); t++)
-				{
-					cout << "[ ";
-					for (int k = 0; k < tmpParents[t].size(); k++)
-					{
-						cout << tmpParents[t][k] << " ";
-					}
-					cout << " ] ----- Parent numero " << t << endl;
-				}
-					*/
 						vector<int> child1, child2;
 						for (int i = 0; i < d_Selection->getParents().size() - 1; i=i+2)
 						{
@@ -157,37 +119,6 @@ void GeneticAlgorithm::run()
 							tmpP2 = d_Selection->getParents()[i+1];
 							
 							d_Crossover->cross(d_Selection->getParents()[i], d_Selection->getParents()[i + 1], child1, child2);
-
-							/*
-							cout << "Parent 1 : [ ";
-							for (const auto& p : tmpP1)
-							{
-								cout << p << " ";
-							}
-							cout << " ]" << endl;
-
-							cout << "Parent 2 : [ ";
-							for (const auto& p : tmpP2)
-							{
-								cout << p << " ";
-							}
-							cout << " ]" << endl;
-
-							cout << "Enfant 1 : [ ";
-							for (const auto& p : child1)
-							{
-								cout << p << " ";
-							}
-							cout << " ]" << endl;
-
-							cout << "Enfant 2 : [ ";
-							for (const auto& p : child2)
-							{
-								cout << p << " ";
-							}
-							cout << " ]" << endl;
-							*/
-
 
 							int rdm_mut = rand() % 101;
 							if (rdm_mut < d_mutationProba * 100)
@@ -258,9 +189,33 @@ void GeneticAlgorithm::run()
 
 				d_Selection->clearParentsList();
 			}
+
 			vector<Polyedre> solution_merged = mergeAlgorithm(d_permutScoreMax);
 			string filename = GENERATE_OBJ_PATH + "FUSION." + to_string(solution_merged.size()) + ".obj";
 			OBJFileHandler::writeOBJ(d_vertices, solution_merged, filename);
+
+			double timetaken = (double)(clock() - tStart) / CLOCKS_PER_SEC;
+
+			// AFFICHAGE DU GRAPHIQUE
+			string info = "Nb itérations : " + to_string(iteration) + "\\n";
+			info += "Best eval : " + to_string(scoreMin) + "\\n";
+			info += "Solution : ";
+			for (auto& p : d_permutScoreMax)	// Affiche la solution
+				info += p.getId() + " ";
+			info += "\\n";
+			info += "Taille finale : " + to_string(solution_merged.size()) + "\\n";
+
+			if (timetaken < 60) {
+				info += "Temps execution : " + to_string(timetaken) + " s\\n";
+			}
+			else {
+				int minutes = static_cast<int>(timetaken) / 60;
+				double seconds = timetaken - (minutes * 60);
+				info += "Temps execution : " + to_string(minutes) + " min " + to_string(seconds) + " s\\n";
+			}
+
+			cout << info << endl;
+			this->printDataChart(info);
 			
 			
 		}
@@ -287,6 +242,21 @@ void GeneticAlgorithm::exportBest()
 	string filename = GENERATE_OBJ_PATH + "FUSION." + to_string(solution_merged.size()) + ".obj";
 	OBJFileHandler::writeOBJ(d_vertices, solution_merged, filename);
 
+}
+
+void GeneticAlgorithm::printDataChart(const string& info)
+{
+	const string legend = "";
+	const string title = "Evolution de l'objectif en fonction des itérations";
+	d_dataWriter.writeDataToFile(
+		GENERATE_OBJ_PATH + "GeneticChart",	// Nom fichier
+		"Iteration",	// Axe X
+		"Objectif",		// Axe Y
+		legend,
+		title,
+		info,
+		false //true	// Invertion de l'axe X
+	);
 }
 
 vector<Polyedre> GeneticAlgorithm::perm2Poly(int index)

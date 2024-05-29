@@ -57,8 +57,8 @@ int main(int argc, char* argv[])
 	//bruteforce.run();
 
 	//TEST RECUIT SIMULE
-	RecuitSimuleAlgorithm recuit(MERGE_TEST_PATH+"exemple3.obj");
-	recuit.run();
+	//RecuitSimuleAlgorithm recuit(MERGE_TEST_PATH+"exemple3.obj");
+	//recuit.run();
 
 	// TESTS CONVEXITE
 	//BruteForceAlgorithm algo(CONVEXITY_TEST_PATH + "2DnotConvex.obj");
@@ -85,13 +85,13 @@ int main(int argc, char* argv[])
 	
 	srand(time(NULL));
 	//TurnamentSelection selection;
-	//BestScoreSelection selection;
-	WheelSelection selection;
+	BestScoreSelection selection;
+	//WheelSelection selection;
 	InsertionMutation mutation;
 	NXCrossover crossover(4);
 
 	//GeneticAlgorithm ga{MERGE_TEST_PATH+"exemple3.obj", 50, 0.5, 0.5, 200, selection, mutation};
-	GeneticAlgorithm ga{MERGE_TEST_PATH+"exemple_complexe.obj", 100, 0.7, 0.8, 10000, selection, crossover, mutation};
+	GeneticAlgorithm ga{MERGE_TEST_PATH+"exemple_complexe.obj", 100, 0.7, 0.8, 100, selection, crossover, mutation};
 	ptr_ga = &ga;
 
 	ga.run();
