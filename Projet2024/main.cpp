@@ -12,11 +12,13 @@
 #include "genetic/NXCrossover.h"
 #include "genetic/InsertionMutation.h"
 #include "genetic/BestScoreSelection.h"
+#include "genetic/WheelSelection.h"
 
 #include <cstdlib> // Pour la fonction system()
 #include <string>
 
 #include <csignal>
+#include <ctime>
 
 using namespace std;
 
@@ -84,19 +86,20 @@ int main(int argc, char* argv[])
 	/*NXCrossover crossover(3);
 	crossover.test();*/
 
-	/*
+	
 	srand(time(NULL));
 	//TurnamentSelection selection;
 	BestScoreSelection selection;
+	//WheelSelection selection;
 	InsertionMutation mutation;
 	NXCrossover crossover(4);
 
 	//GeneticAlgorithm ga{MERGE_TEST_PATH+"exemple3.obj", 50, 0.5, 0.5, 200, selection, mutation};
-	GeneticAlgorithm ga{MERGE_TEST_PATH+"exemple_complexe.obj", 300, 0.7, 0.8, 10000, selection, crossover, mutation};
+	GeneticAlgorithm ga{MERGE_TEST_PATH+"exemple_complexe.obj", 100, 0.7, 0.8, 100, selection, crossover, mutation};
 	ptr_ga = &ga;
 
 	ga.run();
-	*/
+	
 
 	//faire gaffe si la population est petite et la dimension aussi
 
