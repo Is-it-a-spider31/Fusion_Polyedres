@@ -1,7 +1,10 @@
 #include "RecuitSimuleAlgorithm.h"
 
 #include <algorithm>	// Pour std:swap
+#include <time.h>
+
 #include "OBJFileHandler.h"
+#include "myUtils.h"	// Pour doubleToStringRounded()
 
 /**
  * Chemin du repertoire ves lequel l'agoritme ecrit
@@ -12,8 +15,8 @@ const string RecuitSimuleAlgorithm::GENERATE_OBJ_PATH = "Tests/generated/RecuitS
 
 RecuitSimuleAlgorithm::RecuitSimuleAlgorithm(const string& filename)
 	: Algorithm(filename),
-	d_coolingFactor(0.99),
-	d_temperature(10000),
+	d_coolingFactor(0.90),
+	d_temperature(800),
 	d_randomGenerator(std::random_device()())
 {
 
@@ -35,10 +38,15 @@ void RecuitSimuleAlgorithm::run()
 	double palier;
 	double n = 0;
 
+	int nbIterations = 0;
+
 	// Parametres
 	const int maxIter = 32;
 	const int initialTemp = d_temperature;
 	const int nbPermutations = 4;
+
+	// Debut du chronometre (pour compter le temps d'execution)
+	clock_t tStart = clock();
 
 	while (d_temperature > 1)	// Critere d'arret (a changer)
 	{
@@ -46,11 +54,14 @@ void RecuitSimuleAlgorithm::run()
 		d_temperature *= d_coolingFactor;
 		palier = std::exp(1 / (d_temperature * d_coolingFactor));
 
-		// cout << "temperature : " << d_temperature << endl;
 		//cout << "palier : " << palier << endl;
 		n = 0;
-
 		d_dataWriter.addPoint(d_temperature, currentEval);
+
+		nbIterations++;
+		if (nbIterations % 4 == 0) {
+			cout << "temperature : " << d_temperature << endl;
+		}
 
 		while (n < maxIter)
 		{
@@ -68,32 +79,48 @@ void RecuitSimuleAlgorithm::run()
 			{
 				currentSolution = neighborSolution;
 				currentEval = neighborEval;
-
-				// Afficher une solution
-				//for (auto& p : currentSolution)
-				//{
-				//	cout << p.getId() << " ";
-				//}
-				//cout << endl;
-
 			}
 			n++;
 		}
 	}
 
+	// Fin du chronometre
+	double timeTaken = (double)(clock() - tStart) / CLOCKS_PER_SEC;
+
+	// Fusion sur la meilleur solution trouvee
+	const vector<Polyedre> mergedSolution = mergeAlgorithm(currentSolution);
+
 	// ECRITURE DE LA MEILLEURE SOLUTION EN OBJ
-	cout << "SIZE : " << currentSolution.size() << endl;
+	cout << "SIZE : " << mergedSolution.size() << endl;
 	// Ecriture du fichier OBJ pour cette solution
 	string filename = GENERATE_OBJ_PATH + "FUSION."
-		+ to_string(currentSolution.size()) + ".obj";
-	OBJFileHandler::writeOBJ(d_vertices, currentSolution, filename);
+		+ to_string(mergedSolution.size()) + ".obj";
+	OBJFileHandler::writeOBJ(d_vertices, mergedSolution, filename);
 
 	// AFFICHAGE DU GRAPHIQUE
 
-	string info = "Nb permutations : " + to_string(nbPermutations) + "\\n";
+	// Temps d'execution en string
+	string strExecutionTime;
+	if (timeTaken < 60)
+	{
+		strExecutionTime = doubleToStringRounded(timeTaken, 3) + " s";
+	}
+	else 
+	{
+		int minutes = static_cast<int>(timeTaken) / 60;
+		double seconds = timeTaken - (minutes * 60);
+		strExecutionTime = to_string(minutes) + " min " + doubleToStringRounded(seconds, 3) + " s";
+	}
+
+	// Encadre d'information sur le graphique
+	string info = "Nb permutations pour voisin : " + to_string(nbPermutations) + "\\n";
 	info += "Initial temp : " + to_string(initialTemp) + "\\n";
+	info += "Facteur refroidissement : " + doubleToStringRounded(d_coolingFactor, 3) + "\\n";
 	info += "Nb iteration par palier : " + to_string(maxIter) + "\\n";
+	info += "Nb iteration effectuees : " + to_string(nbIterations) + "\\n";
+	info += "Temps d'execution : " + strExecutionTime + "\\n";
 	info += "Best eval : " + to_string(currentEval)+ "\\n";
+	info += "Taille finale : " + to_string(mergedSolution.size())+ "\\n";
 	info += "Solution : ";
 	for (auto& p : currentSolution)	// Affiche la solution
 		info += p.getId() + " ";
@@ -165,7 +192,7 @@ bool RecuitSimuleAlgorithm::isNeighborAccepted(const double& currentEval, const 
 		//cout << "proba" << proba << endl;
 		//cout << "random" << random << endl;
 
-		//if (random >= proba)
+		//if (random <= proba)
 			isAccepted = false;
 	}
 

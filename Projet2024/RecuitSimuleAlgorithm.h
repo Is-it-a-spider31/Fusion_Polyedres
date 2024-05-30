@@ -18,7 +18,7 @@ public:
     */
     void run() override;
 
-private:
+protected:
     /**
      * @brief Affiche le graphique qui montre l'evolution des donnees de l'algo
      */
