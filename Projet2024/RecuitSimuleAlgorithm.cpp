@@ -112,7 +112,7 @@ void RecuitSimuleAlgorithm::run()
 		strExecutionTime = to_string(minutes) + " min " + doubleToStringRounded(seconds, 3) + " s";
 	}
 
-	// 
+	// Encadre d'information sur le graphique
 	string info = "Nb permutations pour voisin : " + to_string(nbPermutations) + "\\n";
 	info += "Initial temp : " + to_string(initialTemp) + "\\n";
 	info += "Facteur refroidissement : " + doubleToStringRounded(d_coolingFactor, 3) + "\\n";

@@ -12,8 +12,8 @@ $directory = "Tests\generated\BruteForce"
 Get-ChildItem $directory -Filter *.obj | Remove-Item -Force
 
 # Recuit simule
-$directory = "Tests\generated\RecuitSimule"
-Get-ChildItem $directory -Filter *.obj | Remove-Item -Force
+#$directory = "Tests\generated\RecuitSimule"
+#Get-ChildItem $directory -Filter *.obj | Remove-Item -Force
 
 # Genetique
 $directory = "Tests\generated\GeneticAlgo"
