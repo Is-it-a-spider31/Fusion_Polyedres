@@ -1,5 +1,6 @@
 #include "GeneticAlgorithm.h"
 #include <time.h>
+#include "../myUtils.h"
 
 /**
  * Chemin du repertoire ves lequel l'agoritme ecrit
@@ -27,17 +28,16 @@ GeneticAlgorithm::GeneticAlgorithm(const string& filename, int popSize, double p
 void GeneticAlgorithm::run()
 {
 	clock_t tStart = clock();
-	
+		
+	//Initialisation
+	d_Population = new Population{ d_dimension, d_popSize };
+	d_pop = d_Population->randomInit();
 
-		//Initialisation
-		d_Population = new Population{ d_dimension, d_popSize };
-		d_pop = d_Population->randomInit();
+	//Evaluation
+	double scoreMin = 10e6;
 
-		//Evaluation
-		double scoreMin = 10e6;
-
-		d_score_pop.clear();
-		for (int i = 0; i < d_popSize; i++)
+	d_score_pop.clear();
+	for (int i = 0; i < d_popSize; i++)
 		{
 			//Transforme le tableau d'index en tableau de polyhedre
 			vector<Polyedre> solution = perm2Poly(i);
@@ -48,7 +48,6 @@ void GeneticAlgorithm::run()
 			//MAJ du score max et index
 			if (current_indiv_score < scoreMin)
 			{
-				//cout << "permutation n°" << i << " : score = " << current_indiv_score << " | NB POLYEDRE FINAL : " << evaluateSolution(solution) << endl;
 				scoreMin = current_indiv_score;
 				d_permutScoreMax = solution;
 			}
@@ -58,8 +57,6 @@ void GeneticAlgorithm::run()
 		d_oldpop = d_pop;
 		d_oldscore_pop = d_score_pop;
 
-		//printPopulation();
-		
 		cout << "=====================================================================" << endl;
 		cout << "Meilleur score apres init : " << scoreMin << " | [ ";
 		for (const auto& i : d_permutScoreMax)
@@ -93,87 +90,84 @@ void GeneticAlgorithm::run()
 
 			while(iteration < d_maxIteration)
 			{
+				//Tracker le score min par itération pour le graphe
 				d_dataWriter.addPoint(iteration, scoreMin);
 
 				cout << "------ITERATION " << iteration << " --------" << endl;
 				//printPopulation();
-				if(iteration % 10 == 0) printPopulation();
+				//if(iteration % 10 == 0) printPopulation();
 				cout << "----------------" << endl;
 				
 				//Selection
 				d_Selection->select(d_oldpop, d_oldscore_pop);
 
-
 				//SUPPRIMER LES TRUCS EN TROP DE LA POPULATION NORMALE
 				d_pop.clear();
 
-						vector<int> child1, child2;
-						for (int i = 0; i < d_Selection->getParents().size() - 1; i=i+2)
-						{
+				vector<int> child1, child2;
 
-							child1.clear();
-							child2.clear();
+				//Selection des parents 2 à 2 pour faire 2 enfants
+				for (int i = 0; i < d_Selection->getParents().size() - 1; i=i+2)
+				{
+					child1.clear();
+					child2.clear();
 
-							vector<int> tmpP1, tmpP2;
-							tmpP1 = d_Selection->getParents()[i];
-							tmpP2 = d_Selection->getParents()[i+1];
-							
-							d_Crossover->cross(d_Selection->getParents()[i], d_Selection->getParents()[i + 1], child1, child2);
-
-							int rdm_mut = rand() % 101;
-							if (rdm_mut < d_mutationProba * 100)
-							{
-								d_Mutation->mutate(child1);
-
-							}
-
-							rdm_mut = rand() % 101;
-							if (rdm_mut < d_mutationProba * 100)
-							{
-								d_Mutation->mutate(child2);
-
-							}
-
-							d_pop.push_back(child1);
-							d_pop.push_back(child2);
-						}
-
-						while (d_pop.size() < d_popSize)
-						{
-							//remplir le reste random
-							vector<int> individual(d_dimension);
-							for (int i = 0; i < d_dimension; ++i) {
-								individual[i] = i;
-							}
-							random_shuffle(individual.begin(), individual.end());
-
-							d_pop.push_back(individual);
-						}
-						
-						
-
-					//}
-
-					//Création de propba mutation
+					vector<int> tmpP1, tmpP2;
+					tmpP1 = d_Selection->getParents()[i];
+					tmpP2 = d_Selection->getParents()[i+1];
 					
+					//Croisement des deux parents
+					d_Crossover->cross(d_Selection->getParents()[i], d_Selection->getParents()[i + 1], child1, child2);
 
-					//Evaluer l'indiv modifier et modifier si besoin le scoreMax
-						for (int indice = 0; indice < d_pop.size(); indice++)
-						{
-							vector<Polyedre> toEvaluate = perm2Poly(indice);
-							double new_indiv_score = evaluateSolution(toEvaluate);
-							d_score_pop[indice] = new_indiv_score;
+					//Peut se faire muter
+					int rdm_mut = rand() % 101;
+					if (rdm_mut < d_mutationProba * 100)
+					{
+						d_Mutation->mutate(child1);
+					}
 
-							if (new_indiv_score < scoreMin)
-							{
-								scoreMin = new_indiv_score;
-								d_permutScoreMax = toEvaluate;
-							}
-							
-							//cout << "indice : " << indice << "  ------- popsize : " << d_pop.size() << endl;
-						}
+					rdm_mut = rand() % 101;
+					if (rdm_mut < d_mutationProba * 100)
+					{
+						d_Mutation->mutate(child2);
+					}
+
+					//Remplissage de la moitié de la nouvelle population avec des enfants
+					d_pop.push_back(child1);
+					d_pop.push_back(child2);
+						
+				}
+
+				//Remplissage random du reste de la population
+				//On pourrai faire des croisement sur des indiv tiré randoms
+				while (d_pop.size() < d_popSize)
+				{
+					vector<int> individual(d_dimension);
+					for (int i = 0; i < d_dimension; ++i) 
+					{
+						individual[i] = i;
+					}
 					
+					random_shuffle(individual.begin(), individual.end());
+					d_pop.push_back(individual);
 
+				}
+						
+				//Evaluation de la nouvelle population
+				for (int indice = 0; indice < d_pop.size(); indice++)
+				{
+					vector<Polyedre> toEvaluate = perm2Poly(indice);
+					double new_indiv_score = evaluateSolution(toEvaluate);
+					d_score_pop[indice] = new_indiv_score;
+
+					if (new_indiv_score < scoreMin)
+					{
+						scoreMin = new_indiv_score;
+						d_permutScoreMax = toEvaluate;
+					}
+				}
+					
+				//Affichage du meilleur score trouvé depuis le début
 				cout << "Best score : " << scoreMin << endl;
 				cout << "Best indiv : [ ";
 				for (const auto& i : d_permutScoreMax)
@@ -182,7 +176,6 @@ void GeneticAlgorithm::run()
 				}
 				cout << " ]" << endl;
 
-				//cout << "------------ITERATION " << iteration << "---------------" << endl;
 				iteration++;
 				d_oldpop = d_pop;
 				d_oldscore_pop = d_score_pop;
@@ -190,13 +183,28 @@ void GeneticAlgorithm::run()
 				d_Selection->clearParentsList();
 			}
 
+			//Export de la solution
 			vector<Polyedre> solution_merged = mergeAlgorithm(d_permutScoreMax);
 			string filename = GENERATE_OBJ_PATH + "FUSION." + to_string(solution_merged.size()) + ".obj";
 			OBJFileHandler::writeOBJ(d_vertices, solution_merged, filename);
 
-			double timetaken = (double)(clock() - tStart) / CLOCKS_PER_SEC;
+			double timeTaken = (double)(clock() - tStart) / CLOCKS_PER_SEC;
 
 			// AFFICHAGE DU GRAPHIQUE
+
+			// Temps d'execution en string
+			string strExecutionTime;
+			if (timeTaken < 60)
+			{
+				strExecutionTime = doubleToStringRounded(timeTaken, 3) + " s";
+			}
+			else
+			{
+				int minutes = static_cast<int>(timeTaken) / 60;
+				double seconds = timeTaken - (minutes * 60);
+				strExecutionTime = to_string(minutes) + " min " + doubleToStringRounded(seconds, 3) + " s";
+			}
+
 			string info = "Nb itérations : " + to_string(iteration) + "\\n";
 			info += "Best eval : " + to_string(scoreMin) + "\\n";
 			info += "Solution : ";
@@ -204,23 +212,13 @@ void GeneticAlgorithm::run()
 				info += p.getId() + " ";
 			info += "\\n";
 			info += "Taille finale : " + to_string(solution_merged.size()) + "\\n";
-
-			if (timetaken < 60) {
-				info += "Temps execution : " + to_string(timetaken) + " s\\n";
-			}
-			else {
-				int minutes = static_cast<int>(timetaken) / 60;
-				double seconds = timetaken - (minutes * 60);
-				info += "Temps execution : " + to_string(minutes) + " min " + to_string(seconds) + " s\\n";
-			}
+			info += "Temps d'execution : " + strExecutionTime + "\\n";
 
 			cout << info << endl;
 			this->printDataChart(info);
 			
 			
 		}
-	
-
 }
 
 void GeneticAlgorithm::printPopulation() const
