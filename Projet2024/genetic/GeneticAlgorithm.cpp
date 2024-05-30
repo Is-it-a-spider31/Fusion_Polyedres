@@ -140,8 +140,12 @@ void GeneticAlgorithm::run()
 
 				//Remplissage random du reste de la population
 				//On pourrai faire des croisement sur des indiv tiré randoms
+				int last = d_oldpop.size() - 1;
 				while (d_pop.size() < d_popSize)
 				{
+					//random 
+
+					/*
 					vector<int> individual(d_dimension);
 					for (int i = 0; i < d_dimension; ++i) 
 					{
@@ -149,7 +153,15 @@ void GeneticAlgorithm::run()
 					}
 					
 					random_shuffle(individual.begin(), individual.end());
-					d_pop.push_back(individual);
+					d_pop.push_back(individual);*/
+
+					//prendre les plus nul et  faire des croisements
+
+					vector<int> child1;
+					d_Crossover->cross(d_oldpop[last], d_oldpop[last - 1],child1,child1);
+					last = last - 2;
+
+					d_pop.push_back(child1);
 
 				}
 						
