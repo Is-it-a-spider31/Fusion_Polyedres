@@ -15,8 +15,8 @@ const string RecuitSimuleAlgorithm::GENERATE_OBJ_PATH = "Tests/generated/RecuitS
 
 RecuitSimuleAlgorithm::RecuitSimuleAlgorithm(const string& filename)
 	: Algorithm(filename),
-	d_coolingFactor(0.90),
-	d_temperature(800),
+	d_coolingFactor(0.98),
+	d_temperature(1000),
 	d_randomGenerator(std::random_device()())
 {
 
@@ -31,17 +31,19 @@ void RecuitSimuleAlgorithm::run()
 
 	// Copies de la liste des polyedres
 	vector<Polyedre> currentSolution = d_polyhedra;
+	vector<Polyedre> bestSolution = d_polyhedra;
 	vector<Polyedre> neighborSolution = d_polyhedra;	// Solution voisine
 
 	double currentEval = this->evaluateSolution(currentSolution);
 	double neighborEval;
+	double bestEval = currentEval;
 	double palier;
 	double n = 0;
 
 	int nbIterations = 0;
 
 	// Parametres
-	const int maxIter = 32;
+	const int maxIter = 40;
 	const int initialTemp = d_temperature;
 	const int nbPermutations = 4;
 
@@ -74,12 +76,19 @@ void RecuitSimuleAlgorithm::run()
 			neighborEval = this->evaluateSolution(neighborSolution);
 			//cout << "Eval : " << neighborEval << endl;
 
+			if (neighborEval < bestEval)
+			{
+				bestSolution = neighborSolution;
+				bestEval = neighborEval;
+			}
+
 			// ACCEPTATION
 			if (isNeighborAccepted(currentEval, neighborEval))
 			{
 				currentSolution = neighborSolution;
 				currentEval = neighborEval;
 			}
+
 			n++;
 		}
 	}
@@ -88,7 +97,7 @@ void RecuitSimuleAlgorithm::run()
 	double timeTaken = (double)(clock() - tStart) / CLOCKS_PER_SEC;
 
 	// Fusion sur la meilleur solution trouvee
-	const vector<Polyedre> mergedSolution = mergeAlgorithm(currentSolution);
+	const vector<Polyedre> mergedSolution = mergeAlgorithm(bestSolution);
 
 	// ECRITURE DE LA MEILLEURE SOLUTION EN OBJ
 	cout << "SIZE : " << mergedSolution.size() << endl;
@@ -119,10 +128,10 @@ void RecuitSimuleAlgorithm::run()
 	info += "Nb iteration par palier : " + to_string(maxIter) + "\\n";
 	info += "Nb iteration effectuees : " + to_string(nbIterations) + "\\n";
 	info += "Temps d'execution : " + strExecutionTime + "\\n";
-	info += "Best eval : " + to_string(currentEval)+ "\\n";
+	info += "Best eval : " + to_string(bestEval)+ "\\n";
 	info += "Taille finale : " + to_string(mergedSolution.size())+ "\\n";
 	info += "Solution : ";
-	for (auto& p : currentSolution)	// Affiche la solution
+	for (auto& p : bestSolution)	// Affiche la solution
 		info += p.getId() + " ";
 
 	cout << info << endl;
@@ -183,7 +192,8 @@ bool RecuitSimuleAlgorithm::isNeighborAccepted(const double& currentEval, const 
 	if (neighborEval > currentEval)
 	{	// Acceptation possible avec une certaine probabilite
 
-		double proba = std::exp((currentEval - neighborEval) / d_temperature);
+		//double proba = std::exp((currentEval - neighborEval) / d_temperature) - 1;
+		double proba = 2 - exp((1-((neighborEval - currentEval) / 5)) * (d_temperature / 1000));
 
 		// Distribution uniforme dans [0, 1]
 		std::uniform_real_distribution<double> uniformDis(0.0, 1.0);
@@ -192,7 +202,7 @@ bool RecuitSimuleAlgorithm::isNeighborAccepted(const double& currentEval, const 
 		//cout << "proba" << proba << endl;
 		//cout << "random" << random << endl;
 
-		//if (random <= proba)
+		if (random < proba)
 			isAccepted = false;
 	}
 
