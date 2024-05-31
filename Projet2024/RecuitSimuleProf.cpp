@@ -161,7 +161,7 @@ bool RecuitSimuleProf::isNeighborAccepted(const double& currentEval, const doubl
     // O n l'accepte avec une proba de 0.5 si gain nul ou pire
     double v = 1000.0 * (1.0 / (1.0 + exp((PARAM_SA_C_CS * gain) / (aireMax * d_temperature))));
     // cout << d_temperature << endl;
-    d_dataWriter.addPoint(d_temperature, v); // ADD DATA
+    //d_dataWriter.addPoint(d_temperature, v); // ADD DATA
 
     //cout << "v = " << v << endl;
     //cout << "random = " << random << endl;
