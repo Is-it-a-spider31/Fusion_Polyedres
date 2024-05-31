@@ -157,11 +157,25 @@ void GeneticAlgorithm::run()
 
 					//prendre les plus nul et  faire des croisements
 
+					
+
 					vector<int> child1;
-					d_Crossover->cross(d_oldpop[last], d_oldpop[last - 1],child1,child1);
+					vector<int> child2;
+					d_Crossover->cross(d_oldpop[last], d_oldpop[last - 1],child1,child2);
 					last = last - 2;
 
-					d_pop.push_back(child1);
+					//if (iteration % 2 == 0)
+					//{
+						d_pop.push_back(child1);
+					//}
+					
+					//else
+					//{
+						//d_pop.push_back(child2);
+					//}
+					
+
+					//cout << "passed";
 
 				}
 						
