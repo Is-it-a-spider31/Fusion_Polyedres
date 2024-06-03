@@ -1,0 +1,12 @@
+Title: Evolution de l'objectif en fonction des itérations
+X-Axis: Iteration
+Y-Axis: Objectif
+Legend: 
+InfoBox: Nb itérations : 5\nBest eval : 1.790585\nSolution : 9 31 17 21 22 25 3 4 19 24 14 28 1 10 7 6 5 29 2 26 20 32 23 18 13 12 16 27 11 8 15 30 \nTaille finale : 22\nTemps d'execution : 28.142 s\n
+InvertX: 0
+Data:
+0,1.90474
+1,1.82794
+2,1.8219
+3,1.8219
+4,1.79058
