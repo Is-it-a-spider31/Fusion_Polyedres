@@ -77,10 +77,9 @@ void BruteForceAlgorithm::run()
 			}
 		}
 
-		// permutedPolyhedrons.clear(); // 1 seul itération si non commente (pour tester)
+		// permutedPolyhedra.clear(); // 1 seule iteration si non commente (pour tester)
 		mergedPolyhedra.clear();
 		nbPermutaions++;
-
 	} while (next_permutation(permutedPolyhedra.begin(), permutedPolyhedra.end()));
 
 	//	ECRITURE DES MEILLEURES SOLUTIONS TROUVEES
@@ -101,11 +100,15 @@ void BruteForceAlgorithm::run()
 
 	// Affichage des statistiques
 	cout << " ---  STATISTIQUES  ---" << endl;
-	cout << "Nb permutations effectuees : " << nbPermutaions << endl;
-	cout << "Nb solutions calculees entierement : " << nbFullSolutions << endl;
-	cout << "Nb solutions uniques calculees entierement: " << solutions.size() << endl;
-	cout << "Nb de solution optimales : " << nbOptimalSolutions << endl;
-	cout << "Nb optimale de poledres : " << minNbPolySolution << endl;
+	cout << "Nb de permutations effectuees : " << nbPermutaions << endl;
+	cout << "Nb de solutions calculees entierement : " << nbFullSolutions << endl;
+	cout << "Nb de solutions uniques calculees entierement: " << solutions.size() << endl;
+	cout << "Nb de solutions optimales : " << nbOptimalSolutions << endl << endl;
+	cout << "Nb de fusions testees : " << d_nbMergeTry << endl;
+	cout << "Nb utilisations du graphe : " << d_nbGraphUsage << endl << endl;
+	cout << "Nb optimale de polyedres : " << minNbPolySolution << endl;
+
+	cout << endl << d_mergeGraph;
 }
 
 

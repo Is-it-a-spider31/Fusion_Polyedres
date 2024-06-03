@@ -1,19 +1,43 @@
 #include <iostream>
-#include "Algorithm.h"
 
+#include "Algorithm.h"
 #include "BruteForceAlgorithm.h"
 #include "RecuitSimuleAlgorithm.h"
-#include "genetic/GeneticAlgorithm.h"
+#include "RecuitSimuleProf.h"
 
+#include "genetic/GeneticAlgorithm.h"
 #include "genetic/TurnamentSelection.h"
+#include "genetic/NXCrossover.h"
+#include "genetic/InsertionMutation.h"
+#include "genetic/BestScoreSelection.h"
+#include "genetic/WheelSelection.h"
 
 #include <cstdlib> // Pour la fonction system()
 #include <string>
 
+#include <csignal>
+#include <ctime>
+
 using namespace std;
+
+GeneticAlgorithm* ptr_ga = nullptr;
+
+void signalHandler(int signum) {
+	std::cout << "Interruption signal (" << signum << ") reçue." << std::endl;	
+	if (ptr_ga != nullptr)
+	{
+		ptr_ga->exportBest();	
+	}
+	
+	exit(signum);
+}
 
 int main(int argc, char* argv[])
 {
+
+	signal(SIGINT, signalHandler);
+
+
 	// Script qui supprime les fichiers .obj eventuellement generes 
 	// par d'anciennes executions du programme
 	#ifdef _WIN32 // OS Windows
@@ -28,11 +52,15 @@ int main(int argc, char* argv[])
 	const string BUGS_TEST_PATH = "Tests/BugsTests/";
 
 	//TEST ALGO BRUTE-FORCE
-	//BruteForceAlgorithm bruteforce(MERGE_TEST_PATH+"exemple2.obj");
+	//BruteForceAlgorithm bruteforce(MERGE_TEST_PATH+"exemple3.obj");
 	//bruteforce.run();
 
 	//TEST RECUIT SIMULE
-	//RecuitSimuleAlgorithm recuit(MERGE_TEST_PATH+"exemple3.obj");
+	//RecuitSimuleAlgorithm recuit(MERGE_TEST_PATH+"exemple.obj");
+	//recuit.run();
+
+
+	//RecuitSimuleProf recuit(MERGE_TEST_PATH+"exemple.obj");
 	//recuit.run();
 
 	// TESTS CONVEXITE
@@ -46,10 +74,31 @@ int main(int argc, char* argv[])
 	//algo.test_WriteObj();
 	//algo.test_LoadObj();
 
-	//------------------------------------------
-	TurnamentSelection selection;
-	GeneticAlgorithm ga{MERGE_TEST_PATH+"exemple3.obj", 10, 0.5, 0.5, 100000, selection};
+	// TEST GRAPH
+	//Graph g;
+	//g.test();
+	//cout << g << endl;
+
+	// TESTS ALGO GENETIQUE ------------------------------------------
+
+	// Test Crossover
+	/*NXCrossover crossover(3);
+	crossover.test();*/
+
+	
+	srand(time(NULL));
+	//TurnamentSelection selection;
+	BestScoreSelection selection;
+	//WheelSelection selection;
+	InsertionMutation mutation;
+	NXCrossover crossover(7);
+
+	//GeneticAlgorithm ga{MERGE_TEST_PATH+"exemple3.obj", 50, 0.5, 0.5, 200, selection, mutation};
+	GeneticAlgorithm ga{MERGE_TEST_PATH+"exemple_complexe.obj", 100, 0.7, 0.8, 5, selection, crossover, mutation};
+	ptr_ga = &ga;
+
 	ga.run();
+
 
 	//faire gaffe si la population est petite et la dimension aussi
 

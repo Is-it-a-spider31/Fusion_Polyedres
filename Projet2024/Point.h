@@ -8,6 +8,16 @@ class Point
 {
 
 public:
+
+	/**
+	 * @brief Constructeur a partir de 2 coordonnees.
+	 * La coordonnee en z est ignoree
+	 *
+	 * @param x coordonnee en x
+	 * @param y coordonnee en y
+	*/
+	Point(double x, double y);
+
 	/**
 	 * @brief Constructeur a partir de 3 coordonnees
 	 * 

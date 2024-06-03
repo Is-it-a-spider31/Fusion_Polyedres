@@ -15,6 +15,6 @@ class InsertionMutation : public Mutation
 	 * @brief Mutation d'un individu par insertion
 	 * @param individual Individu dont un gene doit muter
 	*/
-	void mutate(vector<int> individual) override;
+	void mutate(vector<int>& individual) override;
 };
 

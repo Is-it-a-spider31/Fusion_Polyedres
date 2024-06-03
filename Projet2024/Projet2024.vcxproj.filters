@@ -60,6 +60,9 @@
     <ClCompile Include="genetic\Crossover.cpp">
       <Filter>Fichiers sources\genetic</Filter>
     </ClCompile>
+    <ClCompile Include="genetic\NXCrossover.cpp">
+      <Filter>Fichiers sources\genetic</Filter>
+    </ClCompile>
     <ClCompile Include="genetic\InsertionMutation.cpp">
       <Filter>Fichiers sources\genetic</Filter>
     </ClCompile>
@@ -68,6 +71,21 @@
     </ClCompile>
     <ClCompile Include="genetic\TurnamentSelection.cpp">
       <Filter>Fichiers sources\genetic</Filter>
+    </ClCompile>
+    <ClCompile Include="Graph.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="ExportAlgoData.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="genetic\BestScoreSelection.cpp">
+      <Filter>Fichiers sources\genetic</Filter>
+    </ClCompile>
+    <ClCompile Include="myUtils.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="RecuitSimuleProf.cpp">
+      <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -119,8 +137,20 @@
     <ClInclude Include="genetic\TurnamentSelection.h">
       <Filter>Fichiers d%27en-tête\genetic</Filter>
     </ClInclude>
-    <ClInclude Include="genetic\NXCrossover.cpp">
-      <Filter>Fichiers sources\genetic</Filter>
+    <ClInclude Include="Graph.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="ExportAlgoData.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="genetic\BestScoreSelection.h">
+      <Filter>Fichiers d%27en-tête\genetic</Filter>
+    </ClInclude>
+    <ClInclude Include="myUtils.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="RecuitSimuleProf.h">
+      <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

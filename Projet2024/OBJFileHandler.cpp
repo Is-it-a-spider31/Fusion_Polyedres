@@ -190,12 +190,12 @@ void OBJFileHandler::loadOBJ(vector<Point>& vertices, vector<Face>& faces, vecto
                 delete iss;
             }
            
-
+            // Calcul de la convexite pour chaque polyedre
             for (auto& p : polyhedrons)
             {
                 p.computeConvexity();
             }
-        }
+        } // if file open
 
         objFile.close();
 
@@ -227,103 +227,6 @@ OBJFileHandler::FirstString OBJFileHandler::resolveFirstString(string input)
     
 }
 
-/* void OBJFileHandler::loadOBJ(vector<Point>& vertices, vector<Face>& faces, vector<Polyedre>& polyhedrons, const string& filename)
-{
-    ifstream objFile(filename);
-
-    string mystring;
-
-    bool object = false;
-    // Les indices commencent à 1 (selon le format OBJ)
-    int indexVertex = 1;
-    int indexFace = 1;
-
-    int indexPoly = 0;
-    vector<Point> currentVertices;
-
-    if (objFile.is_open())
-    {
-        while (objFile.good())
-        {
-            objFile >> mystring;
-
-            if (mystring == "o" || object == true)  // POLYEDRE
-            {
-                objFile >> mystring;
-                Polyedre polyedreInter(indexPoly);
-                polyhedrons.push_back(polyedreInter);
-                indexPoly++;
-                object = false;
-            }
-            if (mystring == "v")    // SOMMET (vertex)
-            {
-                // Coordonnes du sommet
-                double x = 0, y = 0, z = 0;
-
-                objFile >> mystring;
-                x = stold(mystring);    // x
-                objFile >> mystring;
-                y = stold(mystring);    // y
-                objFile >> mystring;
-                z = stold(mystring);    // z
-
-                Point currentVertex(indexVertex, x, y, z);
-                indexVertex++;
-                vertices.push_back(currentVertex);
-            }
-            if (mystring == "f")    // FACE
-            {
-                objFile >> mystring;
-
-                // Parcours de toutes les faces du polyedre courant
-                while (mystring != "o" && objFile.good())
-                {
-                    if (mystring == "f")    // Nouvelle face
-                    {
-                        if (currentVertices.size() != 0) 
-                        {
-                            Face currentFace(currentVertices, indexFace);
-                            indexFace++;
-                            faces.push_back(currentFace);
-                            currentVertices.clear();
-                            polyhedrons[indexPoly - 1].faces.push_back(currentFace);
-                        }
-                    }
-                    else    // Face courante
-                    {
-                        vector<float> vertexData = vertexDataFromString(mystring, '/');
-                        // Ajout du sommet a la face
-                        currentVertices.push_back(vertices[vertexData[0] - 1]);
-                    }
-                    objFile >> mystring;
-                }
-
-                if (mystring == "o")    // POLYEDRE SUIVANT
-                {
-                    polyhedrons[indexPoly - 1].computeConvexity();
-
-                    if (currentVertices.size() != 0)
-                    {
-                        Face currentFace(currentVertices, indexFace);
-                        indexFace++;
-                        faces.push_back(currentFace);
-                        currentVertices.clear();
-                        polyhedrons[indexPoly - 1].faces.push_back(currentFace);
-                 
-                    }
-                    object = true;
-                }
-            }
-        }
-
-        // Ajout de la derniere face
-        Face currentFace(currentVertices, indexFace);
-        faces.push_back(currentFace);
-        currentVertices.clear();
-        polyhedrons[indexPoly - 1].faces.push_back(currentFace);
-        polyhedrons[indexPoly - 1].computeConvexity();
-    }
-} */
 
 /**
  * @brief Permet d'extraire les donnees d'une face dans un tableau

@@ -129,39 +129,51 @@
   <ItemGroup>
     <ClCompile Include="Algorithm.cpp" />
     <ClCompile Include="BruteForceAlgorithm.cpp" />
+    <ClCompile Include="ExportAlgoData.cpp" />
     <ClCompile Include="Face.cpp" />
+    <ClCompile Include="genetic\BestScoreSelection.cpp" />
     <ClCompile Include="genetic\GeneticAlgorithm.cpp" />
     <ClCompile Include="genetic\Crossover.cpp" />
     <ClCompile Include="genetic\Mutation.cpp" />
+    <ClCompile Include="genetic\NXCrossover.cpp" />
     <ClCompile Include="genetic\Population.cpp" />
     <ClCompile Include="genetic\Selection.cpp" />
     <ClCompile Include="genetic\InsertionMutation.cpp" />
-    <ClInclude Include="genetic\NXCrossover.cpp" />
     <ClCompile Include="genetic\TurnamentSelection.cpp" />
+    <ClCompile Include="genetic\WheelSelection.cpp" />
+    <ClCompile Include="Graph.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="myUtils.cpp" />
     <ClCompile Include="OBJFileHandler.cpp" />
     <ClCompile Include="Plan.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="Polyedre.cpp" />
     <ClCompile Include="RecuitSimuleAlgorithm.cpp" />
+    <ClCompile Include="RecuitSimuleProf.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Algorithm.h" />
     <ClInclude Include="BruteForceAlgorithm.h" />
+    <ClInclude Include="ExportAlgoData.h" />
     <ClInclude Include="Face.h" />
+    <ClInclude Include="genetic\BestScoreSelection.h" />
     <ClInclude Include="genetic\GeneticAlgorithm.h" />
     <ClInclude Include="genetic\Crossover.h" />
     <ClInclude Include="genetic\Mutation.h" />
+    <ClInclude Include="genetic\NXCrossover.h" />
     <ClInclude Include="genetic\Population.h" />
     <ClInclude Include="genetic\Selection.h" />
     <ClInclude Include="genetic\InsertionMutation.h" />
-    <ClInclude Include="genetic\NXCrossover.h" />
     <ClInclude Include="genetic\TurnamentSelection.h" />
+    <ClInclude Include="genetic\WheelSelection.h" />
+    <ClInclude Include="Graph.h" />
+    <ClInclude Include="myUtils.h" />
     <ClInclude Include="OBJFileHandler.h" />
     <ClInclude Include="Plan.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Polyedre.h" />
     <ClInclude Include="RecuitSimuleAlgorithm.h" />
+    <ClInclude Include="RecuitSimuleProf.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -2,33 +2,27 @@
 #include "Plan.h"
 
 #include <iostream>
+#include <string>
+
 
 /**
- * @brief Constructeur par defaut
+* Constructeur par defaut
+*/
+Polyedre::Polyedre() : d_id(""), d_isConvex(true) {}
+
+/**
+ * @brief Constructeur avec un identifiant
  *
  * @param id Identifiant unique
 */
-Polyedre::Polyedre(int id) : d_id(id), d_isConvex(true){}
-
-
-/**
- * @brief Constructeur par copie
- *
- * @param copy Polyedre a copier
-*/
-Polyedre::Polyedre(const Polyedre& copy)
+Polyedre::Polyedre(int id) : d_id(to_string(id)), d_isConvex(true) 
 {
-    this->d_id = copy.d_id;
-    this->d_isConvex = copy.d_isConvex;
-
-    for (const Face faceCopy: copy.faces)
-    {
-        this->faces.push_back(faceCopy);
-    }
+    d_components.insert(id);
 }
 
 /**
- * @brief Constructeur par copie en excluant des faces
+ * Constructeur par copie en excluant des faces.
+ * Donne un nouvel id unique au polyedre.
  *
  * @param copy Polyedre a copier
  * @param sharedFaces Faces a ne pas copier
@@ -78,9 +72,8 @@ vector<Face> Polyedre::getSharedFaces(const Polyedre& poly1, const Polyedre& pol
     return sharedFaces;
 }
 
-
 /**
- * @brief Fusionne 2 polyedres
+ * @brief Fusionne 2 polyedres adjacents (au moins une face commune).
  * 
  * Les 2 polyedres doivent avoir au moins une face commune.
  * La fusion fonctionne si les polyedres ont une seule face (volume nul)
@@ -91,7 +84,11 @@ vector<Face> Polyedre::getSharedFaces(const Polyedre& poly1, const Polyedre& pol
  * 
  * @return Le polyedre resultant de la fusion
 */
-Polyedre Polyedre::merge2Polyhedra(const Polyedre& poly1, const Polyedre& poly2, const vector<Face> sharedFaces)
+Polyedre Polyedre::merge2AdjacentPolyhedra(
+    const Polyedre& poly1, 
+    const Polyedre& poly2, 
+    const vector<Face> sharedFaces
+)
 {
     // Si poly2 a une seule face (polygone)
     // la fusion est egale a poly1
@@ -119,16 +116,50 @@ Polyedre Polyedre::merge2Polyhedra(const Polyedre& poly1, const Polyedre& poly2,
     return mergedPoly;
 }
 
-
-// GETTERS
-int Polyedre::getId() const { return d_id; }
-
-string Polyedre::getMTL() const
+/**
+ * @brief Fusionne 2 polyedres si possible
+ *
+ * Si la fusion n'est pas possible, retourne un polyedre
+ *	vide avec son id vide
+ *
+ * @param poly1
+ * @param poly2
+ * @return Le polyedre fusionne (id vide si pas possible)
+*/
+Polyedre Polyedre::merge2Polyhedra(const Polyedre& poly1, const Polyedre& poly2)
 {
-    return d_texture;
-}
+    // id vide par defaut (fusion pas effectuee)
+    Polyedre mergedPoly;
 
-vector<Face> Polyedre::getFaces() const { return faces; }
+    // recherche des faces communes entre les 2 polyedres
+    vector<Face> sharedFaces = Polyedre::getSharedFaces(poly1, poly2);
+
+    if (!sharedFaces.empty())	// S'il y a au moins une face commune
+    {
+        // Fusionne 2 polyedres
+        mergedPoly = Polyedre::merge2AdjacentPolyhedra(
+            poly1,
+            poly2,
+            sharedFaces
+        );
+        // Mise a jour de l'identifiant
+        mergedPoly.updateIdAndCompnenents(poly1, poly2);
+    }
+    else	// Pas de faces communes
+    {
+        // Les 2 polyedres ont une seule face
+        if (poly1.faces.size() == poly2.faces.size()
+            && poly1.faces.size() == 1)
+        {
+            // Fusionne 2 polygones (polyedres volume nul)
+            //	id = -1 si pas possible
+            mergedPoly = Polyedre::merge2Polygones(poly1, poly2);
+            // Mise a jour de l'identifiant
+            mergedPoly.updateIdAndCompnenents(poly1, poly2);
+        }
+    }
+    return mergedPoly;
+}
 
 /**
  * @brief Fusionne 2 polygones
@@ -138,11 +169,11 @@ vector<Face> Polyedre::getFaces() const { return faces; }
  *
  * @param poly1
  * @param poly2
- * @return Le polygone resultant de la fusion (si id=-1, alors fusion pas possible)
+ * @return Le polygone resultant de la fusion (id vide si fusion impossible)
 */
 Polyedre Polyedre::merge2Polygones(const Polyedre& poly1, const Polyedre& poly2)
 {
-    Polyedre mergedPoly(-1);    // -1 par defaut : pas de fusion
+    Polyedre mergedPoly;    // Id vide par defaut
     const Face& face1 = poly1.faces[0];
     const Face& face2 = poly2.faces[0];
 
@@ -193,11 +224,9 @@ Polyedre Polyedre::merge2Polygones(const Polyedre& poly1, const Polyedre& poly2)
             // j : determine a partir de quel sommet de la 2eme face
             // on doit commencer la fusion
             if (sameEdge == -1)
-            {
                 j = (j + 1) % face2.d_sommets.size();
-            }
 
-            mergedPoly = Polyedre(poly1);   // copie
+            mergedPoly = poly1;   // copie
 
             // Insertion des sommets de la 2ème faces dans la 1ere
             // si ils ne sont pas deja dans la 1er face
@@ -237,16 +266,16 @@ Polyedre Polyedre::merge2Polygones(const Polyedre& poly1, const Polyedre& poly2)
     return mergedPoly;
 }
   
-void Polyedre::setMTL(string name)
-{
-    d_texture = "Texture/" + name + ".obj";
-}
-
-bool Polyedre::isConvex() const { return d_isConvex; }
-
+/**
+ * @brief Calcul si le polyedre est convexe ou pas
+ * 
+ * Pour savoir si un polyedre est convexe, le principe est de verifier
+ * si pour chaque face, tous les sommets sont du meme cote.
+ * 
+*/
 void Polyedre::computeConvexity()
 {
-    if (faces.size() == 1)  // POLYGONE (Poledre 2D, une seule face)
+    if (faces.size() == 1)  // POLYGONE (Poledre 2D, une seule face et volume nul)
     {
         d_isConvex = faces[0].isConvex();
         return;
@@ -255,14 +284,23 @@ void Polyedre::computeConvexity()
     // Pour chaques faces
     for (int i = 0; i < faces.size(); i++)
     {
+        // Creation d'un plan a patir de 3 points de la face
         Plan plan = Plan(faces[i].d_sommets[0], faces[i].d_sommets[1], faces[i].d_sommets[2]);
-        double sens = 0;
+        double sens = 0;    // sens de reference pour une face
+
+        // Indique de quel cote est un sommet par rapport a une face
+        // donc a gauche ou a droite
         bool pos;
 
+        // Pour chaque face
         for (int f = 0; f < faces.size(); f++)
         {
+            // Pour chaque sommet de la face
             for (int p2 = 0; p2 < faces[f].d_sommets.size(); p2++)
             {
+                // si = 0 alors le sommet est sur le meme plan, donc pas utilisable
+                // sinon indique de quel cote se trouve le sommet par rapport a la face courante
+                //  selon si sa valeur est > 0 ou < 0
                 double sens_point = plan.pointPositionFromPlan(faces[f].d_sommets[p2]);
 
                 // Pour determiner le sens de reference, il faut etre sur que le point
@@ -270,16 +308,20 @@ void Polyedre::computeConvexity()
                 // Ajout d'une marge d'erreur (exemple : 1.54 e-18 est considere comme 0)
                 if (sens_point != 0 && abs(sens_point) > 0.00001)
                 {
-                    if (sens == 0) {
-                        sens = sens_point;
-                        pos = (sens > 0);
+                    // Si sens de reference pas initilise
+                    if (sens == 0) 
+                    {   // Initialisation du sens de reference pour la face courante
+                        sens = sens_point;  // sens de reference pour la face courante
+                        pos = (sens > 0);   // a gauche ou a droite
                     }
-                    else {
+                    else // On a deja un sens de reference
+                    {
+                        // Si le sommet courant n'est pas du meme cote que le sommet de reference
                         if ( (   (sens_point > 0 && !pos) 
                             ||  (sens_point < 0 && pos))
                              && abs(sens_point) > 0.0001)
                         {
-                            d_isConvex = false;
+                            d_isConvex = false; // Pas convexe
                             return;
                         }
                     }
@@ -290,6 +332,56 @@ void Polyedre::computeConvexity()
     d_isConvex = true;
     return;
 }
+
+/**
+ * @brief Met a jour l'id et les composants du polyedre.
+ *
+ * Met a jour l'ensemble des composants a partir de ceux des 2
+ * polyedres en parametre.
+ * Puis met a jour l'identifiant a partir de cet ensemble
+ *
+ * @param poly1
+ * @param poly2
+*/
+void Polyedre::updateIdAndCompnenents(const Polyedre& poly1, const Polyedre& poly2)
+{
+    d_components.insert(
+        poly1.d_components.begin(), 
+        poly1.d_components.end()
+    );
+    d_components.insert(
+        poly2.d_components.begin(), 
+        poly2.d_components.end()
+    );
+    d_id = "0";
+    for (int elem : d_components) {
+        d_id += to_string(elem);
+    }
+}
+
+
+// GETTERS
+
+string Polyedre::getId() const { return d_id; }
+
+string Polyedre::getMTL() const
+{
+    return d_texture;
+}
+
+vector<Face> Polyedre::getFaces() const { return faces; }
+
+void Polyedre::setMTL(string name)
+{
+    d_texture = "Texture/" + name + ".obj";
+}
+
+void Polyedre::setId(const int id)
+{
+    d_id = to_string(id);
+}
+
+bool Polyedre::isConvex() const { return d_isConvex; }
 
 
 // OPERATEURS
