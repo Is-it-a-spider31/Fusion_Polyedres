@@ -7,6 +7,14 @@
 #include <algorithm>
 #include "OBJFileHandler.h"
 
+#include <chrono>
+#include <ctime>
+#include <iomanip>
+
+#include <cstdlib>
+#include <string>
+
+
 using namespace std;
 
 /**
@@ -227,6 +235,50 @@ vector<Polyedre> Algorithm::mergeAlgorithm(vector<Polyedre> solution, int limitN
 
 	return mergedPolyhedra;
 }
+
+void Algorithm::createRunDir(string currentDir, string solution)
+{
+	// Date courante
+	auto now = chrono::system_clock::now();
+	time_t now_time = chrono::system_clock::to_time_t(now);
+
+	// Convertion acec le fuseau horaire local
+	tm local_tm;
+	localtime_s(&local_tm, &now_time);
+
+	// Formatage de la date en une chaine de caracteres
+	ostringstream oss;
+	oss << put_time(&local_tm, "%Y-%m-%d-%H%M%S");
+
+	const string fullPath = currentDir + "Run_Poly"+ solution + "_" + oss.str() + "/";
+	d_fullFilePath = fullPath;
+
+	string cmd = "mkdir " + convertToWindowsPath(fullPath);
+	
+	#ifdef __linux__ // OS Linux
+		cmd = "mkdir -p ./" + fullPath;
+	#endif
+
+	// Convertion string en char* pour system()
+	char* cstr = new char[cmd.length() + 1];    // Allocation de la memoire
+	strcpy_s(cstr, cmd.length() + 1, cmd.c_str());  // Copie
+
+	system(cstr);
+	
+
+}
+
+string Algorithm::convertToWindowsPath(const string& unixPath)
+{
+	string windowsPath = unixPath;
+	for (char& c : windowsPath) {
+		if (c == '/') {
+			c = '\\';
+		}
+	}
+	return windowsPath;
+}
+
 
 /**
  * @brief Fonction d'evaluation d'une solution

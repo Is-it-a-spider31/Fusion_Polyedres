@@ -43,7 +43,7 @@ void TurnamentSelection::select(vector<vector<int>>& population, vector<double> 
 
 void TurnamentSelection::oneWinnerTurnament(vector<vector<int>>& population, vector<double>& score, int& winnerInd)
 {
-	nbIndivInTurnament = population.size() / 3;
+	nbIndivInTurnament = population.size() / 4;
 
 	vector<int> indexToFight(nbIndivInTurnament, -1);
 	int cpt_correct_number = 0;

@@ -240,7 +240,8 @@ void RecuitSimuleAlgorithm::printDataChart(const string& info)
 	const string legend = "";
 	string title = "Evolution de l'objectif en fonction des iterations";
 	d_dataWriters[0].writeDataToFile(
-		GENERATE_OBJ_PATH+"RecuitChartObj",	// Nom fichier
+		d_fullFilePath ,
+    "RecuitChart",	// Nom fichier
 		"Nb iteration",	// Axe X
 		"Objectif",		// Axe Y
 		legend,
@@ -251,7 +252,8 @@ void RecuitSimuleAlgorithm::printDataChart(const string& info)
 
 	title = "Evolution du nombre de permutation en fonction des iterations";
 	d_dataWriters[1].writeDataToFile(
-		GENERATE_OBJ_PATH + "RecuitChartPerm",	// Nom fichier
+			d_fullFilePath ,
+    "RecuitChart",	// Nom fichier
 		"Nb iteration",	// Axe X
 		"Nb permutations",		// Axe Y
 		legend,
@@ -263,7 +265,8 @@ void RecuitSimuleAlgorithm::printDataChart(const string& info)
 	title = "Evolution de la temperature en fonction des iterations";
 	/*
 	d_dataWriters[2].writeDataToFile(
-		GENERATE_OBJ_PATH + "RecuitChartTemp",	// Nom fichier
+			d_fullFilePath ,
+    "RecuitChart",	// Nom fichier
 		"Nb iteration",	// Axe X
 		"Temperature",		// Axe Y
 		legend,

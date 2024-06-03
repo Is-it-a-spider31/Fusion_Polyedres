@@ -184,7 +184,7 @@ void RecuitSimuleProf::printDataChart(const string& info)
     const string legend = "";
     const string title = "[Prof] Evolution de l'objectif au cours des iterations";
     d_dataWriters[0].writeDataToFile(
-        GENERATE_OBJ_PATH + "RecuitProfChart",	// Nom fichier
+        d_fullFilePath , "RecuitProfChart",	// Nom fichier
         "Temperature",	// Axe X
         "Objectif",		// Axe Y
         legend,
