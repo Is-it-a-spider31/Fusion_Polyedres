@@ -22,9 +22,8 @@ GeneticAlgorithm::GeneticAlgorithm(const string& filename, int popSize, double p
 
 void GeneticAlgorithm::run()
 {
-
 	clock_t tStart = clock();
-		
+	d_dataWriters.push_back(ExportAlgoData());
 	//Initialisation
 	d_Population = new Population{ d_dimension, d_popSize };
 	d_pop = d_Population->randomInit();
@@ -63,7 +62,7 @@ void GeneticAlgorithm::run()
 		cout <<"=====================================================================" << endl;
 
 
-		//SI d_popsize = tgamma(d_dimension + 1) BREAK pck on a déja fait toutes les permutations
+		//SI d_popsize = tgamma(d_dimension + 1) BREAK pck on a dÃ©ja fait toutes les permutations
 		// donc il faut renvoyer le meilleur score. 
 		//if(d_popresized) { break; }
 		if(d_popResized)
@@ -81,8 +80,9 @@ void GeneticAlgorithm::run()
 
 			while(iteration < d_maxIteration)
 			{
-				//Tracker le score min par itération pour le graphe
-				d_dataWriter.addPoint(iteration, scoreMin);
+				d_dataWriters[0].addPoint(iteration, scoreMin);
+				//Tracker le score min par itÃ©ration pour le graphe
+
 
 				cout << "------ITERATION " << iteration << " --------" << endl;
 				//printPopulation();
@@ -97,7 +97,7 @@ void GeneticAlgorithm::run()
 
 				vector<int> child1, child2;
 
-				//Selection des parents 2 à 2 pour faire 2 enfants
+				//Selection des parents 2 Ã  2 pour faire 2 enfants
 				for (int i = 0; i < d_Selection->getParents().size() - 1; i=i+2)
 				{
 					child1.clear();
@@ -123,14 +123,14 @@ void GeneticAlgorithm::run()
 						d_Mutation->mutate(child2);
 					}
 
-					//Remplissage de la moitié de la nouvelle population avec des enfants
+					//Remplissage de la moitiÃ© de la nouvelle population avec des enfants
 					d_pop.push_back(child1);
 					d_pop.push_back(child2);
 						
 				}
 
 				//Remplissage random du reste de la population
-				//On pourrai faire des croisement sur des indiv tiré randoms
+				//On pourrai faire des croisement sur des indiv tirÃ© randoms
 				int last = d_oldpop.size() - 1;
 				while (d_pop.size() < d_popSize)
 				{
@@ -189,7 +189,7 @@ void GeneticAlgorithm::run()
 
 				}
 					
-				//Affichage du meilleur score trouvé depuis le début
+				//Affichage du meilleur score trouvÃ© depuis le dÃ©but
 				cout << "Best score : " << scoreMin << endl;
 				cout << "Best indiv : [ ";
 				for (const auto& i : d_permutScoreMax)
@@ -225,7 +225,7 @@ void GeneticAlgorithm::run()
 				strExecutionTime = to_string(minutes) + " min " + doubleToStringRounded(seconds, 3) + " s";
 			}
 
-			string info = "Nb itérations : " + to_string(iteration) + "\\n";
+			string info = "Nb itÃ©rations : " + to_string(iteration) + "\\n";
 			info += "Best eval : " + to_string(scoreMin) + "\\n";
 			info += "Solution : ";
 			for (auto& p : d_permutScoreMax)	// Affiche la solution
@@ -280,9 +280,10 @@ const string GeneticAlgorithm::getFilePath()
 void GeneticAlgorithm::printDataChart(const string& info)
 {
 	const string legend = "";
-	const string title = "Evolution de l'objectif en fonction des itérations";
-	d_dataWriter.writeDataToFile(
+	const string title = "Evolution de l'objectif en fonction des itÃ©rations";
+	d_dataWriters[0].writeDataToFile(
 		d_fullFilePath, "GeneticChart",	//filepath , Nom fichier
+
 		"Iteration",	// Axe X
 		"Objectif",		// Axe Y
 		legend,

@@ -15,8 +15,8 @@ const string RecuitSimuleAlgorithm::GENERATE_OBJ_PATH = "Tests/generated/RecuitS
 
 RecuitSimuleAlgorithm::RecuitSimuleAlgorithm(const string& filename)
 	: Algorithm(filename),
-	d_coolingFactor(0.90),
-	d_temperature(800),
+	d_coolingFactor(0.96),
+	d_temperature(1000),
 	d_randomGenerator(std::random_device()())
 {
 
@@ -31,19 +31,27 @@ void RecuitSimuleAlgorithm::run()
 
 	// Copies de la liste des polyedres
 	vector<Polyedre> currentSolution = d_polyhedra;
+	vector<Polyedre> bestSolution = d_polyhedra;
 	vector<Polyedre> neighborSolution = d_polyhedra;	// Solution voisine
 
 	double currentEval = this->evaluateSolution(currentSolution);
 	double neighborEval;
+	double bestEval = currentEval;
 	double palier;
 	double n = 0;
 
 	int nbIterations = 0;
+	double nonImprovIter = 0;
+	double nonImprovLimit = 1000;
 
 	// Parametres
-	const int maxIter = 32;
+	const int maxIter = 24;
 	const int initialTemp = d_temperature;
-	const int nbPermutations = 4;
+	int nbPermutations = 4;
+
+	d_dataWriters.push_back(ExportAlgoData());
+	d_dataWriters.push_back(ExportAlgoData());
+	d_dataWriters.push_back(ExportAlgoData());
 
 	// Debut du chronometre (pour compter le temps d'execution)
 	clock_t tStart = clock();
@@ -56,30 +64,52 @@ void RecuitSimuleAlgorithm::run()
 
 		//cout << "palier : " << palier << endl;
 		n = 0;
-		d_dataWriter.addPoint(d_temperature, currentEval);
+		d_dataWriters[0].addPoint(nbIterations, currentEval);		// ADD DATA
+		d_dataWriters[2].addPoint(nbIterations, d_temperature);		// ADD DATA
 
-		nbIterations++;
-		if (nbIterations % 4 == 0) {
+		if (nbIterations % 7 == 0) {
 			cout << "temperature : " << d_temperature << endl;
 		}
 
 		while (n < maxIter)
 		{
+			nbIterations++;
+
 			//cout << "\tn : " << n << endl;
 			// PERTURBATION
 			neighborSolution = currentSolution;
+			int min = 0.15 * d_polyhedra.size();
+			int max = 0.3 * d_polyhedra.size();
+			nbPermutations = min + ((nonImprovIter / nonImprovLimit) * (max - min));
+			//if (nbPermutations > 4)
+			//	cout << "ahah" << endl;
+			d_dataWriters[1].addPoint(nbIterations, nbPermutations);	// ADD DATA
 			this->permuteNElements(neighborSolution, nbPermutations);
 
 			// EVALUATION
 			neighborEval = this->evaluateSolution(neighborSolution);
 			//cout << "Eval : " << neighborEval << endl;
 
+			// UPDATE best solution
+			if (neighborEval < bestEval)
+			{
+				bestSolution = neighborSolution;
+				bestEval = neighborEval;
+			}
+
 			// ACCEPTATION
-			if (isNeighborAccepted(currentEval, neighborEval))
+			if (isNeighborAccepted(currentEval, neighborEval)
+				|| nonImprovIter > nonImprovLimit)
 			{
 				currentSolution = neighborSolution;
 				currentEval = neighborEval;
+				nonImprovIter = 0;
 			}
+			else
+			{
+				nonImprovIter++;
+			}
+
 			n++;
 		}
 	}
@@ -88,7 +118,7 @@ void RecuitSimuleAlgorithm::run()
 	double timeTaken = (double)(clock() - tStart) / CLOCKS_PER_SEC;
 
 	// Fusion sur la meilleur solution trouvee
-	const vector<Polyedre> mergedSolution = mergeAlgorithm(currentSolution);
+	const vector<Polyedre> mergedSolution = mergeAlgorithm(bestSolution);
 
 	// ECRITURE DE LA MEILLEURE SOLUTION EN OBJ
 	cout << "SIZE : " << mergedSolution.size() << endl;
@@ -113,16 +143,18 @@ void RecuitSimuleAlgorithm::run()
 	}
 
 	// Encadre d'information sur le graphique
-	string info = "Nb permutations pour voisin : " + to_string(nbPermutations) + "\\n";
+	// string info = "Nb permutations pour voisin : " + to_string(nbPermutations) + "\\n";
+	string info = "Nb permutations pour voisin (VARIABLE)\\n";
 	info += "Initial temp : " + to_string(initialTemp) + "\\n";
 	info += "Facteur refroidissement : " + doubleToStringRounded(d_coolingFactor, 3) + "\\n";
 	info += "Nb iteration par palier : " + to_string(maxIter) + "\\n";
 	info += "Nb iteration effectuees : " + to_string(nbIterations) + "\\n";
+	info += "Non improv Iter (VARIABLE): " + doubleToStringRounded(nonImprovLimit, 1) + "\\n";
 	info += "Temps d'execution : " + strExecutionTime + "\\n";
-	info += "Best eval : " + to_string(currentEval)+ "\\n";
+	info += "Best eval : " + to_string(bestEval)+ "\\n";
 	info += "Taille finale : " + to_string(mergedSolution.size())+ "\\n";
 	info += "Solution : ";
-	for (auto& p : currentSolution)	// Affiche la solution
+	for (auto& p : bestSolution)	// Affiche la solution
 		info += p.getId() + " ";
 
 	cout << info << endl;
@@ -183,7 +215,8 @@ bool RecuitSimuleAlgorithm::isNeighborAccepted(const double& currentEval, const 
 	if (neighborEval > currentEval)
 	{	// Acceptation possible avec une certaine probabilite
 
-		double proba = std::exp((currentEval - neighborEval) / d_temperature);
+		//double proba = std::exp((currentEval - neighborEval) / d_temperature) - 1;
+		double proba = 2 - exp((1-((neighborEval - currentEval) / 5)) * (d_temperature / 1000));
 
 		// Distribution uniforme dans [0, 1]
 		std::uniform_real_distribution<double> uniformDis(0.0, 1.0);
@@ -192,7 +225,7 @@ bool RecuitSimuleAlgorithm::isNeighborAccepted(const double& currentEval, const 
 		//cout << "proba" << proba << endl;
 		//cout << "random" << random << endl;
 
-		//if (random <= proba)
+		//if (random < proba)
 			isAccepted = false;
 	}
 
@@ -205,14 +238,41 @@ bool RecuitSimuleAlgorithm::isNeighborAccepted(const double& currentEval, const 
 void RecuitSimuleAlgorithm::printDataChart(const string& info)
 {
 	const string legend = "";
-	const string title = "Evolution de l'objectif en fonction de la temperature";
-	d_dataWriter.writeDataToFile(
-		d_fullFilePath ,"RecuitChart",	// Nom fichier
-		"Temperature",	// Axe X
+	string title = "Evolution de l'objectif en fonction des iterations";
+	d_dataWriters[0].writeDataToFile(
+		d_fullFilePath ,
+    "RecuitChart",	// Nom fichier
+		"Nb iteration",	// Axe X
 		"Objectif",		// Axe Y
 		legend,
 		title,
 		info,
-		true	// Invertion de l'axe X
+		false	// Invertion de l'axe X
 	);
+
+	title = "Evolution du nombre de permutation en fonction des iterations";
+	d_dataWriters[1].writeDataToFile(
+			d_fullFilePath ,
+    "RecuitChart",	// Nom fichier
+		"Nb iteration",	// Axe X
+		"Nb permutations",		// Axe Y
+		legend,
+		title,
+		info,
+		false	// Invertion de l'axe X
+	);
+
+	title = "Evolution de la temperature en fonction des iterations";
+	/*
+	d_dataWriters[2].writeDataToFile(
+			d_fullFilePath ,
+    "RecuitChart",	// Nom fichier
+		"Nb iteration",	// Axe X
+		"Temperature",		// Axe Y
+		legend,
+		title,
+		info,
+		false	// Invertion de l'axe X
+	);
+	*/
 }

@@ -20,9 +20,9 @@ RecuitSimuleProf::RecuitSimuleProf(const string& filename)
 */
 void RecuitSimuleProf::run()
 {
-    int maxIter = 1000;
+    int maxIter = 2000;
     int maxIterStep = 24;
-    d_coolingFactor = 0.95;
+    d_coolingFactor = 0.99;
     int maxReducSteps = static_cast<int>(0.5 - (3.0 / log(d_coolingFactor)));
     int stagnationCrit = 1000;
     double aireMin = this->evaluateSolution(d_polyhedra);
@@ -34,7 +34,9 @@ void RecuitSimuleProf::run()
     double bestEval;
     int nbIterations = 0;
 
-    int PARAM_SA_C_IT = 1;
+    int PARAM_SA_C_IT = 3;
+
+    d_dataWriters.push_back(ExportAlgoData());
 
     // Debut du chronometre (pour compter le temps d'execution)
     clock_t tStart = clock();
@@ -59,11 +61,12 @@ void RecuitSimuleProf::run()
             double neighborEval = this->evaluateSolution(neighborSolution);
 
             bool isAccepted = isNeighborAccepted(currentEval, neighborEval);
-            if (isAccepted) {
+            if (isAccepted) 
+            {
                 currentSolution = neighborSolution;
                 currentEval = neighborEval;
 
-                d_dataWriter.addPoint(nbIterations, currentEval); // ADD DATA
+                d_dataWriters[0].addPoint(nbIterations, currentEval); // ADD DATA
             }
             else {
                 nonImprovIter++;
@@ -159,6 +162,9 @@ bool RecuitSimuleProf::isNeighborAccepted(const double& currentEval, const doubl
 
     // O n l'accepte avec une proba de 0.5 si gain nul ou pire
     double v = 1000.0 * (1.0 / (1.0 + exp((PARAM_SA_C_CS * gain) / (aireMax * d_temperature))));
+    // cout << d_temperature << endl;
+    //d_dataWriter.addPoint(d_temperature, v); // ADD DATA
+
     //cout << "v = " << v << endl;
     //cout << "random = " << random << endl;
     if (gain < 0 || ((d_temperature > 0) && (random > v)))
@@ -177,7 +183,7 @@ void RecuitSimuleProf::printDataChart(const string& info)
 {
     const string legend = "";
     const string title = "[Prof] Evolution de l'objectif au cours des iterations";
-    d_dataWriter.writeDataToFile(
+    d_dataWriters[0].writeDataToFile(
         d_fullFilePath , "RecuitProfChart",	// Nom fichier
         "Temperature",	// Axe X
         "Objectif",		// Axe Y

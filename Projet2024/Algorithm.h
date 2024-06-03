@@ -88,7 +88,7 @@ protected:
     /**
      * @brief Permet de stocker et ecrire des donnes de l'algo
     */
-    ExportAlgoData d_dataWriter;
+    vector<ExportAlgoData> d_dataWriters;
 
 
     /**
@@ -104,7 +104,7 @@ protected:
      * @param nbGraphUsage Nombre de fois que le graphe des fusions a ete utilise
      * @return nombre de polyedres apres fusions
     */
-    vector<Polyedre> mergeAlgorithm(const vector<Polyedre>& solution, int limitNbPoly = -1);
+    vector<Polyedre> mergeAlgorithm(vector<Polyedre> solution, int limitNbPoly = -1);
 
     virtual const string getFilePath() = 0;
 

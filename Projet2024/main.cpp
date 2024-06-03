@@ -59,6 +59,7 @@ int main(int argc, char* argv[])
 	//RecuitSimuleAlgorithm recuit(MERGE_TEST_PATH+"exemple.obj");
 	//recuit.run();
 
+
 	//RecuitSimuleProf recuit(MERGE_TEST_PATH+"exemple.obj");
 	//recuit.run();
 
@@ -97,7 +98,7 @@ int main(int argc, char* argv[])
 	ptr_ga = &ga;
 
 	ga.run();
-	
+
 
 	//faire gaffe si la population est petite et la dimension aussi
 
