@@ -31,6 +31,7 @@ public:
      * @param invertX Si vrai, valeurs sur l'axes par ordre decroissant
     */
     void writeDataToFile(
+        const string& filepath,
         const string& filename,    // Nom du fichier
         const string& xAxisName,   // Nom de l'axe X
         const string& yAxisName,   // Nom de l'axe Y
@@ -59,6 +60,6 @@ private:
     */
     vector<Point> dataPoints;
 
-    void displayChart(const string& dataFilePath);
+    void displayChart(const string& dataFilePath, const string& dataFileName);
 };
 

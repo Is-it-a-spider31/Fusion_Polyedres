@@ -1,6 +1,4 @@
 #include <iostream>
-#include <cstdlib> // Pour la fonction system()
-#include <string>
 
 #include "Algorithm.h"
 #include "BruteForceAlgorithm.h"
@@ -95,7 +93,7 @@ int main(int argc, char* argv[])
 	NXCrossover crossover(7);
 
 	//GeneticAlgorithm ga{MERGE_TEST_PATH+"exemple3.obj", 50, 0.5, 0.5, 200, selection, mutation};
-	GeneticAlgorithm ga{MERGE_TEST_PATH+"exemple_complexe.obj", 100, 0.7, 0.8, 100, selection, crossover, mutation};
+	GeneticAlgorithm ga{MERGE_TEST_PATH+"exemple_complexe.obj", 100, 0.7, 0.8, 5, selection, crossover, mutation};
 	ptr_ga = &ga;
 
 	ga.run();

@@ -27,7 +27,7 @@ def read_data_from_file(filename):
     return title, x_axis_name, y_axis_name, legend, info_box, invert_x, data_points
 
 
-def plot_graph(title, x_axis_name, y_axis_name, legend, info_box, invert_x, data_points):
+def plot_graph(title, x_axis_name, y_axis_name, legend, info_box, invert_x, data_points, filepath):
     # Affichage des donnees dans un graphique
 
     x_values, y_values = zip(*data_points)
@@ -48,6 +48,7 @@ def plot_graph(title, x_axis_name, y_axis_name, legend, info_box, invert_x, data
     plt.annotate(info_box, xy=(0.5, 0.5), xycoords='axes fraction', fontsize=10,
                  bbox=dict(facecolor='white', edgecolor='black'))
 
+    plt.savefig(filepath+filename+".png")
     plt.show()
 
 
@@ -63,11 +64,13 @@ if __name__ == "__main__":
 
     # Chemin/nom du fichier passe en argument
     parser = argparse.ArgumentParser()
+    parser.add_argument('filepath', type=str)
     parser.add_argument('filename', type=str)
     filename = parser.parse_args().filename
+    filepath = parser.parse_args().filepath
 
     # Lecture des donnees
-    title, x_axis_name, y_axis_name, legend, info_box, invert_x, data_points = read_data_from_file(filename)
+    title, x_axis_name, y_axis_name, legend, info_box, invert_x, data_points = read_data_from_file(filepath+filename + ".txt")
 
     # Affichage des donnes
-    plot_graph(title, x_axis_name, y_axis_name, legend, info_box, invert_x, data_points)
+    plot_graph(title, x_axis_name, y_axis_name, legend, info_box, invert_x, data_points, filepath)

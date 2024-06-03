@@ -2,11 +2,6 @@
 #include <time.h>
 #include "../myUtils.h"
 
-/**
- * Chemin du repertoire ves lequel l'agoritme ecrit
- * les solutions trouvees sous forme de fichiers .obj
-*/
-const string GeneticAlgorithm::GENERATE_OBJ_PATH = "Tests/generated/GeneticAlgo/";
 
 GeneticAlgorithm::GeneticAlgorithm(const string& filename, int popSize, double probaCross, double probaMut, int maxIter, Selection& selection, Crossover& crossover, Mutation& mutation) :
 	Algorithm(filename), d_popSize{ popSize }, d_crossoverProba{probaCross}, d_mutationProba{probaMut}, d_maxIteration{maxIter}
@@ -27,6 +22,7 @@ GeneticAlgorithm::GeneticAlgorithm(const string& filename, int popSize, double p
 
 void GeneticAlgorithm::run()
 {
+
 	clock_t tStart = clock();
 		
 	//Initialisation
@@ -72,12 +68,7 @@ void GeneticAlgorithm::run()
 		//if(d_popresized) { break; }
 		if(d_popResized)
 		{
-			vector<Polyedre> solution_merged = mergeAlgorithm(d_permutScoreMax);
-
-			//Ecriture de la solution puis fin de la boucle
-			string filename = GENERATE_OBJ_PATH + "FUSION." + to_string(solution_merged.size()) + ".obj";
-			OBJFileHandler::writeOBJ(d_vertices, solution_merged, filename);
-
+			exportBest();
 			return;
 		}
 
@@ -190,7 +181,12 @@ void GeneticAlgorithm::run()
 					{
 						scoreMin = new_indiv_score;
 						d_permutScoreMax = toEvaluate;
+
 					}
+
+					
+
+
 				}
 					
 				//Affichage du meilleur score trouvé depuis le début
@@ -210,9 +206,7 @@ void GeneticAlgorithm::run()
 			}
 
 			//Export de la solution
-			vector<Polyedre> solution_merged = mergeAlgorithm(d_permutScoreMax);
-			string filename = GENERATE_OBJ_PATH + "FUSION." + to_string(solution_merged.size()) + ".obj";
-			OBJFileHandler::writeOBJ(d_vertices, solution_merged, filename);
+			exportBest();
 
 			double timeTaken = (double)(clock() - tStart) / CLOCKS_PER_SEC;
 
@@ -237,7 +231,7 @@ void GeneticAlgorithm::run()
 			for (auto& p : d_permutScoreMax)	// Affiche la solution
 				info += p.getId() + " ";
 			info += "\\n";
-			info += "Taille finale : " + to_string(solution_merged.size()) + "\\n";
+			info += "Taille finale : " + to_string(d_nb_poly_finale) + "\\n";
 			info += "Temps d'execution : " + strExecutionTime + "\\n";
 
 			cout << info << endl;
@@ -263,9 +257,24 @@ void GeneticAlgorithm::printPopulation() const
 void GeneticAlgorithm::exportBest()
 {
 	vector<Polyedre> solution_merged = mergeAlgorithm(d_permutScoreMax);
-	string filename = GENERATE_OBJ_PATH + "FUSION." + to_string(solution_merged.size()) + ".obj";
+	createRunDir(getFilePath(), to_string(solution_merged.size()));
+	cout << "Directory created ! " << endl;
+
+	string filename = d_fullFilePath + "FUSION." + to_string(solution_merged.size()) + ".obj";
 	OBJFileHandler::writeOBJ(d_vertices, solution_merged, filename);
 
+	d_nb_poly_finale = solution_merged.size();
+
+}
+
+/**
+ * Chemin du repertoire ves lequel l'agoritme ecrit
+ * les solutions trouvees sous forme de fichiers .obj
+*/
+
+const string GeneticAlgorithm::getFilePath()
+{
+	return "Tests/generated/GeneticAlgo/";
 }
 
 void GeneticAlgorithm::printDataChart(const string& info)
@@ -273,7 +282,7 @@ void GeneticAlgorithm::printDataChart(const string& info)
 	const string legend = "";
 	const string title = "Evolution de l'objectif en fonction des itérations";
 	d_dataWriter.writeDataToFile(
-		GENERATE_OBJ_PATH + "GeneticChart",	// Nom fichier
+		d_fullFilePath, "GeneticChart",	//filepath , Nom fichier
 		"Iteration",	// Axe X
 		"Objectif",		// Axe Y
 		legend,

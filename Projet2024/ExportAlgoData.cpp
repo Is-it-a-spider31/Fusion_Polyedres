@@ -27,6 +27,7 @@
  * @param invertX Si vrai, valeurs sur l'axes par ordre decroissant
 */
 void ExportAlgoData::writeDataToFile(
+    const string& filepath,    // Chemin du fichier
     const string& filename,    // Nom du fichier
     const string& xAxisName,   // Nom de l'axe X
     const string& yAxisName,   // Nom de l'axe Y
@@ -36,7 +37,7 @@ void ExportAlgoData::writeDataToFile(
     const bool& invertX        // Axe X dans l'ordre decroissant
 )
 {
-    const string fullPath = filename + "_" + this->getCurrentDateTime() + ".txt";
+    const string fullPath = filepath + filename + ".txt";
     ofstream file(fullPath);
 
     /*
@@ -63,7 +64,7 @@ void ExportAlgoData::writeDataToFile(
         file.close();
 
         // Affichage du graphique correspondant aux donnees
-        displayChart(fullPath);
+        displayChart(filepath, filename);
     }
     else {
         cerr << "Unable to open file";
@@ -100,14 +101,14 @@ string ExportAlgoData::getCurrentDateTime()
     return oss.str();
 }
 
-void ExportAlgoData::displayChart(const string& dataFilePath)
+void ExportAlgoData::displayChart(const string& dataFilePath, const string& dataFileName)
 {
 
-    string command = "scripts\\pythonGenerateGraph\\dist\\plot_graph.exe " + dataFilePath;
+    string command = "scripts\\pythonGenerateGraph\\dist\\plot_graph.exe " + dataFilePath + " " + dataFileName;
 
     cout << "Commande : " << command << endl;
     #ifdef __linux__ // OS Linux
-        command = "./scripts/pythonGenerateGraph/dist/plot_graph " + dataFilePath;
+        command = "./scripts/pythonGenerateGraph/dist/plot_graph " + dataFilePath + " " + dataFileName;
     #endif
 
     // Convertion string en char* pour system()

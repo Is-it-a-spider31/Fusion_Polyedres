@@ -207,7 +207,7 @@ void RecuitSimuleAlgorithm::printDataChart(const string& info)
 	const string legend = "";
 	const string title = "Evolution de l'objectif en fonction de la temperature";
 	d_dataWriter.writeDataToFile(
-		GENERATE_OBJ_PATH+"RecuitChart",	// Nom fichier
+		d_fullFilePath ,"RecuitChart",	// Nom fichier
 		"Temperature",	// Axe X
 		"Objectif",		// Axe Y
 		legend,

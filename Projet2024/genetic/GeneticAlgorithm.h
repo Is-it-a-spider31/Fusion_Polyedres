@@ -25,6 +25,11 @@ public:
 
 	void exportBest();
 
+	/**
+	 * Chemin du repertoire ves lequel l'agoritme ecrit
+	 * les solutions trouvees sous forme de fichiers .obj
+	*/
+	const string getFilePath() override;
 
 protected:
 
@@ -57,12 +62,7 @@ protected:
 	Crossover* d_Crossover;
 	Mutation* d_Mutation;
 
-private:
-	/**
-	 * Chemin du repertoire ves lequel l'agoritme ecrit
-	 * les solutions trouvees sous forme de fichiers .obj
-	*/
-	static const string GENERATE_OBJ_PATH;
+private:	
 
 	void printDataChart(const string& info);
 	

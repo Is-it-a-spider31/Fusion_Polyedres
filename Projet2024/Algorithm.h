@@ -106,6 +106,16 @@ protected:
     */
     vector<Polyedre> mergeAlgorithm(const vector<Polyedre>& solution, int limitNbPoly = -1);
 
+    virtual const string getFilePath() = 0;
+
+    void createRunDir(string currentDir, string solution);
+
+    string convertToWindowsPath(const string& unixPath);
+
+    string d_fullFilePath;
+
+    int d_nb_poly_finale;
+
 private:
     /**
      * Construit le graphe des fusions convexes
