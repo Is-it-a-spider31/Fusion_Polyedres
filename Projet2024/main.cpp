@@ -54,12 +54,12 @@ int main(int argc, char* argv[])
 	const string BUGS_TEST_PATH = "Tests/BugsTests/";
 
 	//TEST ALGO BRUTE-FORCE
-	//BruteForceAlgorithm bruteforce(MERGE_TEST_PATH+"exemple3.obj");
-	//bruteforce.run();
+	BruteForceAlgorithm bruteforce(MERGE_TEST_PATH+"4cubes.obj");
+	bruteforce.run();
 
 	//TEST RECUIT SIMULE
-	RecuitSimuleAlgorithm recuit(MERGE_TEST_PATH+"exemple.obj");
-	recuit.run();
+	//RecuitSimuleAlgorithm recuit(MERGE_TEST_PATH+"exemple.obj");
+	//recuit.run();
 
 	//RecuitSimuleProf recuit(MERGE_TEST_PATH+"exemple.obj");
 	//recuit.run();

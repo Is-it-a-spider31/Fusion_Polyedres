@@ -195,7 +195,7 @@ vector<Polyedre> Algorithm::mergeAlgorithm(const vector<Polyedre>& solution, int
 	// cout << "Val reward avant calcul : " << reward << endl;
 	double min = 0;
 	double max = pow((solution.size() - 1), 2);
-	reward = (reward - min)/(max-min)*2;	// Normalisation
+	reward = ((reward - min)/(max-min))*2;	// Normalisation
 	// cout << "Recompense : " << reward << endl;
 	// Evaluation de la soluion courante
 	// cout << "nb poly : " << mergedPolyhedra.size() << endl;

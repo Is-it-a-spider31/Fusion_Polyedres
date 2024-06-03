@@ -27,7 +27,7 @@ GeneticAlgorithm::GeneticAlgorithm(const string& filename, int popSize, double p
 void GeneticAlgorithm::run()
 {
 	clock_t tStart = clock();
-	
+	d_dataWriters.push_back(ExportAlgoData());
 
 		//Initialisation
 		d_Population = new Population{ d_dimension, d_popSize };
@@ -93,7 +93,7 @@ void GeneticAlgorithm::run()
 
 			while(iteration < d_maxIteration)
 			{
-				d_dataWriter.addPoint(iteration, scoreMin);
+				d_dataWriters[0].addPoint(iteration, scoreMin);
 
 				cout << "------ITERATION " << iteration << " --------" << endl;
 				//printPopulation();
@@ -248,7 +248,7 @@ void GeneticAlgorithm::printDataChart(const string& info)
 {
 	const string legend = "";
 	const string title = "Evolution de l'objectif en fonction des itérations";
-	d_dataWriter.writeDataToFile(
+	d_dataWriters[0].writeDataToFile(
 		GENERATE_OBJ_PATH + "GeneticChart",	// Nom fichier
 		"Iteration",	// Axe X
 		"Objectif",		// Axe Y

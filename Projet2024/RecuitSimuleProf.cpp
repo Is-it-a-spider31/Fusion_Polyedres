@@ -36,6 +36,8 @@ void RecuitSimuleProf::run()
 
     int PARAM_SA_C_IT = 3;
 
+    d_dataWriters.push_back(ExportAlgoData());
+
     // Debut du chronometre (pour compter le temps d'execution)
     clock_t tStart = clock();
 
@@ -64,7 +66,7 @@ void RecuitSimuleProf::run()
                 currentSolution = neighborSolution;
                 currentEval = neighborEval;
 
-                // d_dataWriter.addPoint(nbIterations, currentEval); // ADD DATA
+                d_dataWriters[0].addPoint(nbIterations, currentEval); // ADD DATA
             }
             else {
                 nonImprovIter++;
@@ -181,7 +183,7 @@ void RecuitSimuleProf::printDataChart(const string& info)
 {
     const string legend = "";
     const string title = "[Prof] Evolution de l'objectif au cours des iterations";
-    d_dataWriter.writeDataToFile(
+    d_dataWriters[0].writeDataToFile(
         GENERATE_OBJ_PATH + "RecuitProfChart",	// Nom fichier
         "Temperature",	// Axe X
         "Objectif",		// Axe Y

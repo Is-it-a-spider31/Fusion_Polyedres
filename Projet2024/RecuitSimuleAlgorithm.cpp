@@ -15,8 +15,8 @@ const string RecuitSimuleAlgorithm::GENERATE_OBJ_PATH = "Tests/generated/RecuitS
 
 RecuitSimuleAlgorithm::RecuitSimuleAlgorithm(const string& filename)
 	: Algorithm(filename),
-	d_coolingFactor(0.99),
-	d_temperature(3000),
+	d_coolingFactor(0.98),
+	d_temperature(1000),
 	d_randomGenerator(std::random_device()())
 {
 
@@ -45,9 +45,13 @@ void RecuitSimuleAlgorithm::run()
 	int nonImprovLimit = 1000;
 
 	// Parametres
-	const int maxIter = 14;
+	const int maxIter = 24;
 	const int initialTemp = d_temperature;
 	int nbPermutations = 4;
+
+	d_dataWriters.push_back(ExportAlgoData());
+	d_dataWriters.push_back(ExportAlgoData());
+	d_dataWriters.push_back(ExportAlgoData());
 
 	// Debut du chronometre (pour compter le temps d'execution)
 	clock_t tStart = clock();
@@ -60,7 +64,8 @@ void RecuitSimuleAlgorithm::run()
 
 		//cout << "palier : " << palier << endl;
 		n = 0;
-		d_dataWriter.addPoint(nbIterations, currentEval);	// ADD DATA
+		d_dataWriters[0].addPoint(nbIterations, currentEval);		// ADD DATA
+		d_dataWriters[2].addPoint(nbIterations, d_temperature);		// ADD DATA
 
 		if (nbIterations % 7 == 0) {
 			cout << "temperature : " << d_temperature << endl;
@@ -76,13 +81,15 @@ void RecuitSimuleAlgorithm::run()
 			int min = 0.15 * d_polyhedra.size();
 			int max = 0.7 * d_polyhedra.size();
 			nbPermutations = min + (nonImprovIter / nonImprovLimit) * (max - min);
+			d_dataWriters[1].addPoint(nbIterations, nbPermutations);	// ADD DATA
 			this->permuteNElements(neighborSolution, nbPermutations);
 
 			// EVALUATION
 			neighborEval = this->evaluateSolution(neighborSolution);
 			//cout << "Eval : " << neighborEval << endl;
 
-			if (neighborEval < bestEval)	// Update best solution
+			// UPDATE best solution
+			if (neighborEval < bestEval)
 			{
 				bestSolution = neighborSolution;
 				bestEval = neighborEval;
@@ -134,7 +141,8 @@ void RecuitSimuleAlgorithm::run()
 	}
 
 	// Encadre d'information sur le graphique
-	string info = "Nb permutations pour voisin : -not used " + to_string(nbPermutations) + "\\n";
+	// string info = "Nb permutations pour voisin : " + to_string(nbPermutations) + "\\n";
+	string info = "Nb permutations pour voisin ADAPTATIF\\n";
 	info += "Initial temp : " + to_string(initialTemp) + "\\n";
 	info += "Facteur refroidissement : " + doubleToStringRounded(d_coolingFactor, 3) + "\\n";
 	info += "Nb iteration par palier : " + to_string(maxIter) + "\\n";
@@ -227,14 +235,36 @@ bool RecuitSimuleAlgorithm::isNeighborAccepted(const double& currentEval, const 
 void RecuitSimuleAlgorithm::printDataChart(const string& info)
 {
 	const string legend = "";
-	const string title = "Evolution de l'objectif en fonction de la temperature";
-	d_dataWriter.writeDataToFile(
-		GENERATE_OBJ_PATH+"RecuitChart",	// Nom fichier
+	string title = "Evolution de l'objectif en fonction des iterations";
+	d_dataWriters[0].writeDataToFile(
+		GENERATE_OBJ_PATH+"RecuitChartObj",	// Nom fichier
 		"Nb iteration",	// Axe X
 		"Objectif",		// Axe Y
 		legend,
 		title,
 		info,
-		true	// Invertion de l'axe X
+		false	// Invertion de l'axe X
+	);
+
+	title = "Evolution du nombre de permutation en fonction des iterations";
+	d_dataWriters[1].writeDataToFile(
+		GENERATE_OBJ_PATH + "RecuitChartPerm",	// Nom fichier
+		"Nb iteration",	// Axe X
+		"Nb permutations",		// Axe Y
+		legend,
+		title,
+		info,
+		false	// Invertion de l'axe X
+	);
+
+	title = "Evolution de la temperature en fonction des iterations";
+	d_dataWriters[2].writeDataToFile(
+		GENERATE_OBJ_PATH + "RecuitChartTemp",	// Nom fichier
+		"Nb iteration",	// Axe X
+		"Temperature",		// Axe Y
+		legend,
+		title,
+		info,
+		false	// Invertion de l'axe X
 	);
 }

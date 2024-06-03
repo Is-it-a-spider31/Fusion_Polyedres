@@ -88,7 +88,7 @@ protected:
     /**
      * @brief Permet de stocker et ecrire des donnes de l'algo
     */
-    ExportAlgoData d_dataWriter;
+    vector<ExportAlgoData> d_dataWriters;
 
 
     /**

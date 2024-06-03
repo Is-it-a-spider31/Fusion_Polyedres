@@ -22,6 +22,7 @@ void Graph::test()
     addVertex("9");
     calculateDiameter();
     cout << "Distance of the graph: " << calculateDistance("1", "9") << endl;
+    cout << "Distance of the graph: " << calculateDistance("1", "2") << endl;
     // cout << "Diametter of the graph: " << d_diameter << endl;
 }
 
