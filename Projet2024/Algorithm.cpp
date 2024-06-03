@@ -39,14 +39,12 @@ Algorithm::Algorithm(const string& filename)
  * @param limitNbPoly Nombre limite de polyedres (-1 par defaut, pas de limite)
  * @return nombre polyedres apres fusions
 */
-vector<Polyedre> Algorithm::mergeAlgorithm(const vector<Polyedre>& solution, int limitNbPoly)
+vector<Polyedre> Algorithm::mergeAlgorithm(vector<Polyedre> solution, int limitNbPoly)
 {
-	Polyedre currentPolyhedron = solution[0];
-	Polyedre nextPolyhedron(0);
-	
 	double sumDistances = 0.0;
 	double nbConsecutiveMerges = 0;
 	double reward  = 0.0;
+	int initSolutionSize = solution.size();
 
 	// Liste des polyedres avec fusion
 	vector<Polyedre> mergedPolyhedra;
@@ -54,154 +52,176 @@ vector<Polyedre> Algorithm::mergeAlgorithm(const vector<Polyedre>& solution, int
 	// true : arreter la solution en cours car on a deja mieux
 	bool stopCurrentSolution = false;
 
-	// Pour chaque polyedres (sauf le premier), 
-	//	tant que la solution courante n'est pas arretee
-	int nextPolyId = 1;
-	while (nextPolyId < solution.size() && !stopCurrentSolution)
+		
+	bool end = false;
+	while (!end)
 	{
-		bool isMergeLegal = false;	// true : la fusion est possible et convexe
-		nextPolyhedron = solution[nextPolyId];
-		d_nbMergeTry++;
+		Polyedre currentPolyhedron = solution[0];
+		Polyedre nextPolyhedron(0);
 
-		bool isEdgeChecked = d_mergeGraph.isEdgeAlreadyChecked(
-			currentPolyhedron.getId(),
-			nextPolyhedron.getId()
-		);
+		int nextPolyId = 1;
+		sumDistances = 0.0;
 
-		// Si les 2 polyedres sont dans le graphe 
-		// et que leur fusion a deja ete testee
-		if (isEdgeChecked)
+		// Pour chaque polyedres (sauf le premier), 
+		//	tant que la solution courante n'est pas arretee
+		while (nextPolyId < solution.size() && !stopCurrentSolution)
 		{
-			d_nbGraphUsage++;	// Pour les statistiques
+			bool isMergeLegal = false;	// true : la fusion est possible et convexe
+			nextPolyhedron = solution[nextPolyId];
+			d_nbMergeTry++;
 
-			// Maj de la distance entre les 2 sommets qu'on a essaye de fusionner
-			sumDistances += d_mergeGraph.calculateDistance(
+			bool isEdgeChecked = d_mergeGraph.isEdgeAlreadyChecked(
 				currentPolyhedron.getId(),
 				nextPolyhedron.getId()
 			);
 
-			// Indique si la fusion est possible
-			isMergeLegal = d_mergeGraph.areVerticesNeighbors(
-				currentPolyhedron.getId(),
-				nextPolyhedron.getId()
-			);
-
-			if (isMergeLegal)	// Si la fusion est possible
+			// Si les 2 polyedres sont dans le graphe 
+			// et que leur fusion a deja ete testee
+			if (isEdgeChecked)
 			{
-				// On recupere le polyedre fusionne pre-calcule
-				currentPolyhedron = d_mergeGraph.getEdgeWeight(
+				d_nbGraphUsage++;	// Pour les statistiques
+
+				// Maj de la distance entre les 2 sommets qu'on a essaye de fusionner
+				sumDistances += d_mergeGraph.calculateDistance(
 					currentPolyhedron.getId(),
 					nextPolyhedron.getId()
 				);
 
-				// Theoriquement, comme on a deja verifie que les 2 polyedres 
-				//	sont voisins dans le graphe, on ne devrait jamais rencontrer ce cas.
-				//	Cela signifierait un probleme dans la strcuture de donnees
-				if (currentPolyhedron.getId().empty())
+				// Indique si la fusion est possible
+				isMergeLegal = d_mergeGraph.areVerticesNeighbors(
+					currentPolyhedron.getId(),
+					nextPolyhedron.getId()
+				);
+
+				if (isMergeLegal)	// Si la fusion est possible
 				{
-					isMergeLegal = false;
-					cerr << "Graph::getEdgeWeight et Graph::areVerticesNeighbors "
-						<< " ne sont pas coherents !" << endl
-						<< "cf. Algorithm::mergeAlgorithm" << endl;
-				}
-			}
-		}
-		// Sinon, si les 2 polyedres sont convexes (cf. consignes du projet)
-		else if (currentPolyhedron.isConvex() && nextPolyhedron.isConvex())
-		{
-			// Fusion des 2 polyedres (id vide si impossible)
-			Polyedre mergedPoly = Polyedre::merge2Polyhedra(
-				currentPolyhedron, 
-				nextPolyhedron
-			);
-
-			// Indique que la fusion de ces 2 polyedres a ete testee
-			d_mergeGraph.markEdgeAsChecked(
-				currentPolyhedron.getId(), 
-				nextPolyhedron.getId()
-			);
-
-			// Si fusion effectuee
-			if (!mergedPoly.getId().empty())
-			{	
-				// Teste si fusion convexe
-				mergedPoly.computeConvexity();
-				if (mergedPoly.isConvex())	// Fusion convexe
-				{
-					// Mise a jour du graphe
-					d_mergeGraph.addEdge(
-						currentPolyhedron.getId(),	// 1er sommet de l'arete (polygone 1)
-						nextPolyhedron.getId(),	// 2eme sommet de l'arete (polygone 2)
-						mergedPoly		// Polyedre fusionne
-					);
-
-
-					// Maj de la distance entre les 2 sommets qu'on a essaye de fusionner
-					sumDistances += d_mergeGraph.calculateDistance(
+					// On recupere le polyedre fusionne pre-calcule
+					currentPolyhedron = d_mergeGraph.getEdgeWeight(
 						currentPolyhedron.getId(),
 						nextPolyhedron.getId()
 					);
 
-					currentPolyhedron = mergedPoly;
-					isMergeLegal = true;
+					// Theoriquement, comme on a deja verifie que les 2 polyedres 
+					//	sont voisins dans le graphe, on ne devrait jamais rencontrer ce cas.
+					//	Cela signifierait un probleme dans la strcuture de donnees
+					if (currentPolyhedron.getId().empty())
+					{
+						isMergeLegal = false;
+						cerr << "Graph::getEdgeWeight et Graph::areVerticesNeighbors "
+							<< " ne sont pas coherents !" << endl
+							<< "cf. Algorithm::mergeAlgorithm" << endl;
+					}
 				}
 			}
-		} // if 2 polyedres convexes
-
-		if (!isMergeLegal)	// Si pas de fusion possible
-		{	// cad Pas de face commune 
-			//	OU au moins 1 poly pas convexes 
-			//	OU fusion pas convexe
-
-			mergedPolyhedra.push_back(currentPolyhedron);
-			currentPolyhedron = solution[nextPolyId];
-
-			// Somme des nbConsecutiveMerges (pour calculer la moyenne plus tard)
-			if (nbConsecutiveMerges >  1)
-				reward += pow(nbConsecutiveMerges, 2);
-			nbConsecutiveMerges = 0;
-
-			// Si on a deja une meilleur solution
-			if (limitNbPoly != -1 && mergedPolyhedra.size() >= limitNbPoly)
+			// Sinon, si les 2 polyedres sont convexes (cf. consignes du projet)
+			else if (currentPolyhedron.isConvex() && nextPolyhedron.isConvex())
 			{
-				stopCurrentSolution = true;
+				// Fusion des 2 polyedres (id vide si impossible)
+				Polyedre mergedPoly = Polyedre::merge2Polyhedra(
+					currentPolyhedron,
+					nextPolyhedron
+				);
+
+				// Indique que la fusion de ces 2 polyedres a ete testee
+				d_mergeGraph.markEdgeAsChecked(
+					currentPolyhedron.getId(),
+					nextPolyhedron.getId()
+				);
+
+				// Si fusion effectuee
+				if (!mergedPoly.getId().empty())
+				{
+					// Teste si fusion convexe
+					mergedPoly.computeConvexity();
+					if (mergedPoly.isConvex())	// Fusion convexe
+					{
+						// Mise a jour du graphe
+						d_mergeGraph.addEdge(
+							currentPolyhedron.getId(),	// 1er sommet de l'arete (polygone 1)
+							nextPolyhedron.getId(),	// 2eme sommet de l'arete (polygone 2)
+							mergedPoly		// Polyedre fusionne
+						);
+
+
+						// Maj de la distance entre les 2 sommets qu'on a essaye de fusionner
+						sumDistances += d_mergeGraph.calculateDistance(
+							currentPolyhedron.getId(),
+							nextPolyhedron.getId()
+						);
+
+						currentPolyhedron = mergedPoly;
+						isMergeLegal = true;
+					}
+				}
+			} // if 2 polyedres convexes
+
+			if (!isMergeLegal)	// Si pas de fusion possible
+			{	// cad Pas de face commune 
+				//	OU au moins 1 poly pas convexes 
+				//	OU fusion pas convexe
+
+				mergedPolyhedra.push_back(currentPolyhedron);
+				currentPolyhedron = solution[nextPolyId];
+
+				// Somme des nbConsecutiveMerges (pour calculer la moyenne plus tard)
+				if (nbConsecutiveMerges > 1)
+					reward += pow(nbConsecutiveMerges, 2);
+				nbConsecutiveMerges = 0;
+
+				// Si on a deja une meilleur solution
+				if (limitNbPoly != -1 && mergedPolyhedra.size() >= limitNbPoly)
+				{
+					stopCurrentSolution = true;
+				}
+			}
+			else
+			{
+				nbConsecutiveMerges++;
+			}
+
+			nextPolyId++;
+		}	// while
+
+		if (!stopCurrentSolution)	// Solution calculee jusqu'au bout
+		{
+			// Ajout du dernier polyedre fusionne
+			mergedPolyhedra.push_back(currentPolyhedron);
+
+			if (mergedPolyhedra.size() < solution.size())
+			{
+				solution = mergedPolyhedra;
+				mergedPolyhedra.clear();
+			}
+			else
+			{
+				end = true;
 			}
 		}
-		else 
+		else	// Si l'algo a ete arrete en cours d'execution, renvoie une liste vide
 		{
-			nbConsecutiveMerges++;
+			mergedPolyhedra.clear();
+			end = true;
 		}
 
-		nextPolyId++;
-	}	// while
-
-	if (!stopCurrentSolution)	// Solution calculee jusqu'au bout
-	{
-		// Ajout du dernier polyedre fusionne
-		mergedPolyhedra.push_back(currentPolyhedron);
-	}
-	else	// Si l'algo a ete arrete en cours d'execution, renvoie une liste vide
-	{
-		mergedPolyhedra.clear();
-	}
+	}	// While pas termine
 
 	// EVALUATION
 	//cout << endl << "------------------" << endl;
 	// Calcul de la penalite penalite (d_sumDistances >= 1)
 	// cout << "sum distances = " << sumDistances << endl;
-	double penality = pow(sumDistances/d_mergeGraph.getDiameter()/solution.size(), 2)/3;
+	double penality = pow(sumDistances/d_mergeGraph.getDiameter()/ initSolutionSize, 2)/3;
 	// cout << "Penalite : " << penality << endl;
 	// Calcul de la recompense
 	// cout << "Val reward avant calcul : " << reward << endl;
 	double min = 0;
-	double max = pow((solution.size() - 1), 2);
+	double max = pow((initSolutionSize - 1), 2);
 	reward = ((reward - min)/(max-min))*2;	// Normalisation
 	// cout << "Recompense : " << reward << endl;
 	// Evaluation de la soluion courante
 	// cout << "nb poly : " << mergedPolyhedra.size() << endl;
 	d_objectiveValue = 1 + (
 		static_cast<double>(mergedPolyhedra.size()) 
-		/ static_cast<double>(solution.size())
+		/ static_cast<double>(initSolutionSize)
 		) + penality - reward;
 	// cout << "Objectif = " << d_objectiveValue << endl;
 

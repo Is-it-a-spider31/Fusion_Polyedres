@@ -2,7 +2,7 @@ Title: Evolution de la temperature en fonction des iterations
 X-Axis: Nb iteration
 Y-Axis: Temperature
 Legend: 
-InfoBox: Nb permutations pour voisin ADAPTATIF\nInitial temp : 1000\nFacteur refroidissement : 0.98\nNb iteration par palier : 24\nNb iteration effectuees : 8208\nTemps d'execution : 3 min 17.018 s\nBest eval : 1.474524\nTaille finale : 15\nSolution : 1 8 5 29 32 20 16 9 15 10 7 25 13 11 12 14 3 18 19 17 21 22 23 24 2 26 27 28 4 30 6 31 
+InfoBox: Nb permutations pour voisin ADAPTATIF\nInitial temp : 1000\nFacteur refroidissement : 0.98\nNb iteration par palier : 24\nNb iteration effectuees : 8208\nTemps d'execution : 4 min 36.676 s\nBest eval : 1.223032\nTaille finale : 10\nSolution : 1 2 3 7 8 6 5 9 10 14 15 12 13 16 11 4 17 18 19 20 21 22 23 24 27 26 25 28 29 30 31 32 
 InvertX: 0
 Data:
 0,980

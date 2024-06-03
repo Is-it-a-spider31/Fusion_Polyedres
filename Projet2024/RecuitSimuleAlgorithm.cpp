@@ -15,7 +15,7 @@ const string RecuitSimuleAlgorithm::GENERATE_OBJ_PATH = "Tests/generated/RecuitS
 
 RecuitSimuleAlgorithm::RecuitSimuleAlgorithm(const string& filename)
 	: Algorithm(filename),
-	d_coolingFactor(0.98),
+	d_coolingFactor(0.96),
 	d_temperature(1000),
 	d_randomGenerator(std::random_device()())
 {
@@ -41,8 +41,8 @@ void RecuitSimuleAlgorithm::run()
 	double n = 0;
 
 	int nbIterations = 0;
-	int nonImprovIter = 0;
-	int nonImprovLimit = 1000;
+	double nonImprovIter = 0;
+	double nonImprovLimit = 1000;
 
 	// Parametres
 	const int maxIter = 24;
@@ -79,8 +79,10 @@ void RecuitSimuleAlgorithm::run()
 			// PERTURBATION
 			neighborSolution = currentSolution;
 			int min = 0.15 * d_polyhedra.size();
-			int max = 0.7 * d_polyhedra.size();
-			nbPermutations = min + (nonImprovIter / nonImprovLimit) * (max - min);
+			int max = 0.3 * d_polyhedra.size();
+			nbPermutations = min + ((nonImprovIter / nonImprovLimit) * (max - min));
+			//if (nbPermutations > 4)
+			//	cout << "ahah" << endl;
 			d_dataWriters[1].addPoint(nbIterations, nbPermutations);	// ADD DATA
 			this->permuteNElements(neighborSolution, nbPermutations);
 
@@ -142,11 +144,12 @@ void RecuitSimuleAlgorithm::run()
 
 	// Encadre d'information sur le graphique
 	// string info = "Nb permutations pour voisin : " + to_string(nbPermutations) + "\\n";
-	string info = "Nb permutations pour voisin ADAPTATIF\\n";
+	string info = "Nb permutations pour voisin (VARIABLE)\\n";
 	info += "Initial temp : " + to_string(initialTemp) + "\\n";
 	info += "Facteur refroidissement : " + doubleToStringRounded(d_coolingFactor, 3) + "\\n";
 	info += "Nb iteration par palier : " + to_string(maxIter) + "\\n";
 	info += "Nb iteration effectuees : " + to_string(nbIterations) + "\\n";
+	info += "Non improv Iter (VARIABLE): " + doubleToStringRounded(nonImprovLimit, 1) + "\\n";
 	info += "Temps d'execution : " + strExecutionTime + "\\n";
 	info += "Best eval : " + to_string(bestEval)+ "\\n";
 	info += "Taille finale : " + to_string(mergedSolution.size())+ "\\n";
@@ -258,6 +261,7 @@ void RecuitSimuleAlgorithm::printDataChart(const string& info)
 	);
 
 	title = "Evolution de la temperature en fonction des iterations";
+	/*
 	d_dataWriters[2].writeDataToFile(
 		GENERATE_OBJ_PATH + "RecuitChartTemp",	// Nom fichier
 		"Nb iteration",	// Axe X
@@ -267,4 +271,5 @@ void RecuitSimuleAlgorithm::printDataChart(const string& info)
 		info,
 		false	// Invertion de l'axe X
 	);
+	*/
 }
