@@ -18,6 +18,13 @@ public:
     */
     void run() override;
 
+
+    /**
+     * Chemin du repertoire ves lequel l'agoritme ecrit
+     * les solutions trouvees sous forme de fichiers .obj
+    */
+    const string getFilePath() override;
+
 protected:
     /**
      * @brief Affiche le graphique qui montre l'evolution des donnees de l'algo

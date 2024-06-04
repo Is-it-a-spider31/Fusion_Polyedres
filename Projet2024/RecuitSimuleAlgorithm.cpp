@@ -6,13 +6,6 @@
 #include "OBJFileHandler.h"
 #include "myUtils.h"	// Pour doubleToStringRounded()
 
-/**
- * Chemin du repertoire ves lequel l'agoritme ecrit
- * les solutions trouvees sous forme de fichiers .obj
-*/
-const string RecuitSimuleAlgorithm::GENERATE_OBJ_PATH = "Tests/generated/RecuitSimule/";
-
-
 RecuitSimuleAlgorithm::RecuitSimuleAlgorithm(const string& filename)
 	: Algorithm(filename),
 	d_coolingFactor(0.96),
@@ -122,9 +115,11 @@ void RecuitSimuleAlgorithm::run()
 
 	// ECRITURE DE LA MEILLEURE SOLUTION EN OBJ
 	cout << "SIZE : " << mergedSolution.size() << endl;
+
 	// Ecriture du fichier OBJ pour cette solution
-	string filename = GENERATE_OBJ_PATH + "FUSION."
-		+ to_string(mergedSolution.size()) + ".obj";
+	createRunDir(getFilePath(), to_string(mergedSolution.size()));
+	string filename = d_fullFilePath + "FUSION." + to_string(mergedSolution.size()) + ".obj";
+
 	OBJFileHandler::writeOBJ(d_vertices, mergedSolution, filename);
 
 	// AFFICHAGE DU GRAPHIQUE
@@ -233,6 +228,15 @@ bool RecuitSimuleAlgorithm::isNeighborAccepted(const double& currentEval, const 
 }
 
 /**
+ * Chemin du repertoire ves lequel l'agoritme ecrit
+ * les solutions trouvees sous forme de fichiers .obj
+*/
+const string RecuitSimuleAlgorithm::getFilePath()
+{
+	return "Tests/generated/RecuitSimule/";
+}
+
+/**
  * @brief Affiche le graphique qui montre l'evolution des donnees de l'algo
  */
 void RecuitSimuleAlgorithm::printDataChart(const string& info)
@@ -241,7 +245,7 @@ void RecuitSimuleAlgorithm::printDataChart(const string& info)
 	string title = "Evolution de l'objectif en fonction des iterations";
 	d_dataWriters[0].writeDataToFile(
 		d_fullFilePath ,
-    "RecuitChart",	// Nom fichier
+		"RecuitChartObj",	// Nom fichier
 		"Nb iteration",	// Axe X
 		"Objectif",		// Axe Y
 		legend,
@@ -252,8 +256,8 @@ void RecuitSimuleAlgorithm::printDataChart(const string& info)
 
 	title = "Evolution du nombre de permutation en fonction des iterations";
 	d_dataWriters[1].writeDataToFile(
-			d_fullFilePath ,
-    "RecuitChart",	// Nom fichier
+		d_fullFilePath,
+		"RecuitChartPerm",	// Nom fichier
 		"Nb iteration",	// Axe X
 		"Nb permutations",		// Axe Y
 		legend,
@@ -266,7 +270,7 @@ void RecuitSimuleAlgorithm::printDataChart(const string& info)
 	/*
 	d_dataWriters[2].writeDataToFile(
 			d_fullFilePath ,
-    "RecuitChart",	// Nom fichier
+		"RecuitChartTemp",	// Nom fichier
 		"Nb iteration",	// Axe X
 		"Temperature",		// Axe Y
 		legend,
