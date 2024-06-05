@@ -18,7 +18,6 @@ public:
     */
     void run() override;
 
-
     /**
      * Chemin du repertoire ves lequel l'agoritme ecrit
      * les solutions trouvees sous forme de fichiers .obj

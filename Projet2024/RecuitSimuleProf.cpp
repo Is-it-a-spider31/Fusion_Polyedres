@@ -149,6 +149,26 @@ void RecuitSimuleProf::run()
 
 }
 
+/**
+ * Chemin du repertoire ves lequel l'agoritme ecrit
+ * les solutions trouvees sous forme de fichiers .obj
+*/
+const string RecuitSimuleProf::getFilePath()
+{
+    return "Tests/generated/RecuitSimuleProf/";
+}
+
+/**
+  * @brief Teste si la solution voisine est acceptee ou pas
+  *
+  * Calcule la probabilite d'acceptation de la solution voisine
+  * avec la formule classique donne dans l'algo du recuit simule.
+  *
+  * @param currentEval Evaluation de la solution courante
+  * @param neighborEval Evaluation de la solution voisine
+  *
+  * @return true si solution voisine acceptee, false sinon
+ */
 bool RecuitSimuleProf::isNeighborAccepted(const double& currentEval, const double& neighborEval)
 {
     bool isAccepted = true;

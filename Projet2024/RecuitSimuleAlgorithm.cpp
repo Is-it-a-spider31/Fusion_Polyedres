@@ -8,7 +8,7 @@
 
 RecuitSimuleAlgorithm::RecuitSimuleAlgorithm(const string& filename)
 	: Algorithm(filename),
-	d_coolingFactor(0.95),
+	d_coolingFactor(0.96),
 	d_temperature(1000),
 	d_randomGenerator(std::random_device()())
 {
@@ -34,8 +34,9 @@ void RecuitSimuleAlgorithm::run()
 	double n = 0;
 
 	int nbIterations = 0;
+	int nbMaxIterations = 4000;
 	double nonImprovLimit = 900;
-	double nonImprovIter = nonImprovLimit;
+	double nonImprovIter = 0;
 
 	// Parametres
 	const int maxIter = 24;
@@ -51,12 +52,20 @@ void RecuitSimuleAlgorithm::run()
 
 	bool stop = false;
 
-	while (!stop || d_temperature > 1)	// Critere d'arret (a changer)
+	while (!stop || d_temperature > nbMaxIterations)	// Critere d'arret (a changer)
 	{
+		// Refait un tour
 		if (d_temperature < 1)
 		{
-			stop = true;
-			d_temperature = initialTemp;
+			if (currentEval > bestEval)
+			{
+				stop = true;
+				d_temperature = initialTemp;
+			}
+			else 
+			{
+				break;
+			}
 		}
 
 		// REFROIDISSEMENT
@@ -76,46 +85,47 @@ void RecuitSimuleAlgorithm::run()
 		{
 			nbIterations++;
 
-			//cout << "\tn : " << n << endl;
 			// PERTURBATION
 			neighborSolution = currentSolution;
 			int min = 0.15 * d_polyhedra.size();
-			int max = 0.5 * d_polyhedra.size();
+			int max = 0.3 * d_polyhedra.size();
+
+			// Augmente quand nonImprovIter augmente
 			nbPermutations = min + ((nonImprovIter / nonImprovLimit) * (max - min));
-			//if (nbPermutations > 4)
-			//	cout << "ahah" << endl;
+
 			d_dataWriters[1].addPoint(nbIterations, nbPermutations);	// ADD DATA
 			this->permuteNElements(neighborSolution, nbPermutations);
 
 			// EVALUATION
 			neighborEval = this->evaluateSolution(neighborSolution);
-			//cout << "Eval : " << neighborEval << endl;
 
 			// UPDATE best solution
 			if (neighborEval < bestEval)
 			{
 				bestSolution = neighborSolution;
 				bestEval = neighborEval;
+				nonImprovIter = 0;
 			}
 
 			// ACCEPTATION
 			if (isNeighborAccepted(currentEval, neighborEval)
-				|| nonImprovIter < 0)
+				|| nonImprovIter > nonImprovLimit)
 			{
-				if (nonImprovIter < 0)
-				{
-					nonImprovIter = nonImprovLimit;
-				}
+				if (nonImprovIter > nonImprovLimit)
+				{}
 				else
 				{
 					currentSolution = neighborSolution;
 					currentEval = neighborEval;
 				}
-				//nonImprovLimit = 900;
+				// nonImprovLimit = 900;
 			}
 			else
 			{
-				nonImprovIter--;
+				if (nonImprovIter > nonImprovLimit)
+					nonImprovIter = nonImprovLimit;
+				else
+					nonImprovIter++;
 			}
 
 			n++;
@@ -132,9 +142,8 @@ void RecuitSimuleAlgorithm::run()
 	cout << "SIZE : " << mergedSolution.size() << endl;
 
 	// Ecriture du fichier OBJ pour cette solution
-	createRunDir(getFilePath(), to_string(mergedSolution.size()));
+	createRunDir(getFilePath(), to_string(mergedSolution.size()));	// Creation du repertoire
 	string filename = d_fullFilePath + "FUSION." + to_string(mergedSolution.size()) + ".obj";
-
 	OBJFileHandler::writeOBJ(d_vertices, mergedSolution, filename);
 
 	// AFFICHAGE DU GRAPHIQUE
@@ -155,7 +164,7 @@ void RecuitSimuleAlgorithm::run()
 	// Encadre d'information sur le graphique
 	// string info = "Nb permutations pour voisin : " + to_string(nbPermutations) + "\\n";
 	string info = "Nb permutations pour voisin (VARIABLE)\\n";
-	info += "PAS Critere Acceptation 0.9 fonction temp\\n";
+	info += "PAS DE Critere Acceptation [0.85, 1] fonction temp\\n";
 	info += "Initial temp : " + to_string(initialTemp) + "\\n";
 	info += "Facteur refroidissement : " + doubleToStringRounded(d_coolingFactor, 3) + "\\n";
 	info += "Nb iteration par palier : " + to_string(maxIter) + "\\n";
@@ -168,7 +177,8 @@ void RecuitSimuleAlgorithm::run()
 	for (auto& p : bestSolution)	// Affiche la solution
 		info += p.getId() + " ";
 
-	cout << info << endl;
+	// cout << info << endl;
+	// AFFICHAGE DES GRAPHIQUES
 	this->printDataChart(info);
 }
 
@@ -228,14 +238,14 @@ bool RecuitSimuleAlgorithm::isNeighborAccepted(const double& currentEval, const 
 
 		//double proba = std::exp((currentEval - neighborEval) / d_temperature) - 1;
 		// double proba = 2 - exp((1-((neighborEval - currentEval) / 5)) * (d_temperature / 1000));
-		double proba = 1 - (0.1 * (d_temperature / 1000));
+
+		// Diminue quand temperature diminue
+		double proba = 1 - (0.05 * (d_temperature / 1000));
 
 		// Distribution uniforme dans [0, 1]
 		std::uniform_real_distribution<double> uniformDis(0.0, 1.0);
 		// Genere un nombre entre 0 et 1
 		double random = uniformDis(d_randomGenerator);
-		//cout << "proba" << proba << endl;
-		//cout << "random" << random << endl;
 
 		if (random < proba)
 			isAccepted = false;
