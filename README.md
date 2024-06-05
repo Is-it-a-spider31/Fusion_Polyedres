@@ -7,6 +7,9 @@
 	- Enregistrement automatique dans un dossier
 
 
+	 1 - (0.2 * (d_temp / initTemp))
+	 [0.8, 1]
+
 	- Fonction objectif avec récompense et pénalité
 
 

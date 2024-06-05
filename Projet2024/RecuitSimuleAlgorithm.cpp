@@ -8,7 +8,7 @@
 
 RecuitSimuleAlgorithm::RecuitSimuleAlgorithm(const string& filename)
 	: Algorithm(filename),
-	d_coolingFactor(0.96),
+	d_coolingFactor(0.95),
 	d_temperature(1000),
 	d_randomGenerator(std::random_device()())
 {
@@ -34,8 +34,8 @@ void RecuitSimuleAlgorithm::run()
 	double n = 0;
 
 	int nbIterations = 0;
-	double nonImprovIter = 0;
-	double nonImprovLimit = 1000;
+	double nonImprovLimit = 900;
+	double nonImprovIter = nonImprovLimit;
 
 	// Parametres
 	const int maxIter = 24;
@@ -49,8 +49,16 @@ void RecuitSimuleAlgorithm::run()
 	// Debut du chronometre (pour compter le temps d'execution)
 	clock_t tStart = clock();
 
-	while (d_temperature > 1)	// Critere d'arret (a changer)
+	bool stop = false;
+
+	while (!stop || d_temperature > 1)	// Critere d'arret (a changer)
 	{
+		if (d_temperature < 1)
+		{
+			stop = true;
+			d_temperature = initialTemp;
+		}
+
 		// REFROIDISSEMENT
 		d_temperature *= d_coolingFactor;
 		palier = std::exp(1 / (d_temperature * d_coolingFactor));
@@ -72,7 +80,7 @@ void RecuitSimuleAlgorithm::run()
 			// PERTURBATION
 			neighborSolution = currentSolution;
 			int min = 0.15 * d_polyhedra.size();
-			int max = 0.3 * d_polyhedra.size();
+			int max = 0.5 * d_polyhedra.size();
 			nbPermutations = min + ((nonImprovIter / nonImprovLimit) * (max - min));
 			//if (nbPermutations > 4)
 			//	cout << "ahah" << endl;
@@ -92,15 +100,22 @@ void RecuitSimuleAlgorithm::run()
 
 			// ACCEPTATION
 			if (isNeighborAccepted(currentEval, neighborEval)
-				|| nonImprovIter > nonImprovLimit)
+				|| nonImprovIter < 0)
 			{
-				currentSolution = neighborSolution;
-				currentEval = neighborEval;
-				nonImprovIter = 0;
+				if (nonImprovIter < 0)
+				{
+					nonImprovIter = nonImprovLimit;
+				}
+				else
+				{
+					currentSolution = neighborSolution;
+					currentEval = neighborEval;
+				}
+				//nonImprovLimit = 900;
 			}
 			else
 			{
-				nonImprovIter++;
+				nonImprovIter--;
 			}
 
 			n++;
@@ -140,11 +155,12 @@ void RecuitSimuleAlgorithm::run()
 	// Encadre d'information sur le graphique
 	// string info = "Nb permutations pour voisin : " + to_string(nbPermutations) + "\\n";
 	string info = "Nb permutations pour voisin (VARIABLE)\\n";
+	info += "PAS Critere Acceptation 0.9 fonction temp\\n";
 	info += "Initial temp : " + to_string(initialTemp) + "\\n";
 	info += "Facteur refroidissement : " + doubleToStringRounded(d_coolingFactor, 3) + "\\n";
 	info += "Nb iteration par palier : " + to_string(maxIter) + "\\n";
 	info += "Nb iteration effectuees : " + to_string(nbIterations) + "\\n";
-	info += "Non improv Iter (VARIABLE): " + doubleToStringRounded(nonImprovLimit, 1) + "\\n";
+	info += "Non improv Iter (REVERSE VARIABLE): " + doubleToStringRounded(nonImprovLimit, 1) + "\\n";
 	info += "Temps d'execution : " + strExecutionTime + "\\n";
 	info += "Best eval : " + to_string(bestEval)+ "\\n";
 	info += "Taille finale : " + to_string(mergedSolution.size())+ "\\n";
@@ -211,7 +227,8 @@ bool RecuitSimuleAlgorithm::isNeighborAccepted(const double& currentEval, const 
 	{	// Acceptation possible avec une certaine probabilite
 
 		//double proba = std::exp((currentEval - neighborEval) / d_temperature) - 1;
-		double proba = 2 - exp((1-((neighborEval - currentEval) / 5)) * (d_temperature / 1000));
+		// double proba = 2 - exp((1-((neighborEval - currentEval) / 5)) * (d_temperature / 1000));
+		double proba = 1 - (0.1 * (d_temperature / 1000));
 
 		// Distribution uniforme dans [0, 1]
 		std::uniform_real_distribution<double> uniformDis(0.0, 1.0);
@@ -220,7 +237,7 @@ bool RecuitSimuleAlgorithm::isNeighborAccepted(const double& currentEval, const 
 		//cout << "proba" << proba << endl;
 		//cout << "random" << random << endl;
 
-		//if (random < proba)
+		if (random < proba)
 			isAccepted = false;
 	}
 
@@ -267,7 +284,6 @@ void RecuitSimuleAlgorithm::printDataChart(const string& info)
 	);
 
 	title = "Evolution de la temperature en fonction des iterations";
-	/*
 	d_dataWriters[2].writeDataToFile(
 			d_fullFilePath ,
 		"RecuitChartTemp",	// Nom fichier
@@ -278,5 +294,4 @@ void RecuitSimuleAlgorithm::printDataChart(const string& info)
 		info,
 		false	// Invertion de l'axe X
 	);
-	*/
 }
