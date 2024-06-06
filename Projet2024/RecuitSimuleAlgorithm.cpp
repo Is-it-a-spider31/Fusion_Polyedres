@@ -85,7 +85,7 @@ void RecuitSimuleAlgorithm::run()
 		n = 0;
 		d_dataWriters[0].addPoint(nbIterations, currentEval);		// ADD DATA
 		d_dataWriters[2].addPoint(nbIterations, d_temperature);		// ADD DATA
-		d_dataWriters[4].addPoint(nbIterations, bestEval)
+		d_dataWriters[4].addPoint(nbIterations, bestEval);
 
 		if (nbIterations % (24*6) == 0)
 			cout << "temperature : " << d_temperature << endl;		
