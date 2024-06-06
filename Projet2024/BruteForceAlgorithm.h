@@ -15,7 +15,7 @@ public:
     BruteForceAlgorithm(const string& filename);
 
     /**
-     * @brief Algoritme force-brute.
+     * @brief Algorithme force-brute.
      * 
      * Teste toutes les permutations possibles et enregistre
      * la meilleur solution trouvee.

@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Algorithm" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AIADFgAEAAAAACgAAAIIAAAYoAgAAABAAEAAAAQAoAA=</HashCode>
+      <FileName>Algorithm.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BruteForceAlgorithm">
+    <Position X="0.5" Y="2.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAAAAAAAAABAAAAAAAAABAAAAAAACAAA=</HashCode>
+      <FileName>BruteForceAlgorithm.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ExportAlgoData">
+    <Position X="5.25" Y="0.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAEBAAAAAAAAAAAAAAAAQAAAQAAAgAAAAAAAAAAAA=</HashCode>
+      <FileName>ExportAlgoData.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Face">
+    <Position X="7.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAAAQEAABQAAAAAAAAAAAAAAAgAAAAA=</HashCode>
+      <FileName>Face.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Graph" Collapsed="true">
+    <Position X="9.25" Y="1" Width="1.5" />
+    <NestedTypes>
+      <Struct Name="Graph::pair_hash" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Graph.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>QAAAAAggAAAIAACAAAAAAIAAsAAABEgoEAACAAAAAAE=</HashCode>
+      <FileName>Graph.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OBJFileHandler" Collapsed="true">
+    <Position X="4.75" Y="3.5" Width="1.25" />
+    <NestedTypes>
+      <Enum Name="OBJFileHandler::FirstString" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>OBJFileHandler.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAEJAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>OBJFileHandler.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Plan" Collapsed="true">
+    <Position X="6.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAAAAAAAAAgAAAAACACAAAAABAAAAAAEAAAA=</HashCode>
+      <FileName>Plan.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Point" Collapsed="true">
+    <Position X="9.25" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgACAAAAAAAAgAACACAWAQAAACAAAABAQAAgAmABAAA=</HashCode>
+      <FileName>Point.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Polyedre" Collapsed="true">
+    <Position X="4.25" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gggAAAAAAIAAAAEAQCAAEQCEAAAAAAkAIAgligAAAAA=</HashCode>
+      <FileName>Polyedre.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RecuitSimuleAlgorithm" Collapsed="true">
+    <Position X="2.75" Y="2" Width="2" />
+    <InheritanceLine Type="Algorithm" ManuallyRouted="true" FixedToPoint="true">
+      <Path>
+        <Point X="1.25" Y="1.062" />
+        <Point X="1.25" Y="1.633" />
+        <Point X="3.688" Y="1.633" />
+        <Point X="3.688" Y="2" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAQgAEACABCAAAAAABQAEAAAAAAAABAAAAAAAAAAA=</HashCode>
+      <FileName>RecuitSimuleAlgorithm.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RecuitSimuleProf" Collapsed="true">
+    <Position X="2.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAQgAEAAAAAAAAAAABAAAAAAAAAAABAAAAAAAAAAA=</HashCode>
+      <FileName>RecuitSimuleProf.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WheelSelection" Collapsed="true">
+    <Position X="7.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAA=</HashCode>
+      <FileName>genetic\WheelSelection.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

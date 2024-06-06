@@ -61,6 +61,7 @@ vector<Polyedre> Algorithm::mergeAlgorithm(vector<Polyedre> solution, int limitN
 	bool stopCurrentSolution = false;
 
 	bool end = false;
+	// Tant qu'on arrive a reduire le nombre de fusions
 	while (!end)
 	{
 		Polyedre currentPolyhedron = solution[0];
@@ -149,7 +150,6 @@ vector<Polyedre> Algorithm::mergeAlgorithm(vector<Polyedre> solution, int limitN
 							mergedPoly		// Polyedre fusionne
 						);
 
-
 						// Maj de la distance entre les 2 sommets qu'on a essaye de fusionner
 						sumDistances += d_mergeGraph.calculateDistance(
 							currentPolyhedron.getId(),
@@ -170,7 +170,8 @@ vector<Polyedre> Algorithm::mergeAlgorithm(vector<Polyedre> solution, int limitN
 				mergedPolyhedra.push_back(currentPolyhedron);
 				currentPolyhedron = solution[nextPolyId];
 
-				// Si on a deja une meilleur solution
+				// Si on a deja une meilleur solution 
+				// (limitNbPoly doit etre passe en parametre de la methode)
 				if (limitNbPoly != -1 && mergedPolyhedra.size() >= limitNbPoly)
 				{
 					stopCurrentSolution = true;
@@ -187,11 +188,13 @@ vector<Polyedre> Algorithm::mergeAlgorithm(vector<Polyedre> solution, int limitN
 
 			if (mergedPolyhedra.size() < solution.size())
 			{
+				// On va refaire une iteration a partir des nouvelles fusions
 				solution = mergedPolyhedra;
 				mergedPolyhedra.clear();
 			}
 			else
 			{
+				// Plus de fusions possibles, on arrete l'algo
 				end = true;
 			}
 		}
