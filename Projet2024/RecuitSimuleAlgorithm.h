@@ -3,6 +3,9 @@
 
 #include <random>   // Pour std::default_random_engine et std::uniform_int_distribution
 
+/**
+ * @brief Algorithme du recuit simule (ou SA: similated annealing)
+*/
 class RecuitSimuleAlgorithm : public Algorithm
 {
 public:

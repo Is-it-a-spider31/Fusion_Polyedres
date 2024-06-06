@@ -267,11 +267,12 @@ Polyedre Polyedre::merge2Polygones(const Polyedre& poly1, const Polyedre& poly2)
 }
   
 /**
- * @brief Calcul si le polyedre est convexe ou pas
- * 
+ * @brief Calcul si le polyedre est convexe ou pas.
+ *
  * Pour savoir si un polyedre est convexe, le principe est de verifier
  * si pour chaque face, tous les sommets sont du meme cote.
- * 
+ * Cette methode met a jour un attribut qui est accessible
+ * avec la fonction @ref isConvexe (pour eviter de refaire le calcul)
 */
 void Polyedre::computeConvexity()
 {
@@ -360,7 +361,7 @@ void Polyedre::updateIdAndCompnenents(const Polyedre& poly1, const Polyedre& pol
 }
 
 
-// GETTERS
+// GETTERS & SETTERS
 
 string Polyedre::getId() const { return d_id; }
 
@@ -372,7 +373,7 @@ string Polyedre::getMTL() const
 vector<Face> Polyedre::getFaces() const { return faces; }
 
 /**
- * @return Le nombre de polyèdres qui composent le polyedre actuel
+ * @return Le nombre de sous-polyèdres qui composent le polyedre actuel
 */
 int Polyedre::getNbComponents() const
 {

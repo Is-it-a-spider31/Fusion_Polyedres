@@ -231,6 +231,14 @@ vector<Polyedre> Algorithm::mergeAlgorithm(vector<Polyedre> solution, int limitN
 	return mergedPolyhedra;
 }
 
+/**
+ * @brief Creer un repertoire avec un nom unique.
+ * Ce nom est compose du nombre de polyedre apres fusion et de
+ * la date courante.
+ *
+ * @param currentDir Repertoire dans lequel on veut creer un sous-repertoire
+ * @param solution Taille de la solution apres fusion
+*/
 void Algorithm::createRunDir(string currentDir, string solution)
 {
 	// Date courante
@@ -259,10 +267,13 @@ void Algorithm::createRunDir(string currentDir, string solution)
 	strcpy_s(cstr, cmd.length() + 1, cmd.c_str());  // Copie
 
 	system(cstr);
-	
-
 }
 
+/**
+ * @brief Remplace les '/' d'un chemin avec des '\' (pour windows)
+ * @param unixPath Chemin avec de '/'
+ * @return Le chemin pour windows avec des '\'
+*/
 string Algorithm::convertToWindowsPath(const string& unixPath)
 {
 	string windowsPath = unixPath;

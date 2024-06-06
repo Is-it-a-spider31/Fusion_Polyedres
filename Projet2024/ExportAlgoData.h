@@ -8,10 +8,10 @@
 using namespace std;
 
 /**
- * Permet d'exporter les donnees d'un algorithme dans un fichier.
+ * @brief Permet d'exporter les donnees d'un algorithme dans un fichier.
  * Ce fichier pourra ensuite etre utilise pour afficher un graphique.
  * Exemple : evolution de l'objectif en fonction nombre d'iteration
-
+ *
 */
 class ExportAlgoData
 {

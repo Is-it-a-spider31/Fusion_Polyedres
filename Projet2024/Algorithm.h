@@ -12,7 +12,7 @@
 using namespace std;
 
 /**
- * @brief Classe abstraite, parent des classes d'algo des fusions
+ * @brief Classe abstraite, permet d'effectuer l'algo de fusion
 */
 class Algorithm
 {
@@ -86,7 +86,7 @@ protected:
     double d_objectiveValue;
 
     /**
-     * @brief Permet de stocker et ecrire des donnes de l'algo
+     * @brief Permet de stocker et ecrire des donnees de l'algo
     */
     vector<ExportAlgoData> d_dataWriters;
 
@@ -108,10 +108,29 @@ protected:
 
     virtual const string getFilePath() = 0;
 
+    /**
+     * @brief Creer un repertoire avec un nom unique.
+     * Ce nom est compose du nombre de polyedre apres fusion et de
+     * la date courante.
+     * 
+     * @param currentDir Repertoire dans lequel on veut creer un sous-repertoire
+     * @param solution Taille de la solution apres fusion
+    */
     void createRunDir(string currentDir, string solution);
 
+    /**
+     * @brief Remplace les '/' d'un chemin avec des '\' (pour windows)
+     * @param unixPath Chemin avec de '/'
+     * @return Le chemin pour windows avec des '\'
+    */
     string convertToWindowsPath(const string& unixPath);
 
+    /**
+     * @brief Repertoire ou on ecrit les resultats de l'execution courante.
+     * 
+     * Chemin du repertoire vers lequel les resultats
+     * de l'execution courante sont ecrits
+    */
     string d_fullFilePath;
 
     int d_nb_poly_finale;
