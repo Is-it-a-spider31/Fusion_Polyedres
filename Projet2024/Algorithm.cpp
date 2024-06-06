@@ -51,7 +51,7 @@ vector<Polyedre> Algorithm::mergeAlgorithm(vector<Polyedre> solution, int limitN
 {
 	double sumDistances = 0.0;
 	double nbConsecutiveMerges = 0;
-	double reward  = 0.0;
+	
 	int initSolutionSize = solution.size();
 
 	// Liste des polyedres avec fusion
@@ -60,7 +60,6 @@ vector<Polyedre> Algorithm::mergeAlgorithm(vector<Polyedre> solution, int limitN
 	// true : arreter la solution en cours car on a deja mieux
 	bool stopCurrentSolution = false;
 
-		
 	bool end = false;
 	while (!end)
 	{
@@ -171,20 +170,11 @@ vector<Polyedre> Algorithm::mergeAlgorithm(vector<Polyedre> solution, int limitN
 				mergedPolyhedra.push_back(currentPolyhedron);
 				currentPolyhedron = solution[nextPolyId];
 
-				// Somme des nbConsecutiveMerges (pour calculer la moyenne plus tard)
-				if (nbConsecutiveMerges > 1)
-					reward += pow(nbConsecutiveMerges, 2);
-				nbConsecutiveMerges = 0;
-
 				// Si on a deja une meilleur solution
 				if (limitNbPoly != -1 && mergedPolyhedra.size() >= limitNbPoly)
 				{
 					stopCurrentSolution = true;
 				}
-			}
-			else
-			{
-				nbConsecutiveMerges++;
 			}
 
 			nextPolyId++;
@@ -217,12 +207,17 @@ vector<Polyedre> Algorithm::mergeAlgorithm(vector<Polyedre> solution, int limitN
 	//cout << endl << "------------------" << endl;
 	// Calcul de la penalite penalite (d_sumDistances >= 1)
 	// cout << "sum distances = " << sumDistances << endl;
-	double penality = pow(sumDistances/d_mergeGraph.getDiameter()/ initSolutionSize, 2)/3;
+	double penality = pow(sumDistances/d_mergeGraph.getDiameter()/ initSolutionSize, 2)/2;
 	// cout << "Penalite : " << penality << endl;
 	// Calcul de la recompense
 	// cout << "Val reward avant calcul : " << reward << endl;
+
 	double min = 0;
 	double max = pow((initSolutionSize - 1), 2);
+	double reward = 0.0;
+	for (Polyedre& poly : mergedPolyhedra)
+		reward += pow(poly.getNbComponents()-1, 2);
+
 	reward = ((reward - min)/(max-min))*2;	// Normalisation
 	// cout << "Recompense : " << reward << endl;
 	// Evaluation de la soluion courante

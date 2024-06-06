@@ -371,6 +371,22 @@ string Polyedre::getMTL() const
 
 vector<Face> Polyedre::getFaces() const { return faces; }
 
+/**
+ * @return Le nombre de polyèdres qui composent le polyedre actuel
+*/
+int Polyedre::getNbComponents() const
+{
+    if (d_components.size() <= 1)
+        return 1;
+   
+    int nbFusions = 0;
+    for (Polyedre poly : d_components)
+    {
+        nbFusions += poly.getNbComponents();
+    }
+    return nbFusions;
+}
+
 void Polyedre::setMTL(string name)
 {
     d_texture = "Texture/" + name + ".obj";

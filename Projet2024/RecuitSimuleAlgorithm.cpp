@@ -24,75 +24,87 @@ void RecuitSimuleAlgorithm::run()
 
 	// Copies de la liste des polyedres
 	vector<Polyedre> currentSolution = d_polyhedra;
+	this->permuteNElements(currentSolution, d_polyhedra.size()/2);
 	vector<Polyedre> bestSolution = d_polyhedra;
 	vector<Polyedre> neighborSolution = d_polyhedra;	// Solution voisine
 
 	double currentEval = this->evaluateSolution(currentSolution);
+	cout << "Init eval" << currentEval << endl;
 	double neighborEval;
 	double bestEval = currentEval;
+	double previousBestEval = currentEval;
 	double palier;
 	double n = 0;
 
 	int nbIterations = 0;
-	int nbMaxIterations = 4000;
-	double nonImprovLimit = 900;
+	int nbMaxIterations = 10000;
+	double nonImprovLimit = 400;
 	double nonImprovIter = 0;
 
 	// Parametres
-	const int maxIter = 24;
+	const int maxIterStep = 24;	// Nb iterations par palier
 	const int initialTemp = d_temperature;
 	int nbPermutations = 4;
 
-	d_dataWriters.push_back(ExportAlgoData());
-	d_dataWriters.push_back(ExportAlgoData());
-	d_dataWriters.push_back(ExportAlgoData());
+	d_dataWriters.push_back(ExportAlgoData());	// Current eval
+	d_dataWriters.push_back(ExportAlgoData());	// Nb Permutations
+	d_dataWriters.push_back(ExportAlgoData());	// Temperature
+	d_dataWriters.push_back(ExportAlgoData());	// Non Improv iter
+	d_dataWriters.push_back(ExportAlgoData());	// Best eval
 
 	// Debut du chronometre (pour compter le temps d'execution)
 	clock_t tStart = clock();
 
-	bool stop = false;
+	int continuer = 0;
 
-	while (!stop || d_temperature > nbMaxIterations)	// Critere d'arret (a changer)
+	while (continuer < 2 && nbIterations < nbMaxIterations)	// Critere d'arret
 	{
-		// Refait un tour
-		if (d_temperature < 1)
+		// REFROIDISSEMENT
+		if (nonImprovIter == nonImprovLimit)	// On stagne
 		{
-			if (currentEval > bestEval)
+			if (bestEval < previousBestEval)	// Amelioration
 			{
-				stop = true;
-				d_temperature = initialTemp;
+				previousBestEval = bestEval;
+				continuer = 0;
 			}
-			else 
+			else	// Pas d'amelioration
 			{
-				break;
+				continuer++;
 			}
+
+			d_temperature = (exp(static_cast<double>(-nbIterations)
+								/ static_cast<double>(nbMaxIterations)) - exp(-1))
+							* initialTemp;
+			nonImprovIter = 0;
+		}
+		else
+		{
+			d_temperature *= d_coolingFactor;
 		}
 
-		// REFROIDISSEMENT
-		d_temperature *= d_coolingFactor;
-		palier = std::exp(1 / (d_temperature * d_coolingFactor));
-
-		//cout << "palier : " << palier << endl;
 		n = 0;
 		d_dataWriters[0].addPoint(nbIterations, currentEval);		// ADD DATA
 		d_dataWriters[2].addPoint(nbIterations, d_temperature);		// ADD DATA
+		d_dataWriters[4].addPoint(nbIterations, bestEval)
 
-		if (nbIterations % 7 == 0) {
-			cout << "temperature : " << d_temperature << endl;
-		}
+		if (nbIterations % (24*6) == 0)
+			cout << "temperature : " << d_temperature << endl;		
 
-		while (n < maxIter)
+		while (n < maxIterStep)
 		{
+			if (nbIterations % 900 == 0)
+				cout << " -- Iteration : " << nbIterations << endl;
 			nbIterations++;
+
+			d_dataWriters[3].addPoint(nbIterations, nonImprovIter);	// ADD DATA
 
 			// PERTURBATION
 			neighborSolution = currentSolution;
-			int min = 0.15 * d_polyhedra.size();
-			int max = 0.3 * d_polyhedra.size();
+			int min = 0.1 * d_polyhedra.size();
+			int max = 0.2 * d_polyhedra.size();
 
 			// Augmente quand nonImprovIter augmente
 			nbPermutations = min + ((nonImprovIter / nonImprovLimit) * (max - min));
-
 			d_dataWriters[1].addPoint(nbIterations, nbPermutations);	// ADD DATA
 			this->permuteNElements(neighborSolution, nbPermutations);
 
@@ -106,26 +118,20 @@ void RecuitSimuleAlgorithm::run()
 				bestEval = neighborEval;
 				nonImprovIter = 0;
 			}
-
-			// ACCEPTATION
-			if (isNeighborAccepted(currentEval, neighborEval)
-				|| nonImprovIter > nonImprovLimit)
-			{
-				if (nonImprovIter > nonImprovLimit)
-				{}
-				else
-				{
-					currentSolution = neighborSolution;
-					currentEval = neighborEval;
-				}
-				// nonImprovLimit = 900;
-			}
 			else
 			{
 				if (nonImprovIter > nonImprovLimit)
 					nonImprovIter = nonImprovLimit;
 				else
 					nonImprovIter++;
+			}
+
+			// ACCEPTATION
+			if (isNeighborAccepted(currentEval, neighborEval))
+			{
+				currentSolution = neighborSolution;
+				currentEval = neighborEval;
+				// nonImprovIter = 0;
 			}
 
 			n++;
@@ -164,12 +170,12 @@ void RecuitSimuleAlgorithm::run()
 	// Encadre d'information sur le graphique
 	// string info = "Nb permutations pour voisin : " + to_string(nbPermutations) + "\\n";
 	string info = "Nb permutations pour voisin (VARIABLE)\\n";
-	info += "PAS DE Critere Acceptation [0.85, 1] fonction temp\\n";
+	info += "Critere Acceptation [0.975, 1] fonction temp\\n";
 	info += "Initial temp : " + to_string(initialTemp) + "\\n";
 	info += "Facteur refroidissement : " + doubleToStringRounded(d_coolingFactor, 3) + "\\n";
-	info += "Nb iteration par palier : " + to_string(maxIter) + "\\n";
+	info += "Nb iteration par palier : " + to_string(maxIterStep) + "\\n";
 	info += "Nb iteration effectuees : " + to_string(nbIterations) + "\\n";
-	info += "Non improv Iter (REVERSE VARIABLE): " + doubleToStringRounded(nonImprovLimit, 1) + "\\n";
+	info += "Non improv Iter (VARIABLE): " + doubleToStringRounded(nonImprovLimit, 1) + "\\n";
 	info += "Temps d'execution : " + strExecutionTime + "\\n";
 	info += "Best eval : " + to_string(bestEval)+ "\\n";
 	info += "Taille finale : " + to_string(mergedSolution.size())+ "\\n";
@@ -235,20 +241,23 @@ bool RecuitSimuleAlgorithm::isNeighborAccepted(const double& currentEval, const 
 
 	if (neighborEval > currentEval)
 	{	// Acceptation possible avec une certaine probabilite
+		isAccepted = false;
 
 		//double proba = std::exp((currentEval - neighborEval) / d_temperature) - 1;
 		// double proba = 2 - exp((1-((neighborEval - currentEval) / 5)) * (d_temperature / 1000));
+		double loss = neighborEval - currentEval;
 
-		// Diminue quand temperature diminue
-		double proba = 1 - (0.05 * (d_temperature / 1000));
+		// proba Augmente quand temperature diminue
+		// proba Augmente quand loss augmente
+		double proba = 1 - ((0.01 / loss) * (d_temperature / 1000));
 
 		// Distribution uniforme dans [0, 1]
 		std::uniform_real_distribution<double> uniformDis(0.0, 1.0);
 		// Genere un nombre entre 0 et 1
 		double random = uniformDis(d_randomGenerator);
 
-		if (random < proba)
-			isAccepted = false;
+		if (random > proba)
+			isAccepted = true;
 	}
 
 	return isAccepted;
@@ -269,7 +278,7 @@ const string RecuitSimuleAlgorithm::getFilePath()
 void RecuitSimuleAlgorithm::printDataChart(const string& info)
 {
 	const string legend = "";
-	string title = "Evolution de l'objectif en fonction des iterations";
+	string title = "Exploration des solutions au fil des iterations";
 	d_dataWriters[0].writeDataToFile(
 		d_fullFilePath ,
 		"RecuitChartObj",	// Nom fichier
@@ -304,4 +313,28 @@ void RecuitSimuleAlgorithm::printDataChart(const string& info)
 		info,
 		false	// Invertion de l'axe X
 	);
+
+	title = "Graphe de convergence";
+	d_dataWriters[4].writeDataToFile(
+		d_fullFilePath,
+		"RecuitChartBestEval",	// Nom fichier
+		"Nb iteration",	// Axe X
+		"Meilleure evaluation",		// Axe Y
+		legend,
+		title,
+		info,
+		false	// Invertion de l'axe X
+	);
+
+	title = "Evolution nonImprovIter en fonction des iterations";
+	//d_dataWriters[3].writeDataToFile(
+	//	d_fullFilePath,
+	//	"RecuitChartImprovIter",	// Nom fichier
+	//	"Nb iteration",	// Axe X
+	//	"nonImprovIter",		// Axe Y
+	//	legend,
+	//	title,
+	//	info,
+	//	false	// Invertion de l'axe X
+	//);
 }

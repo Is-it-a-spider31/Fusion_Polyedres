@@ -30,3 +30,8 @@
 	gain augmente, Proba diminue
 
 	d_temperature diminue, Proba diminue
+
+
+	Notes Prof Algo :
+		palier : exploration
+			fin du palier : on reprend à best eval du palier

@@ -81,6 +81,11 @@ public:
 	string getMTL() const;
 	vector<Face> getFaces() const;
 
+	/**
+	 * @return Le nombre de polyèdres qui composent le polyedre actuel
+	*/
+	int getNbComponents() const;
+
 	//SETTERS
 	void setMTL(string name);
 	void setId(const int id);
