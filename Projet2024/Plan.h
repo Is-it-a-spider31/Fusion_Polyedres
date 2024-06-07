@@ -3,7 +3,9 @@
 #include "Point.h"
 
 /**
- * @brief Classe qui represente un plan
+ * @brief Classe qui represente un plan selon son equation cartesienne.
+ * Euation cartesienne : ax + by + cz = d.
+ * Le plan est donc identifie avec les parametres a, b, c et d
 */
 class Plan
 {
@@ -23,8 +25,8 @@ public:
 	 * @brief Test de quel cote est un point par rapport au plan.
 	 * 
 	 * Renvoie un nombre :
-	 * > 0 : point a droite du plan
-	 * < 0 : point a gauche du plan
+	 * > 0 : point a droite du plan.
+	 * < 0 : point a gauche du plan.
 	 * 0 : point sur le plan
 	 * 
 	 * @param p point a tester
