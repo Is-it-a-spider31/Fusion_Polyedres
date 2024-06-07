@@ -13,11 +13,16 @@ public:
     */
     RecuitSimuleProf(const string& filename);
 
-
     /**
      * @brief Algorithme principal du recuit simule
     */
     void run() override;
+
+    /**
+     * Chemin du repertoire ves lequel l'agoritme ecrit
+     * les solutions trouvees sous forme de fichiers .obj
+    */
+    const string getFilePath() override;
 
 private:
     /**

@@ -56,8 +56,8 @@ int main(int argc, char* argv[])
 	//bruteforce.run();
 
 	//TEST RECUIT SIMULE
-	//RecuitSimuleAlgorithm recuit(MERGE_TEST_PATH+"exemple.obj");
-	//recuit.run();
+	RecuitSimuleAlgorithm recuit(MERGE_TEST_PATH+"exemple.obj");
+	recuit.run();
 
 
 	//RecuitSimuleProf recuit(MERGE_TEST_PATH+"exemple.obj");
@@ -85,7 +85,7 @@ int main(int argc, char* argv[])
 	/*NXCrossover crossover(3);
 	crossover.test();*/
 
-	
+	/*
 	srand(time(NULL));
 	//TurnamentSelection selection;
 	BestScoreSelection selection;
@@ -98,6 +98,7 @@ int main(int argc, char* argv[])
 	ptr_ga = &ga;
 
 	ga.run();
+	*/
 
 
 	//faire gaffe si la population est petite et la dimension aussi

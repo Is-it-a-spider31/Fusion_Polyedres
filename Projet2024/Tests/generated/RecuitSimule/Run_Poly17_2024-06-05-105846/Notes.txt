@@ -1,0 +1,4 @@
+// Diminue quand temperature diminue
+double proba = 1 - (0.8 * (d_temperature / 1000));
+
+0.8 ... oups

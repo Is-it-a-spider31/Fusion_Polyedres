@@ -3,6 +3,9 @@
 
 #include <random>   // Pour std::default_random_engine et std::uniform_int_distribution
 
+/**
+ * @brief Algorithme du recuit simule (ou SA: similated annealing)
+*/
 class RecuitSimuleAlgorithm : public Algorithm
 {
 public:
@@ -17,6 +20,12 @@ public:
      * @brief Algorithme principal du recuit simule
     */
     void run() override;
+
+    /**
+     * Chemin du repertoire ves lequel l'agoritme ecrit
+     * les solutions trouvees sous forme de fichiers .obj
+    */
+    const string getFilePath() override;
 
 protected:
     /**

@@ -10,8 +10,10 @@
 using namespace std;
 
 /**
- * Represente le graphe non oriente des fusions possibles entre 2
- * elements atomiques d'un ensemble de polyedres.
+ * @brief Graphe non oriente des fusions convexes
+ *
+ * Represente le graphe non oriente des fusions possibles (convexes) 
+ * pour un ensemble de polyedres.
  * 
  * Ainsi un sommet represente un polyedre, et une arete un fusion possible
 */

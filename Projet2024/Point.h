@@ -2,7 +2,7 @@
 #include <iostream>
 
 /**
- * @brief Classe qui represente un point
+ * @brief Classe qui represente un point (2D ou 3D)
 */
 class Point
 {

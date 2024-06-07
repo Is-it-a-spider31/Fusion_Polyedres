@@ -1,0 +1,2 @@
+nonImprovIter remis à 0 si acceptation
+même si meilleur solution pas trouvee
