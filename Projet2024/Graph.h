@@ -100,7 +100,15 @@ public:
     bool isEdgeAlreadyChecked(const string& vertex1, const string& vertex2);
 
     // OPERATEUR
-
+    /**
+ * @brief Opérateur de flux de sortie pour les objets Graph.
+ *
+ * Affiche les informations du graphe dans un flux de sortie.
+ *
+ * @param os Le flux de sortie dans lequel le graphe est affiché.
+ * @param p Le graphe à afficher.
+ * @return Une référence au flux de sortie après l'affichage du graphe.
+ */
     friend std::ostream& operator<<(std::ostream& os, const Graph& p);
 
 private:

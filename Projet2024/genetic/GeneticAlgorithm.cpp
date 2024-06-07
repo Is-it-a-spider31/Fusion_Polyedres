@@ -3,8 +3,21 @@
 #include "../myUtils.h"
 
 
-GeneticAlgorithm::GeneticAlgorithm(const string& filename, int popSize, double probaCross, double probaMut, int maxIter, Selection& selection, Crossover& crossover, Mutation& mutation) :
-	Algorithm(filename), d_popSize{ popSize }, d_crossoverProba{probaCross}, d_mutationProba{probaMut}, d_maxIteration{maxIter}
+/**
+ * @brief Constructeur de la classe GeneticAlgorithm.
+ *
+ * Initialise un algorithme génétique avec les paramètres spécifiés.
+ *
+ * @param filename Le nom du fichier contenant les données d'entrée.
+ * @param popSize La taille de la population.
+ * @param probaMut La probabilité de mutation.
+ * @param maxIter Le nombre maximum d'itérations.
+ * @param selection L'opérateur de sélection à utiliser.
+ * @param crossover L'opérateur de croisement à utiliser.
+ * @param mutation L'opérateur de mutation à utiliser.
+ */
+GeneticAlgorithm::GeneticAlgorithm(const string& filename, int popSize, double probaMut, int maxIter, Selection& selection, Crossover& crossover, Mutation& mutation) :
+	Algorithm(filename), d_popSize{ popSize }, d_mutationProba{probaMut}, d_maxIteration{maxIter}
 {
 	d_Selection = &selection;
 	d_Crossover = &crossover;
@@ -20,10 +33,15 @@ GeneticAlgorithm::GeneticAlgorithm(const string& filename, int popSize, double p
 	}
 }
 
+/**
+	 * @brief Algorithme principal du recuit simule
+	*/
 void GeneticAlgorithm::run()
 {
+	//Début du chronometre
 	clock_t tStart = clock();
 	d_dataWriters.push_back(ExportAlgoData());
+
 	//Initialisation
 	d_Population = new Population{ d_dimension, d_popSize };
 	d_pop = d_Population->randomInit();
@@ -62,37 +80,36 @@ void GeneticAlgorithm::run()
 		cout <<"=====================================================================" << endl;
 
 
-		//SI d_popsize = tgamma(d_dimension + 1) BREAK pck on a déja fait toutes les permutations
-		// donc il faut renvoyer le meilleur score. 
-		//if(d_popresized) { break; }
+		//Si toutes les solutions on était testé
 		if(d_popResized)
 		{
+			//renvoie la meilleur
 			exportBest();
 			return;
 		}
 
 		else
 		{
-			//-----------------------------TANT QUE----------------------------------------------------
+		
 			int iteration = 0;
-			//while (iteration < d_maxIteration)
-			//double stop = 20;
 
+			//Tant qu'on a pas dépasser le nombre max d'itération
 			while(iteration < d_maxIteration)
 			{
-				d_dataWriters[0].addPoint(iteration, scoreMin);
 				//Tracker le score min par itération pour le graphe
-
-
+				d_dataWriters[0].addPoint(iteration, scoreMin);
+				
+				//Affiche l'itération courante
 				cout << "------ITERATION " << iteration << " --------" << endl;
-				//printPopulation();
-				//if(iteration % 10 == 0) printPopulation();
+
+				//Affiche la population toutes les N itérations
+				if(iteration % 50 == 0) printPopulation();
 				cout << "----------------" << endl;
 				
 				//Selection
 				d_Selection->select(d_oldpop, d_oldscore_pop);
 
-				//SUPPRIMER LES TRUCS EN TROP DE LA POPULATION NORMALE
+				//Début de création de la nouvelle population
 				d_pop.clear();
 
 				vector<int> child1, child2;
@@ -110,13 +127,14 @@ void GeneticAlgorithm::run()
 					//Croisement des deux parents
 					d_Crossover->cross(d_Selection->getParents()[i], d_Selection->getParents()[i + 1], child1, child2);
 
-					//Peut se faire muter
+					//Mutation possible sur enfant 1
 					int rdm_mut = rand() % 101;
 					if (rdm_mut < d_mutationProba * 100)
 					{
 						d_Mutation->mutate(child1);
 					}
 
+					//Mutation possible sur enfant 2
 					rdm_mut = rand() % 101;
 					if (rdm_mut < d_mutationProba * 100)
 					{
@@ -184,9 +202,6 @@ void GeneticAlgorithm::run()
 
 					}
 
-					
-
-
 				}
 					
 				//Affichage du meilleur score trouvé depuis le début
@@ -205,13 +220,12 @@ void GeneticAlgorithm::run()
 				d_Selection->clearParentsList();
 			}
 
-			//Export de la solution
+			//Export de la meilleur solution
 			exportBest();
 
 			double timeTaken = (double)(clock() - tStart) / CLOCKS_PER_SEC;
 
 			// AFFICHAGE DU GRAPHIQUE
-
 			// Temps d'execution en string
 			string strExecutionTime;
 			if (timeTaken < 60)
@@ -241,6 +255,9 @@ void GeneticAlgorithm::run()
 		}
 }
 
+/**
+ * @brief Affiche la population actuelle.
+ */
 void GeneticAlgorithm::printPopulation() const
 {
 	for (int i = 0; i < d_pop.size(); i++)
@@ -254,12 +271,22 @@ void GeneticAlgorithm::printPopulation() const
 	}
 }
 
+/**
+	 * @brief Sauvegarde la meilleur solution
+	 *
+	 * Crée un dossier avec un id unique et stocke a l'interieur la solution au format OBJ.
+	 * Point de sortie de l'algorithme.
+	 */
 void GeneticAlgorithm::exportBest()
 {
+	//Fusionne la solution finale
 	vector<Polyedre> solution_merged = mergeAlgorithm(d_permutScoreMax);
+
+	//Créer un dossier unique
 	createRunDir(getFilePath(), to_string(solution_merged.size()));
 	cout << "Directory created ! " << endl;
 
+	//Sauvegarde la solution fusionnée en .obj
 	string filename = d_fullFilePath + "FUSION." + to_string(solution_merged.size()) + ".obj";
 	OBJFileHandler::writeOBJ(d_vertices, solution_merged, filename);
 
@@ -277,22 +304,41 @@ const string GeneticAlgorithm::getFilePath()
 	return "Tests/generated/GeneticAlgo/";
 }
 
+/**
+ * @brief Affiche un graphique représentant l'évolution de l'objectif en fonction des itérations.
+ *
+ * Cette méthode écrit les données dans un fichier, puis génère un graphique en utilisant un objet DataWriter.
+ * Le graphique affiche l'évolution de l'objectif en fonction des itérations.
+ *
+ * @param info Informations supplémentaires à inclure dans le graphique.
+ */
 void GeneticAlgorithm::printDataChart(const string& info)
 {
 	const string legend = "";
 	const string title = "Evolution de l'objectif en fonction des itérations";
-	d_dataWriters[0].writeDataToFile(
-		d_fullFilePath, "GeneticChart",	//filepath , Nom fichier
 
-		"Iteration",	// Axe X
-		"Objectif",		// Axe Y
+	// Écrit les données dans un fichier et génère le graphique
+	d_dataWriters[0].writeDataToFile(
+		d_fullFilePath, "GeneticChart",    // Chemin du fichier, nom du fichier
+		"Iteration",                      // Axe X
+		"Objectif",                       // Axe Y
 		legend,
 		title,
 		info,
-		false //true	// Invertion de l'axe X
+		false                             // Inversion de l'axe X
 	);
 }
 
+
+/**
+ * @brief Convertit une permutation en une liste de polyèdres.
+ *
+ * Cette méthode prend en entrée l'index d'une permutation dans la population
+ * et retourne une liste de polyèdres correspondant à cette permutation.
+ *
+ * @param index L'index de la permutation dans la population.
+ * @return Une liste de polyèdres correspondant à la permutation.
+ */
 vector<Polyedre> GeneticAlgorithm::perm2Poly(int index)
 {
 	vector<Polyedre> solution;
