@@ -153,7 +153,6 @@
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="Polyedre.cpp" />
     <ClCompile Include="RecuitSimuleAlgorithm.cpp" />
-    <ClCompile Include="RecuitSimuleProf.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Algorithm.h" />
@@ -177,7 +176,6 @@
     <ClInclude Include="Point.h" />
     <ClInclude Include="Polyedre.h" />
     <ClInclude Include="RecuitSimuleAlgorithm.h" />
-    <ClInclude Include="RecuitSimuleProf.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
