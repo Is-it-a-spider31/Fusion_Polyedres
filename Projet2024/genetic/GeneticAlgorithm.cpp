@@ -34,7 +34,7 @@ GeneticAlgorithm::GeneticAlgorithm(const string& filename, int popSize, double p
 }
 
 /**
-	 * @brief Algorithme principal du recuit simule
+	 * @brief Algorithme principal de l'algorithme génétique
 	*/
 void GeneticAlgorithm::run()
 {
