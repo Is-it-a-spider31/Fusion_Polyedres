@@ -85,7 +85,7 @@ void RecuitSimuleAlgorithm::run()
 		n = 0;
 		d_dataWriters[0].addPoint(nbIterations, currentEval);		// ADD DATA
 		d_dataWriters[2].addPoint(nbIterations, d_temperature);		// ADD DATA
-		d_dataWriters[4].addPoint(nbIterations, bestEval);
+		d_dataWriters[4].addPoint(nbIterations, bestEval);			// ADD DATA
 
 		if (nbIterations % (24*6) == 0)
 			cout << "temperature : " << d_temperature << endl;		
@@ -247,8 +247,8 @@ bool RecuitSimuleAlgorithm::isNeighborAccepted(const double& currentEval, const 
 		// double proba = 2 - exp((1-((neighborEval - currentEval) / 5)) * (d_temperature / 1000));
 		double loss = neighborEval - currentEval;
 
-		// proba Augmente quand temperature diminue
-		// proba Augmente quand loss augmente
+		// proba Augmente quand temperature diminue (et inversement)
+		// proba Augmente quand loss augmente (et inversement)
 		double proba = 1 - ((0.01 / loss) * (d_temperature / 1000));
 
 		// Distribution uniforme dans [0, 1]

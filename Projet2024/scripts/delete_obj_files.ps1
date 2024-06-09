@@ -8,8 +8,8 @@
 # Les chemins sont donc relatifs au fichier main.cpp
 
 # Bruteforce
-$directory = "Tests\generated\BruteForce"
-Get-ChildItem $directory -Filter *.obj | Remove-Item -Force
+# $directory = "Tests\generated\BruteForce"
+# Get-ChildItem $directory -Filter *.obj | Remove-Item -Force
 
 # Recuit simule
 #$directory = "Tests\generated\RecuitSimule"

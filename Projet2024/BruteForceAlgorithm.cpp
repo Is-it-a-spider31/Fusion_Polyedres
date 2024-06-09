@@ -9,11 +9,6 @@
 #include <algorithm>
 #include "OBJFileHandler.h"
 
-/**
- * Chemin du repertoire ves lequel l'agoritme ecrit
- * les solutions trouvees sous forme de fichiers .obj
-*/
-const string BruteForceAlgorithm::GENERATE_OBJ_PATH = "Tests/generated/BruteForce/";
 
 /**
  * @brief Contructeur a partir d'un fichier .obj
@@ -83,6 +78,7 @@ void BruteForceAlgorithm::run()
 	} while (next_permutation(permutedPolyhedra.begin(), permutedPolyhedra.end()));
 
 	//	ECRITURE DES MEILLEURES SOLUTIONS TROUVEES
+	createRunDir(getFilePath(), to_string(minNbPolySolution));	// Creation du 
 	auto solutionId = permutationsId.begin();
 	for (vector<Polyedre>& solution : solutions)
 	{
@@ -91,7 +87,7 @@ void BruteForceAlgorithm::run()
 			nbOptimalSolutions++;
 
 			// Ecriture du fichier OBJ pour cette solution
-			string filename = GENERATE_OBJ_PATH + "FUSION." + to_string(solution.size())
+			string filename = d_fullFilePath + "FUSION." + to_string(solution.size())
 				+ "Poly_" + to_string(*solutionId) + ".obj";
 			OBJFileHandler::writeOBJ(d_vertices, solution, filename);
 		}
@@ -109,6 +105,15 @@ void BruteForceAlgorithm::run()
 	cout << "Nb optimale de polyedres : " << minNbPolySolution << endl;
 
 	cout << endl << d_mergeGraph;
+}
+
+/**
+ * Chemin du repertoire ves lequel l'agoritme ecrit
+ * les solutions trouvees sous forme de fichiers .obj
+*/
+const string BruteForceAlgorithm::getFilePath()
+{
+	return "Tests/generated/BruteForce/";
 }
 
 

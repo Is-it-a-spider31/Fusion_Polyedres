@@ -3,7 +3,6 @@
 #include "Algorithm.h"
 #include "BruteForceAlgorithm.h"
 #include "RecuitSimuleAlgorithm.h"
-#include "RecuitSimuleProf.h"
 
 #include "genetic/GeneticAlgorithm.h"
 #include "genetic/TurnamentSelection.h"
@@ -22,6 +21,10 @@ using namespace std;
 
 GeneticAlgorithm* ptr_ga = nullptr;
 
+/**
+ * @brief Intercepte un signal
+ * @param signum Numero du signal
+*/
 void signalHandler(int signum) {
 	std::cout << "Interruption signal (" << signum << ") reçue." << std::endl;	
 	if (ptr_ga != nullptr)
@@ -34,7 +37,7 @@ void signalHandler(int signum) {
 
 int main(int argc, char* argv[])
 {
-
+	// Interception du signal SIGINT (ctrl + C)
 	signal(SIGINT, signalHandler);
 
 
@@ -52,16 +55,14 @@ int main(int argc, char* argv[])
 	const string BUGS_TEST_PATH = "Tests/BugsTests/";
 
 	//TEST ALGO BRUTE-FORCE
-	//BruteForceAlgorithm bruteforce(MERGE_TEST_PATH+"exemple3.obj");
-	//bruteforce.run();
+	BruteForceAlgorithm bruteforce(MERGE_TEST_PATH+"exemple3.obj");
+	bruteforce.run();
 
 	//TEST RECUIT SIMULE
 	//RecuitSimuleAlgorithm recuit(MERGE_TEST_PATH+"exemple.obj");
-	//recuit.run();
-
-
 	//RecuitSimuleProf recuit(MERGE_TEST_PATH+"exemple.obj");
 	//recuit.run();
+
 
 	// TESTS CONVEXITE
 	//BruteForceAlgorithm algo(CONVEXITY_TEST_PATH + "2DnotConvex.obj");
@@ -99,9 +100,6 @@ int main(int argc, char* argv[])
 
 	ga.run();
 	
-
-
-	//faire gaffe si la population est petite et la dimension aussi
 
 	return 0;
 }

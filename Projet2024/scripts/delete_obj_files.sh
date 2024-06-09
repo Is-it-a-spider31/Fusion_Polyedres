@@ -9,8 +9,8 @@
 # Les chemins sont donc relatifs au fichier main.cpp
 
 # Bruteforce
-directory="Tests/generated/BruteForce"
-find "$directory" -type f -name "*.obj" -delete
+# directory="Tests/generated/BruteForce"
+# find "$directory" -type f -name "*.obj" -delete
 
 # Recuit simule
 #directory="Tests/generated/RecuitSimule"
