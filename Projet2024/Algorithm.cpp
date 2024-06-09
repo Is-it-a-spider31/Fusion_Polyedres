@@ -216,10 +216,10 @@ vector<Polyedre> Algorithm::mergeAlgorithm(vector<Polyedre> solution, int limitN
 	// cout << "Val reward avant calcul : " << reward << endl;
 
 	double min = 0;
-	double max = pow((initSolutionSize - 1), 2);
+	double max = pow((initSolutionSize - 1), 1.35);
 	double reward = 0.0;
 	for (Polyedre& poly : mergedPolyhedra)
-		reward += pow(poly.getNbComponents()-1, 2);
+		reward += pow(poly.getNbComponents()-1, 1.35);
 
 	reward = ((reward - min)/(max-min))*2;	// Normalisation
 	// cout << "Recompense : " << reward << endl;
