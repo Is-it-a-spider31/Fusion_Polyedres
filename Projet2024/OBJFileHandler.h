@@ -44,6 +44,13 @@ public:
 		const string& filename
 	);
 
+	/**
+	* @brief Énumération des différentes chaînes de caractères reconnues dans un fichier OBJ.
+	*
+	* Cette énumération définit les différentes chaînes de caractères possibles
+	* pour le premier mot d'une ligne dans un fichier OBJ, ce qui permet de déterminer
+	* le type de données que représente la ligne.
+	*/
 	enum FirstString {
 		commentaire,
 		vertex,
@@ -60,6 +67,16 @@ public:
 		dont_know_string,
 	};
 
+	/**
+	* @brief Résout la chaîne de caractères en une valeur de l'énumération FirstString.
+	*
+	* Cette fonction prend en entrée une chaîne de caractères et retourne la valeur correspondante
+	* de l'énumération FirstString. Si la chaîne de caractères ne correspond à aucune valeur connue,
+	* la fonction retourne dont_know_string.
+	*
+	* @param input La chaîne de caractères à résoudre.
+	* @return La valeur de l'énumération FirstString correspondant à la chaîne de caractères.
+	*/
 	static FirstString resolveFirstString(string input);
 
 private:

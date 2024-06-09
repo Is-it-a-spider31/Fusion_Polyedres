@@ -133,6 +133,9 @@ protected:
     */
     string d_fullFilePath;
 
+    /**
+     * @brief Nombre de polyèdre total de la solution finale
+     */
     int d_nb_poly_finale;
 
 private:

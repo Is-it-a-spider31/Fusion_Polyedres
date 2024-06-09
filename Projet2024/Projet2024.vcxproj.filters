@@ -85,7 +85,7 @@
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="genetic\WheelSelection.cpp">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Fichiers sources\genetic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -150,7 +150,7 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="genetic\WheelSelection.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+      <Filter>Fichiers d%27en-tête\genetic</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -60,6 +60,15 @@ private:
     */
     vector<Point> dataPoints;
 
+    /**
+ * @brief Affiche un graphique à partir des données fournies en utilisant un executable.
+ *
+ * Cette fonction prend en entrée le chemin du fichier de données et le nom du fichier de données,
+ * puis génère un graphique à partir de ces données en utilisant un executable.
+ *
+ * @param dataFilePath Le chemin du fichier de données.
+ * @param dataFileName Le nom du fichier de données.
+ */
     void displayChart(const string& dataFilePath, const string& dataFileName);
 };
 

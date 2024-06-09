@@ -72,8 +72,16 @@ int Face::getId() const
 }
 
 
-// OPERATEURS REDEFINIS
-
+/**
+ * @brief Compare deux objets Face pour l'égalité.
+ *
+ * Cette méthode vérifie si deux objets Face sont égaux en comparant leurs sommets.
+ * Deux objets Face sont considérés comme égaux si et seulement si ils ont le même nombre de sommets
+ * et que chaque sommet de l'un est présent dans l'autre.
+ *
+ * @param f L'objet Face à comparer.
+ * @return true si les deux objets Face sont égaux, false sinon.
+ */
 bool Face::operator==(const Face f) const
 {
 	if (d_sommets.size() == f.d_sommets.size()) {
@@ -95,6 +103,16 @@ bool Face::operator==(const Face f) const
 	return false;
 }
 
+/**
+* @brief Opérateur de flux de sortie pour les objets Face.
+*
+* Cette fonction amie permet d'écrire un objet Face dans un flux de sortie.
+* Elle formate les données de l'objet Face pour une sortie lisible.
+*
+* @param os Le flux de sortie dans lequel l'objet Face est écrit.
+* @param f L'objet Face à écrire dans le flux de sortie.
+* @return Une référence au flux de sortie après l'écriture de l'objet Face.
+*/
 std::ostream& operator<<(std::ostream& os, const Face& f)
 {
 	os << "f ";
