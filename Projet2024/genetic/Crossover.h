@@ -4,6 +4,9 @@
 
 using namespace std;
 
+/**
+ * @brief Classe abstraite de croisement avec la fonction cross a redefinir
+ */
 class Crossover
 {
 

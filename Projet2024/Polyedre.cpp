@@ -362,14 +362,25 @@ void Polyedre::updateIdAndCompnenents(const Polyedre& poly1, const Polyedre& pol
 
 
 // GETTERS & SETTERS
-
+/**
+ * @brief Renvoie l'identifiant du polyèdre.
+ * @return L'identifiant du polyèdre.
+ */
 string Polyedre::getId() const { return d_id; }
 
+/**
+     * @brief Renvoie le nom du matériau (MTL) du polyèdre.
+     * @return Le nom du matériau du polyèdre.
+     */
 string Polyedre::getMTL() const
 {
     return d_texture;
 }
 
+/**
+     * @brief Renvoie la liste des faces du polyèdre.
+     * @return Un vecteur contenant les faces du polyèdre.
+     */
 vector<Face> Polyedre::getFaces() const { return faces; }
 
 /**
@@ -388,26 +399,48 @@ int Polyedre::getNbComponents() const
     return nbFusions;
 }
 
+/**
+     * @brief Définit le nom du matériau (MTL) du polyèdre.
+     * @param name Le nom du matériau à attribuer au polyèdre.
+     */
 void Polyedre::setMTL(string name)
 {
     d_texture = "Texture/" + name + ".obj";
 }
 
+/**
+     * @brief Définit l'identifiant du polyèdre.
+     * @param id L'identifiant à attribuer au polyèdre.
+     */
 void Polyedre::setId(const int id)
 {
     d_id = to_string(id);
 }
 
+/**
+     * @return true si le polyedre est convexe, faux sinon
+    */
 bool Polyedre::isConvex() const { return d_isConvex; }
 
 
 // OPERATEURS
-
+/**
+ * @brief Compare les identifiants de deux polyèdres.
+ *
+ * @param otherPoly Le polyèdre à comparer.
+ * @return true si l'identifiant de ce polyèdre est inférieur à celui de otherPoly, sinon false.
+ */
 bool Polyedre::operator<(const Polyedre& otherPoly) const
 {
     return d_id < otherPoly.d_id;
 }
 
+/**
+     * @brief Vérifie si deux polyèdres sont égaux en comparant leurs faces.
+     *
+     * @param poly Le polyèdre à comparer.
+     * @return true si les polyèdres ont le même nombre de faces et que toutes leurs faces sont communes, sinon false.
+     */
 bool Polyedre::operator==(const Polyedre& poly) const
 {
     // Liste des faces communes aux 2 polyedres
@@ -423,6 +456,14 @@ bool Polyedre::operator==(const Polyedre& poly) const
     return false;
 }
 
+
+/**
+     * @brief Affiche le polyèdre dans un flux de sortie.
+     *
+     * @param os Le flux de sortie où le polyèdre sera affiché.
+     * @param p Le polyèdre à afficher.
+     * @return Une référence au flux de sortie après l'affichage du polyèdre.
+     */
 std::ostream& operator<<(std::ostream& os, const Polyedre& p)
 {
     os << "o Object" << p.getId() << std::endl;

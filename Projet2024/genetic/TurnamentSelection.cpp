@@ -4,6 +4,7 @@ void TurnamentSelection::select(vector<vector<int>>& population, vector<double> 
 {
 	//nbIndivInTurnament = population.size() / 8;
 
+	//divise la population en 2 et fait en sorte d'avoir un tableau pair
 	int index_lasthalf = population.size() / 2;
 	if (index_lasthalf % 2 != 0)
 	{
@@ -13,6 +14,7 @@ void TurnamentSelection::select(vector<vector<int>>& population, vector<double> 
 	vector<vector<int>> population_no_double = population;
 	vector<double> score_no_double = score;
 
+	//tant qu'il y'a de la place dans le tableau parents on fait un tournoi avec un gagnant
 	for (int i = 0; i < index_lasthalf; i++)
 	{
 		int winnerInd;
@@ -57,20 +59,6 @@ void TurnamentSelection::oneWinnerTurnament(vector<vector<int>>& population, vec
 		}
 	}
 
-	/*cout << "Index in turnament : [ ";
-	for (const auto& ind : indexToFight)
-	{
-		cout << ind << " ";
-	}
-	cout << " ]" << endl;
-
-	cout << "Score of them : [ ";
-	for (const auto& ind : indexToFight)
-	{
-		cout << score[ind] << " ";
-	}
-	cout << " ]" << endl;*/
-
 	int winner1 = indexToFight[0];
 	for (const auto& indiv : indexToFight)
 	{
@@ -83,5 +71,4 @@ void TurnamentSelection::oneWinnerTurnament(vector<vector<int>>& population, vec
 	//cout << "Winner 1 = " << winner1 << " | Winner 2 = " << winner2 << endl;
 	d_parents.push_back(population[winner1]);
 	winnerInd = winner1;
-	//d_id_p1 = winner1;
 }
