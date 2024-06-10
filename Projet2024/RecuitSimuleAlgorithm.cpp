@@ -39,7 +39,7 @@ void RecuitSimuleAlgorithm::run()
 
 	int nbIterations = 0;
 	int nbMaxIterations = 6000;
-	double nonImprovLimit = 600;
+	double nonImprovLimit = 1300;
 	double nonImprovIter = 0;
 
 	// Parametres
@@ -101,16 +101,29 @@ void RecuitSimuleAlgorithm::run()
 
 			// PERTURBATION
 			neighborSolution = currentSolution;
-			int min = 0.1 * d_polyhedra.size();
-			int max = 0.2 * d_polyhedra.size();
+			//int min = 0.1 * d_polyhedra.size();
+			//int max = 0.2 * d_polyhedra.size();
+			int min = 1;
+			int max = 3;
 
 			// Augmente quand nonImprovIter augmente
-			nbPermutations = min + ((nonImprovIter / nonImprovLimit) * (max - min));
+			// nbPermutations = min + ((nonImprovIter / nonImprovLimit) * (max - min));
+			//if (d_temperature > 250)
+			//	nbPermutations = max;
+			//else 
+			//	nbPermutations = min + ((d_temperature / 250) * (max - min));
 			d_dataWriters[1].addPoint(nbIterations, nbPermutations);	// ADD DATA
 			// this->permuteNElements(neighborSolution, nbPermutations);
+
+			for (int i = min; i <= max; i++)
+			{
+				this->permute2ConssecutivesElements(neighborSolution);
+			}
+			/*
 			this->permute2ConssecutivesElements(neighborSolution);
 			this->permute2ConssecutivesElements(neighborSolution);
 			this->permute2ConssecutivesElements(neighborSolution);
+			*/
 
 			// EVALUATION
 			neighborEval = this->evaluateSolution(neighborSolution);

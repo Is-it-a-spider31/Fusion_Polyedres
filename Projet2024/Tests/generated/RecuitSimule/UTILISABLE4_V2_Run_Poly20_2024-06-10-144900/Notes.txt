@@ -1,0 +1,17 @@
+
+
+
+nb Wrong Acceptation : 1127
+
+acceptation : 
+double proba = 1 - ((0.01 / loss) * (d_temperature / 1000));
+
+stagne iter : 1300
+
+// UTILISABLE 4 mais sans la ligne suivante :
+// this->permuteNElements(neighborSolution, nbPermutations);
+
+for (int i = 1; i <= 3; i++)
+{
+	this->permute2ConssecutivesElements(neighborSolution);
+}
