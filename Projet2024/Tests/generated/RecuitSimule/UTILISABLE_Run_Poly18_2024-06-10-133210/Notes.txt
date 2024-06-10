@@ -1,0 +1,3 @@
+
+3 permutations de 2 éléments à la suite
+nb Wrong Acceptation : 1424
