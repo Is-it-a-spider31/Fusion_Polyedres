@@ -1,6 +1,6 @@
 # Fusion de polyèdres - 2024
 
-**Contexte :** Projet semestre 2 master 1 informatique et mobilité - Université de Strasbourg
+**Contexte :** Projet semestre 2 master 1 informatique et mobilité - Université de Haute Alsace
 
 ### Auteurs
 - Jérôme Dubois
