@@ -1,0 +1,6 @@
+// Diminue quand temperature diminue
+double proba = 1 - (0.025 * (d_temperature / 1000));
+
+if (neighborEval < bestEval)
+ou si (isNeighborAccepted(currentEval, neighborEval))
+	nonImprovIter = 0;

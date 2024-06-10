@@ -1,0 +1,13 @@
+
+2 à 5 permutations de 2 éléments à la suite
+Critère : plus ça stagne (non imrpov) plus on augmente 5 sinon 2
+
+nbPermutations = min + ((nonImprovIter / nonImprovLimit) * (max - min));
+
+
+nb Wrong Acceptation : 1078
+
+acceptation : 
+double proba = 1 - ((0.01 / loss) * (d_temperature / 1000));
+
+stagne iter : 600

@@ -62,8 +62,6 @@ void OBJFileHandler::loadOBJ(vector<Point>& vertices, vector<Face>& faces, vecto
             int id_face = 1;
             int id_poly = 1;
             
-           // Polyedre* currentObject;
-           // int current_id_poly = -1;
 
             while (objFile.good())
             {
@@ -208,6 +206,16 @@ void OBJFileHandler::loadOBJ(vector<Point>& vertices, vector<Face>& faces, vecto
     
 }
 
+/**
+    * @brief Résout la chaîne de caractères en une valeur de l'énumération FirstString.
+    *
+    * Cette fonction prend en entrée une chaîne de caractères et retourne la valeur correspondante
+    * de l'énumération FirstString. Si la chaîne de caractères ne correspond à aucune valeur connue,
+    * la fonction retourne dont_know_string.
+    *
+    * @param input La chaîne de caractères à résoudre.
+    * @return La valeur de l'énumération FirstString correspondant à la chaîne de caractères.
+    */
 OBJFileHandler::FirstString OBJFileHandler::resolveFirstString(string input)
 {
     if (input == "#") return commentaire;
@@ -224,7 +232,7 @@ OBJFileHandler::FirstString OBJFileHandler::resolveFirstString(string input)
     if (input == "s") return smoothgroup;
 
     return dont_know_string;
-    
+
 }
 
 

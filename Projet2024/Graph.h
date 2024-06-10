@@ -10,8 +10,10 @@
 using namespace std;
 
 /**
- * Represente le graphe non oriente des fusions possibles entre 2
- * elements atomiques d'un ensemble de polyedres.
+ * @brief Graphe non oriente des fusions convexes
+ *
+ * Represente le graphe non oriente des fusions possibles (convexes) 
+ * pour un ensemble de polyedres.
  * 
  * Ainsi un sommet represente un polyedre, et une arete un fusion possible
 */
@@ -98,7 +100,15 @@ public:
     bool isEdgeAlreadyChecked(const string& vertex1, const string& vertex2);
 
     // OPERATEUR
-
+    /**
+ * @brief Opérateur de flux de sortie pour les objets Graph.
+ *
+ * Affiche les informations du graphe dans un flux de sortie.
+ *
+ * @param os Le flux de sortie dans lequel le graphe est affiché.
+ * @param p Le graphe à afficher.
+ * @return Une référence au flux de sortie après l'affichage du graphe.
+ */
     friend std::ostream& operator<<(std::ostream& os, const Graph& p);
 
 private:

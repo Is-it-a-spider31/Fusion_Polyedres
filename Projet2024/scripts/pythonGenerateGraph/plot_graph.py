@@ -2,7 +2,9 @@ import matplotlib.pyplot as plt
 import argparse
 
 def read_data_from_file(filename):
+    ##################################################################
     #   Lecture des donnes contenues dans le fichier
+    ##################################################################
 
     with open(filename, 'r') as file:
         lines = file.readlines()
@@ -28,7 +30,9 @@ def read_data_from_file(filename):
 
 
 def plot_graph(title, x_axis_name, y_axis_name, legend, info_box, invert_x, data_points, filepath):
+    ##################################################################
     # Affichage des donnees dans un graphique
+    ##################################################################
 
     x_values, y_values = zip(*data_points)
 
@@ -56,9 +60,7 @@ def plot_graph(title, x_axis_name, y_axis_name, legend, info_box, invert_x, data
 # Lit les donnees du fichier passe en argument, puis affiche
 # le graphique correspondant.
 #
-# Generer l'executable (repertoire dist/):
-#   pyinstaller --onefile plot_graph.py
-# L'executable peut ensuite etre appele en ligne de commande
+# Cf. README.txt pour plus de détails.
 ##################################################################
 if __name__ == "__main__":
 

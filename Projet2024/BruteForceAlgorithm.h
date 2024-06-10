@@ -1,6 +1,9 @@
 #pragma once
 #include "Algorithm.h"
 
+/**
+ * @brief Algorithme force-brute pour minimiser le nombre de fusions.
+ */
 class BruteForceAlgorithm : public Algorithm
 {
 public:
@@ -12,17 +15,20 @@ public:
     BruteForceAlgorithm(const string& filename);
 
     /**
-     * @brief Algoritme Brute-force
+     * @brief Algorithme force-brute.
+     * 
+     * Teste toutes les permutations possibles et enregistre
+     * la meilleur solution trouvee.
     */
     void run() override;
-
-private:
 
     /**
      * Chemin du repertoire ves lequel l'agoritme ecrit
      * les solutions trouvees sous forme de fichiers .obj
     */
-    static const string GENERATE_OBJ_PATH ;
+    const string getFilePath() override;
+
+private:
 
     /**
      * @brief Verifie si une solution de l'algo de fusion a deja ete trouvee

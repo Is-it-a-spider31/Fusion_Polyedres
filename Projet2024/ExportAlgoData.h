@@ -8,10 +8,10 @@
 using namespace std;
 
 /**
- * Permet d'exporter les donnees d'un algorithme dans un fichier.
+ * @brief Permet d'exporter les donnees d'un algorithme dans un fichier.
  * Ce fichier pourra ensuite etre utilise pour afficher un graphique.
  * Exemple : evolution de l'objectif en fonction nombre d'iteration
-
+ *
 */
 class ExportAlgoData
 {
@@ -60,6 +60,15 @@ private:
     */
     vector<Point> dataPoints;
 
+    /**
+ * @brief Affiche un graphique à partir des données fournies en utilisant un executable.
+ *
+ * Cette fonction prend en entrée le chemin du fichier de données et le nom du fichier de données,
+ * puis génère un graphique à partir de ces données en utilisant un executable.
+ *
+ * @param dataFilePath Le chemin du fichier de données.
+ * @param dataFileName Le nom du fichier de données.
+ */
     void displayChart(const string& dataFilePath, const string& dataFileName);
 };
 

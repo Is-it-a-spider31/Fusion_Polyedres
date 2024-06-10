@@ -2,7 +2,7 @@
 #include <iostream>
 
 /**
- * @brief Classe qui represente un point
+ * @brief Classe qui represente un point (2D ou 3D)
 */
 class Point
 {
@@ -72,17 +72,54 @@ public:
 	*/
 	double dotProduct(const Point& other) const;
 
-	// GETTERS
+	/**
+	 * @brief Renvoie l'identifiant du point.
+	 * @return L'identifiant du point.
+	 */
 	int getId() const;
+
+	/**
+	 * @brief Renvoie la coordonnée X du point.
+	 * @return La coordonnée X du point.
+	 */
 	double getX() const;
+
+	/**
+	 * @brief Renvoie la coordonnée Y du point.
+	 * @return La coordonnée Y du point.
+	 */
 	double getY() const;
+
+	/**
+	 * @brief Renvoie la coordonnée Z du point.
+	 * @return La coordonnée Z du point.
+	 */
 	double getZ() const;
 
-	// SETTERS
+	/**
+	 * @brief Définit l'identifiant du point.
+	 * @param id L'identifiant à attribuer à l'objet.
+	 */
 	void setId(int id);
+
+	/**
+	 * @brief Définit la coordonnée X du point.
+	 * @param x La nouvelle valeur de la coordonnée X.
+	 */
 	void setX(double x);
+
+	/**
+	 * @brief Définit la coordonnée Y du point.
+	 * @param y La nouvelle valeur de la coordonnée Y.
+	 */
 	void setY(double y);
+
+	/**
+	 * @brief Définit la coordonnée Z du point.
+	 * @param z La nouvelle valeur de la coordonnée Z.
+	 */
 	void setZ(double z);
+
 
 	/**
 	 * @brief Remplace le point par un nouveau
@@ -91,12 +128,48 @@ public:
 	*/
 	void setPoint(const Point& v);
 
-	// OPERATEURS REDEFINIS
+	
+	/**
+ * @brief Compare deux objets Point pour l'égalité.
+ *
+ * Cette méthode vérifie si deux objets Point sont égaux.
+ *
+ * @param v L'objet Point à comparer.
+ * @return true si les deux objets Point sont égaux, false sinon.
+ */
 	bool operator==(const Point& v) const;
+
+	/**
+	 * @brief Compare deux objets Point pour l'inégalité.
+	 *
+	 * Cette méthode vérifie si deux objets Point sont différents.
+	 *
+	 * @param v L'objet Point à comparer.
+	 * @return true si les deux objets Point sont différents, false sinon.
+	 */
 	bool operator!=(const Point& v) const;
+
+	/**
+	 * @brief Soustraction de deux objets Point.
+	 *
+	 * Cette méthode retourne la différence entre deux objets Point.
+	 *
+	 * @param v L'objet Point à soustraire.
+	 * @return Un nouvel objet Point représentant la différence entre les deux Points.
+	 */
 	Point operator-(const Point& v) const;
 
-	friend std::ostream& operator<<(std::ostream& os, const Point& );
+	/**
+	 * @brief Opérateur de flux de sortie pour les objets Point.
+	 *
+	 * Cette fonction amie permet d'écrire un objet Point dans un flux de sortie.
+	 *
+	 * @param os Le flux de sortie dans lequel l'objet Point est écrit.
+	 * @param p L'objet Point à écrire dans le flux de sortie.
+	 * @return Une référence au flux de sortie après l'écriture de l'objet Point.
+	 */
+	friend std::ostream& operator<<(std::ostream& os, const Point& p);
+
 
 private:
 	/**

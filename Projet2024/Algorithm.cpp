@@ -51,7 +51,7 @@ vector<Polyedre> Algorithm::mergeAlgorithm(vector<Polyedre> solution, int limitN
 {
 	double sumDistances = 0.0;
 	double nbConsecutiveMerges = 0;
-	double reward  = 0.0;
+	
 	int initSolutionSize = solution.size();
 
 	// Liste des polyedres avec fusion
@@ -60,8 +60,8 @@ vector<Polyedre> Algorithm::mergeAlgorithm(vector<Polyedre> solution, int limitN
 	// true : arreter la solution en cours car on a deja mieux
 	bool stopCurrentSolution = false;
 
-		
 	bool end = false;
+	// Tant qu'on arrive a reduire le nombre de fusions
 	while (!end)
 	{
 		Polyedre currentPolyhedron = solution[0];
@@ -150,7 +150,6 @@ vector<Polyedre> Algorithm::mergeAlgorithm(vector<Polyedre> solution, int limitN
 							mergedPoly		// Polyedre fusionne
 						);
 
-
 						// Maj de la distance entre les 2 sommets qu'on a essaye de fusionner
 						sumDistances += d_mergeGraph.calculateDistance(
 							currentPolyhedron.getId(),
@@ -171,20 +170,12 @@ vector<Polyedre> Algorithm::mergeAlgorithm(vector<Polyedre> solution, int limitN
 				mergedPolyhedra.push_back(currentPolyhedron);
 				currentPolyhedron = solution[nextPolyId];
 
-				// Somme des nbConsecutiveMerges (pour calculer la moyenne plus tard)
-				if (nbConsecutiveMerges > 1)
-					reward += pow(nbConsecutiveMerges, 2);
-				nbConsecutiveMerges = 0;
-
-				// Si on a deja une meilleur solution
+				// Si on a deja une meilleur solution 
+				// (limitNbPoly doit etre passe en parametre de la methode)
 				if (limitNbPoly != -1 && mergedPolyhedra.size() >= limitNbPoly)
 				{
 					stopCurrentSolution = true;
 				}
-			}
-			else
-			{
-				nbConsecutiveMerges++;
 			}
 
 			nextPolyId++;
@@ -197,11 +188,13 @@ vector<Polyedre> Algorithm::mergeAlgorithm(vector<Polyedre> solution, int limitN
 
 			if (mergedPolyhedra.size() < solution.size())
 			{
+				// On va refaire une iteration a partir des nouvelles fusions
 				solution = mergedPolyhedra;
 				mergedPolyhedra.clear();
 			}
 			else
 			{
+				// Plus de fusions possibles, on arrete l'algo
 				end = true;
 			}
 		}
@@ -217,12 +210,17 @@ vector<Polyedre> Algorithm::mergeAlgorithm(vector<Polyedre> solution, int limitN
 	//cout << endl << "------------------" << endl;
 	// Calcul de la penalite penalite (d_sumDistances >= 1)
 	// cout << "sum distances = " << sumDistances << endl;
-	double penality = pow(sumDistances/d_mergeGraph.getDiameter()/ initSolutionSize, 2)/3;
+	double penality = pow(sumDistances/d_mergeGraph.getDiameter()/ initSolutionSize, 2)/2;
 	// cout << "Penalite : " << penality << endl;
 	// Calcul de la recompense
 	// cout << "Val reward avant calcul : " << reward << endl;
+
 	double min = 0;
 	double max = pow((initSolutionSize - 1), 2);
+	double reward = 0.0;
+	for (Polyedre& poly : mergedPolyhedra)
+		reward += pow(poly.getNbComponents()-1, 2);
+
 	reward = ((reward - min)/(max-min))*2;	// Normalisation
 	// cout << "Recompense : " << reward << endl;
 	// Evaluation de la soluion courante
@@ -236,6 +234,14 @@ vector<Polyedre> Algorithm::mergeAlgorithm(vector<Polyedre> solution, int limitN
 	return mergedPolyhedra;
 }
 
+/**
+ * @brief Creer un repertoire avec un nom unique.
+ * Ce nom est compose du nombre de polyedre apres fusion et de
+ * la date courante.
+ *
+ * @param currentDir Repertoire dans lequel on veut creer un sous-repertoire
+ * @param solution Taille de la solution apres fusion
+*/
 void Algorithm::createRunDir(string currentDir, string solution)
 {
 	// Date courante
@@ -264,10 +270,13 @@ void Algorithm::createRunDir(string currentDir, string solution)
 	strcpy_s(cstr, cmd.length() + 1, cmd.c_str());  // Copie
 
 	system(cstr);
-	
-
 }
 
+/**
+ * @brief Remplace les '/' d'un chemin avec des '\' (pour windows)
+ * @param unixPath Chemin avec de '/'
+ * @return Le chemin pour windows avec des '\'
+*/
 string Algorithm::convertToWindowsPath(const string& unixPath)
 {
 	string windowsPath = unixPath;

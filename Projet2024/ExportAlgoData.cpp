@@ -101,24 +101,31 @@ string ExportAlgoData::getCurrentDateTime()
     return oss.str();
 }
 
-void ExportAlgoData::displayChart(const string& dataFilePath, const string& dataFileName)
+
+/**
+ * @brief Affiche un graphique à partir des données fournies en utilisant un executable.
+ *
+ * Cette fonction prend en entrée le chemin du fichier de données et le nom du fichier de données,
+ * puis génère un graphique à partir de ces données en utilisant un executable.
+ *
+ * @param dataFilePath Le chemin du fichier de données.
+ * @param dataFileName Le nom du fichier de données.
+ */
+void ExportAlgoData::displayChart(const std::string& dataFilePath, const std::string& dataFileName)
 {
+    // Construction de la commande pour générer le graphique
+    std::string command = "scripts\\pythonGenerateGraph\\dist\\plot_graph.exe " + dataFilePath + " " + dataFileName;
 
-    string command = "scripts\\pythonGenerateGraph\\dist\\plot_graph.exe " + dataFilePath + " " + dataFileName;
+    // Affichage de la commande
+    std::cout << "Commande : " << command << std::endl;
 
-    cout << "Commande : " << command << endl;
-    #ifdef __linux__ // OS Linux
-        command = "./scripts/pythonGenerateGraph/dist/plot_graph " + dataFilePath + " " + dataFileName;
-    #endif
-
-    // Convertion string en char* pour system()
-    char* cstr = new char[command.length() + 1];    // Allocation de la memoire
-    strcpy_s(cstr, command.length() + 1, command.c_str());  // Copie
-
-    // Script python qui creer le graphique
-    #ifdef _WIN32 // OS Windows
-        system(cstr);
-    #elif __linux__ // OS Linux
-        system(cstr);
-    #endif
+    // Exécution du script Python pour créer le graphique
+#ifdef _WIN32 // Pour les systèmes Windows
+    system(command.c_str());
+#elif __linux__ // Pour les systèmes Linux
+    // Construction de la commande pour Linux
+    command = "./scripts/pythonGenerateGraph/dist/plot_graph " + dataFilePath + " " + dataFileName;
+    system(command.c_str());
+#endif
 }
+

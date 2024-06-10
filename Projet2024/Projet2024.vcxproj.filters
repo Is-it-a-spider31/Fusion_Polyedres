@@ -84,8 +84,8 @@
     <ClCompile Include="myUtils.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="RecuitSimuleProf.cpp">
-      <Filter>Fichiers sources</Filter>
+    <ClCompile Include="genetic\WheelSelection.cpp">
+      <Filter>Fichiers sources\genetic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -149,8 +149,8 @@
     <ClInclude Include="myUtils.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="RecuitSimuleProf.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+    <ClInclude Include="genetic\WheelSelection.h">
+      <Filter>Fichiers d%27en-tête\genetic</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

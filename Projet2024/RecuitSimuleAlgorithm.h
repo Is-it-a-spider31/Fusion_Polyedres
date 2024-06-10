@@ -3,6 +3,9 @@
 
 #include <random>   // Pour std::default_random_engine et std::uniform_int_distribution
 
+/**
+ * @brief Algorithme du recuit simule (ou SA: similated annealing)
+*/
 class RecuitSimuleAlgorithm : public Algorithm
 {
 public:
@@ -17,6 +20,12 @@ public:
      * @brief Algorithme principal du recuit simule
     */
     void run() override;
+
+    /**
+     * Chemin du repertoire ves lequel l'agoritme ecrit
+     * les solutions trouvees sous forme de fichiers .obj
+    */
+    const string getFilePath() override;
 
 protected:
     /**
@@ -52,6 +61,13 @@ protected:
      * @param n nombre d'elements a permuter
     */
     void permuteNElements(vector<Polyedre>& polyhedra, const size_t n);
+
+    /**
+     * @brief Permute 2 elements qui se suivent dans la liste
+     *
+     * @param polyhedra Liste de polyedres a permuter
+    */
+    void permute2ConssecutivesElements(vector<Polyedre>& polyhedra);
 
     /**
      * @brief Teste si la solution voisine est acceptee ou pas

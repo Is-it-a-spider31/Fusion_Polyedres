@@ -9,11 +9,6 @@
 #include <algorithm>
 #include "OBJFileHandler.h"
 
-/**
- * Chemin du repertoire ves lequel l'agoritme ecrit
- * les solutions trouvees sous forme de fichiers .obj
-*/
-const string BruteForceAlgorithm::GENERATE_OBJ_PATH = "Tests/generated/BruteForce/";
 
 /**
  * @brief Contructeur a partir d'un fichier .obj
@@ -24,7 +19,7 @@ BruteForceAlgorithm::BruteForceAlgorithm(const string& filename)
 	: Algorithm(filename) {}
 
 /**
- * @brief Algoritme Brute-force
+ * @brief Algorithme Brute-force
 */
 void BruteForceAlgorithm::run()
 {
@@ -50,7 +45,7 @@ void BruteForceAlgorithm::run()
 	int minNbPolySolution = permutedPolyhedra.size();
 
 	// Statistiques
-	int nbPermutaions = 0;		// nombre de permuations effectuees
+	int nbPermutations = 0;		// nombre de permuations effectuees
 	int nbFullSolutions = 0;	// nombre de solutions qui ont ete calculees jusqu'au bout
 	int nbOptimalSolutions = 0;	// nombre de solutions uniques trouvees
 
@@ -58,7 +53,7 @@ void BruteForceAlgorithm::run()
 	//	(complexite n! pour n polyedres)
 	do
 	{
-		// Algoritme de fusion de la solution courante (permutedPolyhedra)
+		// Algorithme de fusion de la solution courante (permutedPolyhedra)
 		mergedPolyhedra = mergeAlgorithm(permutedPolyhedra, minNbPolySolution);
 
 		if (!mergedPolyhedra.empty())	// Solution calculee jusqu'au bout
@@ -73,16 +68,17 @@ void BruteForceAlgorithm::run()
 			if (!isAlreadyFinded)	// Si c'est une nouvelle solution
 			{
 				solutions.push_back(mergedPolyhedra);
-				permutationsId.push_back(nbPermutaions);
+				permutationsId.push_back(nbPermutations);
 			}
 		}
 
 		// permutedPolyhedra.clear(); // 1 seule iteration si non commente (pour tester)
 		mergedPolyhedra.clear();
-		nbPermutaions++;
+		nbPermutations++;
 	} while (next_permutation(permutedPolyhedra.begin(), permutedPolyhedra.end()));
 
 	//	ECRITURE DES MEILLEURES SOLUTIONS TROUVEES
+	createRunDir(getFilePath(), to_string(minNbPolySolution));	// Creation du 
 	auto solutionId = permutationsId.begin();
 	for (vector<Polyedre>& solution : solutions)
 	{
@@ -91,7 +87,7 @@ void BruteForceAlgorithm::run()
 			nbOptimalSolutions++;
 
 			// Ecriture du fichier OBJ pour cette solution
-			string filename = GENERATE_OBJ_PATH + "FUSION." + to_string(solution.size())
+			string filename = d_fullFilePath + "FUSION." + to_string(solution.size())
 				+ "Poly_" + to_string(*solutionId) + ".obj";
 			OBJFileHandler::writeOBJ(d_vertices, solution, filename);
 		}
@@ -100,7 +96,7 @@ void BruteForceAlgorithm::run()
 
 	// Affichage des statistiques
 	cout << " ---  STATISTIQUES  ---" << endl;
-	cout << "Nb de permutations effectuees : " << nbPermutaions << endl;
+	cout << "Nb de permutations effectuees : " << nbPermutations << endl;
 	cout << "Nb de solutions calculees entierement : " << nbFullSolutions << endl;
 	cout << "Nb de solutions uniques calculees entierement: " << solutions.size() << endl;
 	cout << "Nb de solutions optimales : " << nbOptimalSolutions << endl << endl;
@@ -109,6 +105,15 @@ void BruteForceAlgorithm::run()
 	cout << "Nb optimale de polyedres : " << minNbPolySolution << endl;
 
 	cout << endl << d_mergeGraph;
+}
+
+/**
+ * Chemin du repertoire ves lequel l'agoritme ecrit
+ * les solutions trouvees sous forme de fichiers .obj
+*/
+const string BruteForceAlgorithm::getFilePath()
+{
+	return "Tests/generated/BruteForce/";
 }
 
 

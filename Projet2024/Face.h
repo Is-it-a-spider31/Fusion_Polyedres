@@ -48,8 +48,27 @@ public:
 	*/
 	Point getSommet(int i);
 
-	// OPERATEUR REDEFINI
+	/**
+	* @brief Compare deux objets Face pour l'égalité.
+	*
+	* Cet opérateur vérifie si deux objets Face sont égaux.
+	*
+	* @param f L'objet Face à comparer.
+	* @return true si les deux objets Face sont égaux, false sinon.
+	*/
 	bool operator==(const Face f) const;
+
+
+	/**
+	* @brief Opérateur de flux de sortie pour les objets Face.
+	*
+	* Cette fonction amie permet d'écrire un objet Face dans un flux de sortie.
+	* Elle formate les données de l'objet Face pour une sortie lisible.
+	*
+	* @param os Le flux de sortie dans lequel l'objet Face est écrit.
+	* @param f L'objet Face à écrire dans le flux de sortie.
+	* @return Une référence au flux de sortie après l'écriture de l'objet Face.
+	*/
 	friend std::ostream& operator<<(std::ostream& os, const Face& f);
 
 private:
