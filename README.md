@@ -25,7 +25,9 @@ Tous les fichiers d'environnement 3D sont au format *.obj*.
 #### Doxygen
 - Installer doxygen
 - Ouvrir un terminal dans le répertoire */Projet2024*
-- Tapez ***doxygen Doxyfile*** pour générer la documentation html
+- Tapez la commande pour générer la documentation html
+  
+        doxygen Doxyfile
 
 La documentation est générée dans le **répertoire */doc*** a la racine du projet.
 Les paramètres de génération sont configurés dans le fichier */Projet2024/Doxyfile*. \
@@ -81,9 +83,6 @@ Voici un exemples de variables intéressantes à modifier dans le fichier Doxyfi
 - ***/generated/*** contient les **resultats générés** par le projet C++. Chaque type d'algorithme a un répertoire dédié
 
 ### /Projet2024/scripts/
-#### 2 scripts "delete_obj_files":
-- (un pour windows et un pour linux) qui permettent de supprimer les fichiers "*.obj*" du répertoire */Projet2024/Tests/generated/BruteForce/*
-- Ils sont appelés automatiquement par le projet C++
 #### pythonGenerateGraph/ : 
 - Projet python qui **genère et enregistre des graphiques** (matplotlib) avec à partir de fichiers de données
 - Exécutable : *dist/plot_graph.exe*, prend 2 arguments en paramètres (chemin du répertoire et nom du fichier) 

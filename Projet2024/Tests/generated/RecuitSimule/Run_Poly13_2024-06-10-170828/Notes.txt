@@ -1,0 +1,6 @@
+3 permutations
+n permuation (random)
+
+stagne iter : 1200
+
+cooling factor 96
