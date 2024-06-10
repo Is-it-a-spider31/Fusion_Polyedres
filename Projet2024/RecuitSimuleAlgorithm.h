@@ -63,6 +63,13 @@ protected:
     void permuteNElements(vector<Polyedre>& polyhedra, const size_t n);
 
     /**
+     * @brief Permute 2 elements qui se suivent dans la liste
+     *
+     * @param polyhedra Liste de polyedres a permuter
+    */
+    void permute2ConssecutivesElements(vector<Polyedre>& polyhedra);
+
+    /**
      * @brief Teste si la solution voisine est acceptee ou pas
      *
      * Calcule la probabilite d'acceptation de la solution voisine

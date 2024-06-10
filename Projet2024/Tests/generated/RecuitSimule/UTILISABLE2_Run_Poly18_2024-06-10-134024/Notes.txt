@@ -1,0 +1,7 @@
+3 permutations de 2 éléments à la suite
+nb Wrong Acceptation : 760
+
+acceptation : 
+double proba = exp(-loss / d_temperature);
+
+stagne iter : 600

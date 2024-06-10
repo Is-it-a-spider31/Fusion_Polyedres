@@ -20,15 +20,50 @@ Tous les fichiers d'environnement 3D sont au format *.obj*.
 - Visual studio
 - Blender (pour visualiser les fichiers *.obj*)
 
-#### Documentation Doxygen
+## Documentation
+
+#### Doxygen
 - Installer doxygen
 - Ouvrir un terminal dans le répertoire */Projet2024*
 - Tapez ***doxygen Doxyfile*** pour générer la documentation html
 
 La documentation est générée dans le **répertoire */doc*** a la racine du projet.
-Les paramètres de génération sont configurés dans le fichier */Projet2024/Doxyfile*.
+Les paramètres de génération sont configurés dans le fichier */Projet2024/Doxyfile*. \
+L'auto completion des commentaires Doxygen dans le code peut être activée dans visual studio. \
+Voici un exemples de variables intéressantes à modifier dans le fichier Doxyfile :
 
-L'auto completion des commentaires Doxygen dans le code peut être activée dans visual studio
+    # Nom du projet
+    PROJECT_NAME           = "Nom du projet"
+    ...
+    # Répertoire d'entrée
+    INPUT                  = ./
+    ...
+    # Inclure récursivement les sous-répertoires
+    RECURSIVE              = YES
+    ...
+    # Exclure plusieurs patterns
+    EXCLUDE_PATTERNS       = */test/* *.cpp
+    ...
+    # Répertoire de sortie
+    OUTPUT_DIRECTORY       = doc
+    ...
+    # Générer de la documentation HTML
+    GENERATE_HTML          = YES
+    ...
+    # Ne pas générer de documentation LaTeX
+    GENERATE_LATEX         = NO
+    ...
+    # Optimiser la sortie pour éviter les redondances
+    OPTIMIZE_OUTPUT_FOR_C  = YES
+
+
+#### Diagramme de classe visual studio
+- Fichier *ClassDiagram.cd*
+- Pour lire le fichier il faut installer une extension visual studio : 
+  - https://stackoverflow.com/questions/17191218/generate-a-class-diagram-from-visual-studio
+- Les associations ne sont pas représentées
+  - https://stackoverflow.com/questions/47895358/creating-aggregation-and-composition-in-class-diagram-in-visual-studio-2017
+
 
 ## Fonctionnalités
 - Fusion de polyèdres

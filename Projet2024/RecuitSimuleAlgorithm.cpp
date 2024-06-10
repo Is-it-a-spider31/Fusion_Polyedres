@@ -8,7 +8,7 @@
 
 RecuitSimuleAlgorithm::RecuitSimuleAlgorithm(const string& filename)
 	: Algorithm(filename),
-	d_coolingFactor(0.96),
+	d_coolingFactor(0.95),
 	d_temperature(1000),
 	d_randomGenerator(std::random_device()())
 {
@@ -35,10 +35,11 @@ void RecuitSimuleAlgorithm::run()
 	double previousBestEval = currentEval;
 	double palier;
 	double n = 0;
+	double nbAcceptation = 0;
 
 	int nbIterations = 0;
-	int nbMaxIterations = 10000;
-	double nonImprovLimit = 400;
+	int nbMaxIterations = 6000;
+	double nonImprovLimit = 1300;
 	double nonImprovIter = 0;
 
 	// Parametres
@@ -60,7 +61,7 @@ void RecuitSimuleAlgorithm::run()
 	while (continuer < 2 && nbIterations < nbMaxIterations)	// Critere d'arret
 	{
 		// REFROIDISSEMENT
-		if (nonImprovIter == nonImprovLimit)	// On stagne
+		if (nonImprovIter >= nonImprovLimit)	// On stagne
 		{
 			if (bestEval < previousBestEval)	// Amelioration
 			{
@@ -69,7 +70,7 @@ void RecuitSimuleAlgorithm::run()
 			}
 			else	// Pas d'amelioration
 			{
-				continuer++;
+				//continuer++;
 			}
 
 			d_temperature = (exp(static_cast<double>(-nbIterations)
@@ -100,13 +101,29 @@ void RecuitSimuleAlgorithm::run()
 
 			// PERTURBATION
 			neighborSolution = currentSolution;
-			int min = 0.1 * d_polyhedra.size();
-			int max = 0.2 * d_polyhedra.size();
+			//int min = 0.1 * d_polyhedra.size();
+			//int max = 0.2 * d_polyhedra.size();
+			int min = 1;
+			int max = 3;
 
 			// Augmente quand nonImprovIter augmente
-			nbPermutations = min + ((nonImprovIter / nonImprovLimit) * (max - min));
+			// nbPermutations = min + ((nonImprovIter / nonImprovLimit) * (max - min));
+			//if (d_temperature > 250)
+			//	nbPermutations = max;
+			//else 
+			//	nbPermutations = min + ((d_temperature / 250) * (max - min));
 			d_dataWriters[1].addPoint(nbIterations, nbPermutations);	// ADD DATA
-			this->permuteNElements(neighborSolution, nbPermutations);
+			// this->permuteNElements(neighborSolution, nbPermutations);
+
+			for (int i = min; i <= max; i++)
+			{
+				this->permute2ConssecutivesElements(neighborSolution);
+			}
+			/*
+			this->permute2ConssecutivesElements(neighborSolution);
+			this->permute2ConssecutivesElements(neighborSolution);
+			this->permute2ConssecutivesElements(neighborSolution);
+			*/
 
 			// EVALUATION
 			neighborEval = this->evaluateSolution(neighborSolution);
@@ -116,11 +133,12 @@ void RecuitSimuleAlgorithm::run()
 			{
 				bestSolution = neighborSolution;
 				bestEval = neighborEval;
+				nbAcceptation--;
 				nonImprovIter = 0;
 			}
 			else
 			{
-				if (nonImprovIter > nonImprovLimit)
+				if (nonImprovIter >= nonImprovLimit)
 					nonImprovIter = nonImprovLimit;
 				else
 					nonImprovIter++;
@@ -131,12 +149,15 @@ void RecuitSimuleAlgorithm::run()
 			{
 				currentSolution = neighborSolution;
 				currentEval = neighborEval;
+				nbAcceptation++;
 				// nonImprovIter = 0;
 			}
 
 			n++;
 		}
 	}
+
+	cout << "nb Wrong Acceptation : " << nbAcceptation << endl;
 
 	// Fin du chronometre
 	double timeTaken = (double)(clock() - tStart) / CLOCKS_PER_SEC;
@@ -225,6 +246,25 @@ void RecuitSimuleAlgorithm::permuteNElements(vector<Polyedre>& polyhedra, const 
 }
 
 /**
+ * @brief Permute 2 elements qui se suivent dans la liste
+ *
+ * @param polyhedra Liste de polyedres a permuter
+*/
+void RecuitSimuleAlgorithm::permute2ConssecutivesElements(vector<Polyedre>& polyhedra)
+{
+	// Si liste vide : permutation impossible
+	if (polyhedra.empty())
+		return;
+
+	std::uniform_int_distribution<size_t> dis(0, polyhedra.size() - 2);
+	int index1 = dis(d_randomGenerator);	// indices i
+	int index2 = index1 + 1;	// indices i + 1
+
+	// Echange des elments i et i+1 de la liste de polyedres
+	std::swap(polyhedra[index1], polyhedra[index2]);
+}
+
+/**
   * @brief Teste si la solution voisine est acceptee ou pas
   *
   * Calcule la probabilite d'acceptation de la solution voisine
@@ -242,14 +282,16 @@ bool RecuitSimuleAlgorithm::isNeighborAccepted(const double& currentEval, const 
 	if (neighborEval > currentEval)
 	{	// Acceptation possible avec une certaine probabilite
 		isAccepted = false;
+		double loss = neighborEval - currentEval;
 
 		//double proba = std::exp((currentEval - neighborEval) / d_temperature) - 1;
 		// double proba = 2 - exp((1-((neighborEval - currentEval) / 5)) * (d_temperature / 1000));
-		double loss = neighborEval - currentEval;
 
 		// proba Augmente quand temperature diminue (et inversement)
 		// proba Augmente quand loss augmente (et inversement)
 		double proba = 1 - ((0.01 / loss) * (d_temperature / 1000));
+
+		//double proba = exp(-loss / d_temperature);
 
 		// Distribution uniforme dans [0, 1]
 		std::uniform_real_distribution<double> uniformDis(0.0, 1.0);
@@ -327,14 +369,14 @@ void RecuitSimuleAlgorithm::printDataChart(const string& info)
 	);
 
 	title = "Evolution nonImprovIter en fonction des iterations";
-	//d_dataWriters[3].writeDataToFile(
-	//	d_fullFilePath,
-	//	"RecuitChartImprovIter",	// Nom fichier
-	//	"Nb iteration",	// Axe X
-	//	"nonImprovIter",		// Axe Y
-	//	legend,
-	//	title,
-	//	info,
-	//	false	// Invertion de l'axe X
-	//);
+	d_dataWriters[3].writeDataToFile(
+		d_fullFilePath,
+		"RecuitChartImprovIter",	// Nom fichier
+		"Nb iteration",	// Axe X
+		"nonImprovIter",		// Axe Y
+		legend,
+		title,
+		info,
+		false	// Invertion de l'axe X
+	);
 }
