@@ -1,0 +1,12 @@
+
+PERMUTAION RANDOM
+
+nb Wrong Acceptation : 1254
+
+acceptation : 
+double proba = 1 - ((0.01 / loss) * (d_temperature / 1000));
+
+stagne iter : 600
+
+// nbPermutations = 3
+this->permuteNElements(neighborSolution, nbPermutations);
