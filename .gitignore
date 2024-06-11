@@ -94,7 +94,6 @@ Anciens_Groupes/projetNathan/ProjectNathanVS/ProjectNathanVS/x64/Debug/vc143.idb
 
 # PYTHON PYCHARM
 *.toc
-*.html
 *.pyc
 */scripts/pythonGenerateGraph/build/*
 */scripts/pythonGenerateGraph/.idea/*
