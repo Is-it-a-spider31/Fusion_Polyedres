@@ -23,13 +23,15 @@ Tous les fichiers d'environnement 3D sont au format *.obj*.
 ## Documentation
 
 #### Doxygen
+Pour consulter la **documentation html** du code, ouvrir le fichier ***Projet2024/doc/html/index.html***. \
+Pour générer la documentation :
 - Installer doxygen
 - Ouvrir un terminal dans le répertoire */Projet2024*
 - Tapez la commande pour générer la documentation html
   
         doxygen Doxyfile
 
-La documentation est générée dans le **répertoire */doc*** a la racine du projet.
+La documentation est générée dans le **répertoire *Projet2024/doc/html***.
 Les paramètres de génération sont configurés dans le fichier */Projet2024/Doxyfile*. \
 L'auto completion des commentaires Doxygen dans le code peut être activée dans visual studio. \
 Voici un exemples de variables intéressantes à modifier dans le fichier Doxyfile :
