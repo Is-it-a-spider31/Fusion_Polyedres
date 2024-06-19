@@ -40,15 +40,6 @@ int main(int argc, char* argv[])
 	// Interception du signal SIGINT (ctrl + C)
 	signal(SIGINT, signalHandler);
 
-
-	// Script qui supprime les fichiers .obj eventuellement generes 
-	// par d'anciennes executions du programme
-	#ifdef _WIN32 // OS Windows
-		system("powershell.exe -ExecutionPolicy Bypass -File scripts/delete_obj_files.ps1");
-	#elif __linux__ // OS Linux
-		system("./scripts/delete_obj_files.sh");
-	#endif
-
 	// Chemins des fichiers .obj avec lesquels le programme est teste
 	const string MERGE_TEST_PATH = "Tests/MergeTest/";
 	const string CONVEXITY_TEST_PATH = "Tests/ConvexiTest/";
